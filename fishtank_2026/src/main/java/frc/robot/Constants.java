@@ -7,14 +7,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
-    public final static boolean hasGyro = false;
-    public final static boolean hasSwerve = false;
+    public final static boolean hasGyro = true;
+    public final static boolean hasSwerve = true;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;
     public final static boolean hasConveyorTwo = false;
     public final static boolean hasIntakeRotation = false;
-    public final static boolean hasIntakeWheels = true;
+    public final static boolean hasIntakeWheels = false;
     public static boolean testMotors = false;
 
     public static final int rightFrontAbsEncPort = 1, leftFrontAbsEncPort = 2, leftRearAbsEncPort = 3, rightRearAbsEncPort = 4;
