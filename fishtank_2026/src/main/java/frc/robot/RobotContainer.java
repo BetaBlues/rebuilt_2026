@@ -98,14 +98,17 @@ public class RobotContainer {
 
 
 
+
     public RobotContainer() {
     // configureButtonBindings();
 
     if (Constants.hasSwerve) {
       DataLogManager.start();
-      m_SwerveSubsystem.setDefaultCommand(new SwerveDriveCommand(m_SwerveSubsystem, m_chassisController));
+      m_SwerveSubsystem.setDefaultCommand(new SwerveDriveCommand(m_SwerveSubsystem, m_chassisController, m_gyro));
 
-      new JoystickButton(m_chassisController, Constants.k_xbox.buttonRightBumper).onTrue(m_SwerveSubsystem.runOnce(m_SwerveSubsystem::zeroHeading));
+      // new JoystickButton(m_chassisController, Constants.k_xbox.buttonRightBumper).onTrue(m_SwerveSubsystem.runOnce(m_SwerveSubsystem::zeroHeading));
+
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_gyro.zeroYaw()));
 
          
     }
@@ -130,19 +133,19 @@ public class RobotContainer {
     }
     
         
-//      new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
-//      new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(Commands.runOnce(SignalLogger::stop));
+    //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
+    //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(Commands.runOnce(SignalLogger::stop));
 
-//         /*
-//          * Joystick Y = quasistatic forward
-//          * Joystick A = quasistatic reverse
-//          * Joystick B = dynamic forward
-//          * Joystick X = dyanmic reverse
-//          */
-//       new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).whileTrue(m_mechanism.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-//       new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).whileTrue(m_mechanism.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-//       new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).whileTrue(m_mechanism.sysIdDynamic(SysIdRoutine.Direction.kForward));
-//       new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).whileTrue(m_mechanism.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        /*
+         * Joystick Y = quasistatic forward
+         * Joystick A = quasistatic 
+         * Joystick B = dynamic forward
+         * Joystick X = dyanmic reverse
+         */
+      // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).whileTrue(m_Motor.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).whileTrue(m_Motor.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).whileTrue(m_Motor.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).whileTrue(m_Motor.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     }
 

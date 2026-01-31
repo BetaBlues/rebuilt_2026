@@ -14,26 +14,43 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Subsystems.ChassisGyro;
 
 public class SwerveDriveCommand extends Command {
     public final SwerveChassis m_chassis;
     public final XboxController m_controller; 
     private SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private final ChassisGyro m_gyro;
+    private double currentAngle;
     
-    public SwerveDriveCommand(SwerveChassis chassis, XboxController controller){
+    public SwerveDriveCommand(SwerveChassis chassis, XboxController controller, ChassisGyro gyro){
         this.m_chassis = chassis; 
         this.m_controller = controller;
         this.xLimiter = new SlewRateLimiter(k_chassis.AccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(k_chassis.AccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(k_chassis.AngularAccelerationUnitsPerSecond);
+        this.m_gyro = gyro;
         addRequirements(m_chassis);
     }
 
      @Override
      public void execute() {
-        double ySpeed = m_controller.getLeftY();
-        double xSpeed = m_controller.getLeftX();
+       currentAngle = Math.toRadians(m_gyro.getCompassHeading());
+
+       
+        double temp = m_controller.getLeftX() * Math.cos(currentAngle) + m_controller.getLeftY() * Math.sin(currentAngle);
+
+        double ySpeedSquared = Math.pow(m_controller.getLeftX() - temp*Math.cos(currentAngle), 2) + Math.pow((m_controller.getLeftY() -temp*Math.sin(currentAngle)), 2); //m_controller.getLeftY();
+        double ySpeed = ySpeedSquared > 0 ? Math.sqrt(ySpeedSquared) : - Math.sqrt(ySpeedSquared);
+
+
+        
+        double xSpeedSquared = Math.pow(temp*Math.cos(currentAngle), 2) + Math.pow(temp*Math.sin(currentAngle), 2);
+        double xSpeed = xSpeedSquared > 0 ? Math.sqrt(xSpeedSquared) : - Math.sqrt(xSpeedSquared);
         double turningSpeed = m_controller.getRightX();
+
+        double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
+
 
         SmartDashboard.putNumber("xSpeed", xSpeed);
         SmartDashboard.putNumber("ySpeed", ySpeed);

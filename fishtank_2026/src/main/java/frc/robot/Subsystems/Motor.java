@@ -54,7 +54,7 @@ public class Motor extends SubsystemBase{
     private double targetPosition;
 
     private SysIdRoutine log;
-    // private final SysIdRoutine m_sysIdRoutine;
+    //private final SysIdRoutine m_sysIdRoutine;
 
 
     public void sysIdDrive(Voltage outputVolts)
@@ -194,9 +194,14 @@ public class Motor extends SubsystemBase{
     }
 
     
-        // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        // return routine.dynamic(direction);
-        // }
+        public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return routine.dynamic(direction);
+        }
+
+        
+        public Command sysIdQuasistatic(Direction direction) {
+            return routine.quasistatic(direction);
+        }
 
         public void stopMotor() {
             System.out.println("Stop Motor");

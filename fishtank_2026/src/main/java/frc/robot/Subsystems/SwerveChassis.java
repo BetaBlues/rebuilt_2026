@@ -111,7 +111,7 @@ public class SwerveChassis extends SubsystemBase {
                                          Constants.rightRearAbsEncPort /* move to Constants */, configRight,
                                          Constants.rightRearAbsOffset);
 
-        setDefaultCommand(new SwerveDriveCommand(this, controller));
+        setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
     }
       
     public void testMotors(double roll_speed, double rot_speed) {
@@ -154,7 +154,7 @@ public class SwerveChassis extends SubsystemBase {
 
     public void drive(double xSpeed, double ySpeed, double rot) {
         // Get the robot's current orientation (yaw) from the gyro
-        double currentAngle = gyro.getAngle(); // In degrees
+        double currentAngle = gyro.getAngle() % 360; // In degrees
 
         // Convert joystick inputs to field-relative speeds
         // Transform the joystick values from robot-relative to field-relative
