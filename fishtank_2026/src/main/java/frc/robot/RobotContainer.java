@@ -68,6 +68,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import static edu.wpi.first.units.Units.Rotation;
 
 import java.util.List;
+import frc.robot.commands.SwerveDriveCommand;
 
 import frc.robot.Subsystems.ChassisGyro;
 //import edu.wpi.first.hal.SimDevice.Direction;
@@ -95,6 +96,7 @@ public class RobotContainer {
     private final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test") : null;
+    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher") : null;
 
 
 
@@ -108,7 +110,7 @@ public class RobotContainer {
 
       // new JoystickButton(m_chassisController, Constants.k_xbox.buttonRightBumper).onTrue(m_SwerveSubsystem.runOnce(m_SwerveSubsystem::zeroHeading));
 
-      new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_gyro.zeroYaw()));
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
 
          
     }
@@ -132,6 +134,12 @@ public class RobotContainer {
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Motor.setTargetVelocity(-10.0, false)));
     }
     
+    if (Constants.hasLauncher) {
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.5)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.5)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+      }
         
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(Commands.runOnce(SignalLogger::stop));

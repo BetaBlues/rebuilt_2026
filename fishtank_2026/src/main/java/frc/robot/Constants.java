@@ -8,13 +8,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
     public final static boolean hasGyro = true;
-    public final static boolean hasSwerve = true;
+    public final static boolean hasSwerve = false;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;
     public final static boolean hasConveyorTwo = false;
     public final static boolean hasIntakeRotation = false;
     public final static boolean hasIntakeWheels = false;
+    public final static boolean hasLauncher = true;
     public static boolean testMotors = false;
 
     public static final int rightFrontAbsEncPort = 1, leftFrontAbsEncPort = 2, leftRearAbsEncPort = 3, rightRearAbsEncPort = 4;
@@ -155,7 +156,7 @@ public class Constants {
 
     public static class SpinMotorConstants {
       //gear box is 1:10
-      public static final int kCanId = 5;
+      public static final int kCanId = 9;
       public static final int kCurrentLimit = 40;
       public static final double MaxRotationSpeed= 0.04; //change to a lower speed to make smoother //0.04
      
@@ -179,6 +180,9 @@ public class Constants {
       public static final double kSoftLimitForward = 35000;
 
     }
+
+    
+
 
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;

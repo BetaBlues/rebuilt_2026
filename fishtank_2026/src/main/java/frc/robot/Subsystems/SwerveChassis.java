@@ -45,8 +45,16 @@ public class SwerveChassis extends SubsystemBase {
 
     // Swerve Drive Kinematics (for calculating wheel speeds and angles)
     private SwerveDriveKinematics m_kinematics;
+    private double worldRotation;
 
-
+    public void setWorldRotation(double nWR)
+    {
+        worldRotation = nWR;
+    }
+    public double getWorldRotation()
+    {
+        return worldRotation;
+    }
     
     public void resetGyro() {
         new Thread(() -> {

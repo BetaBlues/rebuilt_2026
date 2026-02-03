@@ -16,12 +16,15 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Subsystems.ChassisGyro;
 
+
 public class SwerveDriveCommand extends Command {
     public final SwerveChassis m_chassis;
     public final XboxController m_controller; 
     private SlewRateLimiter xLimiter, yLimiter, turningLimiter;
     private final ChassisGyro m_gyro;
     private double currentAngle;
+    
+    
     
     public SwerveDriveCommand(SwerveChassis chassis, XboxController controller, ChassisGyro gyro){
         this.m_chassis = chassis; 
@@ -30,31 +33,44 @@ public class SwerveDriveCommand extends Command {
         this.yLimiter = new SlewRateLimiter(k_chassis.AccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(k_chassis.AngularAccelerationUnitsPerSecond);
         this.m_gyro = gyro;
+        chassis.setWorldRotation(0.0);
         addRequirements(m_chassis);
     }
 
+   
+
      @Override
      public void execute() {
-       currentAngle = Math.toRadians(m_gyro.getCompassHeading());
+    //    currentAngle = Math.toRadians(m_gyro.getCompassHeading());
 
        
-        double temp = m_controller.getLeftX() * Math.cos(currentAngle) + m_controller.getLeftY() * Math.sin(currentAngle);
+        // double temp = m_controller.getLeftX() * Math.cos(currentAngle) + m_controller.getLeftY() * Math.sin(currentAngle);
 
-        double ySpeedSquared = Math.pow(m_controller.getLeftX() - temp*Math.cos(currentAngle), 2) + Math.pow((m_controller.getLeftY() -temp*Math.sin(currentAngle)), 2); //m_controller.getLeftY();
-        double ySpeed = ySpeedSquared > 0 ? Math.sqrt(ySpeedSquared) : - Math.sqrt(ySpeedSquared);
+        // double ySpeedSquared = Math.pow(m_controller.getLeftX() - temp*Math.cos(currentAngle), 2) + Math.pow((m_controller.getLeftY() -temp*Math.sin(currentAngle)), 2); //m_controller.getLeftY();
+        // double ySpeed = ySpeedSquared > 0 ? Math.sqrt(ySpeedSquared) : - Math.sqrt(ySpeedSquared);
 
 
         
-        double xSpeedSquared = Math.pow(temp*Math.cos(currentAngle), 2) + Math.pow(temp*Math.sin(currentAngle), 2);
-        double xSpeed = xSpeedSquared > 0 ? Math.sqrt(xSpeedSquared) : - Math.sqrt(xSpeedSquared);
+        // double xSpeedSquared = Math.pow(temp*Math.cos(currentAngle), 2) + Math.pow(temp*Math.sin(currentAngle), 2);
+        // double xSpeed = xSpeedSquared > 0 ? Math.sqrt(xSpeedSquared) : - Math.sqrt(xSpeedSquared);
+        // double turningSpeed = m_controller.getRightX();
+
+        // double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
+
+        double xVal = m_controller.getLeftX();
+        double yVal = m_controller.getLeftY();
+
+        
+        double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
+        double sin_w = Math.sin(Math.toRadians(m_chassis.getWorldRotation()));
+
+        double rotatedXInput = xVal * cos_w - yVal * sin_w;
+        double rotatedYInput = xVal * sin_w + yVal * cos_w;
+
+
+        double xSpeed = rotatedXInput;
+        double ySpeed = rotatedYInput;
         double turningSpeed = m_controller.getRightX();
-
-        double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
-
-
-        SmartDashboard.putNumber("xSpeed", xSpeed);
-        SmartDashboard.putNumber("ySpeed", ySpeed);
-        SmartDashboard.putNumber("turningSpeed", turningSpeed);
 
         xSpeed = Math.abs(xSpeed) > k_chassis.kDeadband ? xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > k_chassis.kDeadband ? ySpeed : 0.0;
