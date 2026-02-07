@@ -1,6 +1,9 @@
 package frc.robot.Subsystems;
-import 
+
 
 public class Vision {
-     PhotonCamera camera = new PhotonCamera("photonvision");
+     PhotonCamera LeftCamera = new PhotonCamera("Left Camera");
+     PhotonCamera MiddleCamera = new PhotonCamera("Middle Camera");
+     PhotonCamera RightCamera = new PhotonCamera("Right Camera");
+     
 }
