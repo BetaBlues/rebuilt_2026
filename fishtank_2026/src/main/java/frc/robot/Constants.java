@@ -18,7 +18,7 @@ public class Constants {
     public final static boolean hasLauncher = false;
     public static boolean testMotors = false;
 
-    public static final int rightFrontAbsEncPort = 1, leftFrontAbsEncPort = 2, leftRearAbsEncPort = 3, rightRearAbsEncPort = 4;
+    public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
     public static final double leftFrontAbsOffset =  0;//1.47;
     public static final double rightFrontAbsOffset = 0;//2.19;
     public static final double leftRearAbsOffset = 0;//-1.57;
@@ -240,7 +240,7 @@ public class Constants {
         //Chassis Motor ports
         /* x1 on can, drive motors*/ 
         public final static int leftFrontMotorPort  = 21; 
-        public final static int rightFrontMotorPort = 11; 
+        public final static int rightFrontMotorPort = 11;
         public final static int rightRearMotorPort  = 41; 
         public final static int leftRearMotorPort   = 31; 
     
