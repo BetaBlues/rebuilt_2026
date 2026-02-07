@@ -135,8 +135,8 @@ public class RobotContainer {
     }
     
     if (Constants.hasLauncher) {
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.5)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.5)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.3)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.3)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
       }

@@ -8,21 +8,21 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
     public final static boolean hasGyro = true;
-    public final static boolean hasSwerve = false;
+    public final static boolean hasSwerve = true;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;
     public final static boolean hasConveyorTwo = false;
     public final static boolean hasIntakeRotation = false;
     public final static boolean hasIntakeWheels = false;
-    public final static boolean hasLauncher = true;
+    public final static boolean hasLauncher = false;
     public static boolean testMotors = false;
 
     public static final int rightFrontAbsEncPort = 1, leftFrontAbsEncPort = 2, leftRearAbsEncPort = 3, rightRearAbsEncPort = 4;
-    public static final double leftFrontAbsOffset =  1.47;
-    public static final double rightFrontAbsOffset = 2.19;
-    public static final double leftRearAbsOffset = -1.57;
-    public static final double rightRearAbsOffset= 2.145;
+    public static final double leftFrontAbsOffset =  0;//1.47;
+    public static final double rightFrontAbsOffset = 0;//2.19;
+    public static final double leftRearAbsOffset = 0;//-1.57;
+    public static final double rightRearAbsOffset= 0;//2.145;
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 
@@ -210,13 +210,14 @@ public class Constants {
 
     public final class k_chassis {
         public static final double kPTurning = 0.7;
-        public static final double kPDrive = 0.5;
+        public static final double kPDrive = 0.3;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double kDeadband = 0.6;
         public static final double AccelerationUnitsPerSecond = 1.1;
         public static final double AngularAccelerationUnitsPerSecond = 1;
         public static final double MaxMetersPerSecond = 0.66;
+
         public static final int kCurrentLimit = 60;
         public static final double driveToDistance = 10.0;
         public static final double targetReached = 0.20;
