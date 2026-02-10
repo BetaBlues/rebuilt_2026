@@ -16,6 +16,7 @@ public class Constants {
     public final static boolean hasIntakeRotation = false;
     public final static boolean hasIntakeWheels = false;
     public final static boolean hasLauncher = false;
+    public final static boolean hasIntake = true;
     public static boolean testMotors = false;
 
     public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
