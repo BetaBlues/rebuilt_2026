@@ -143,8 +143,11 @@ public class RobotContainer {
       }
 
     if (Constants.hasIntake) {
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(0.4)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(-0.4)));
+        //in
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(0.5)));
+        //out
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(-0.5)));
+        //stops
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Intake.MoveMotor(0.0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Intake.MoveMotor(0.0)));
       }
