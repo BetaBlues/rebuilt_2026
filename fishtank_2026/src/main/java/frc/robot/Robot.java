@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Subsystems.Vision;
 
 
 /**
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
   private final Field2d field = new Field2d();
 
   private Field2d m_field = new Field2d();
+  private Vision m_vision = new Vision();
   
 
   //simulation testing
@@ -99,10 +101,14 @@ public class Robot extends TimedRobot {
       // This will get the simulated sensor readings that we set
       // in the previous article while in simulation, but will use
       // real values on the robot itself.
+      
+      
+      
   }
   @Override
   public void robotInit() {
     SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("adlkfbsda", field);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -124,6 +130,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    m_vision.estimatePose(m_field, m_robotContainer.m_gyro);
+    m_vision.showData();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
