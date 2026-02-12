@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
   private static final String kRightAuto = "Right Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final Field2d field = new Field2d();
 
   private Field2d m_field = new Field2d();
   private Vision m_vision = new Vision();
@@ -107,8 +106,8 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
-    SmartDashboard.putData("Field", field);
-    SmartDashboard.putData("adlkfbsda", field);
+    SmartDashboard.putData("Field", m_field);
+    //SmartDashboard.putData("adlkfbsda", m_field);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
