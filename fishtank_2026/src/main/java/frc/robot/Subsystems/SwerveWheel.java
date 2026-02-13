@@ -130,16 +130,18 @@ public class SwerveWheel {
 
     // Return the absolute encoder value in radians.
     public double getAbsEncoderRaw() {
-        double angle = (absoluteEncoder.get() - 0.5) * 2.0 * Math.PI;
+        //double angle = (absoluteEncoder.get() - 0.5) * 2.0 * Math.PI;
         // double angle = absoluteEncoder.get();
+        double angle = absoluteEncoder.get();
         return angle;
     }
 
     // Return the absolute encoder value in radians.
     public double getAbsEncoderRad() {
         double angle = getAbsEncoderRaw(); 
-        angle -= absoluteEncoderOffsetRad;
+       // angle -= absoluteEncoderOffsetRad;
         return -1.0 *angle; //-1.0*angle
+        //return angle;
     }
 
     public double getDrivePosition() {
@@ -168,7 +170,7 @@ public class SwerveWheel {
     }
 
     public double getTurningPosition() {
-        return steerEncoder.getPosition() / Constants.steerEncoderRatio;
+        return steerEncoder.getPosition(); // / Constants.steerEncoderRatio;
     }
 
     public double getDriveVelocity() {
@@ -186,7 +188,7 @@ public class SwerveWheel {
                     double tmp = getAbsEncoderRad();
                     SmartDashboard.putNumber(loc+"InitialAdj", tmp);
                     driveEncoder.setPosition(0);
-                    steerEncoder.setPosition(tmp* Constants.steerEncoderRatio);
+                    steerEncoder.setPosition(0); //tmp* Constants.steerEncoderRatio);
                 } catch (Exception e) {
                 }
             }).start();

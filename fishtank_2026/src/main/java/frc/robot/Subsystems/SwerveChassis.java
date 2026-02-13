@@ -100,7 +100,7 @@ public class SwerveChassis extends SubsystemBase {
         configLeft.inverted(false);
         configRight.apply(configLeft);
 
-        configRight.inverted(false);
+        configRight.inverted(false); //usually false
 
         leftFrontWheel = new SwerveWheel("LF", Constants.k_chassis.leftFrontMotorPort,
                                          Constants.k_chassis.leftFrontMotorSteerPort,

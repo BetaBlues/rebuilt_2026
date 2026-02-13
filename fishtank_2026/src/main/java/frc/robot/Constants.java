@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
     public final static boolean hasGyro = true;
-    public final static boolean hasSwerve = false;
+    public final static boolean hasSwerve = true;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;

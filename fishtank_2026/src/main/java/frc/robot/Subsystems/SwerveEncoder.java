@@ -31,6 +31,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 
 //(device_id: int, canbus: phoenix6.canbus.CANBus | str = CANBus())
@@ -55,8 +56,9 @@ public class SwerveEncoder extends CoreCANcoder {
     public double get() {
         // StatusSignal<Angle> signal = super.getAbsolutePosition();
         // return signal.getValue().in(Radians);
-        double rawValue = super.getAbsolutePosition().getValue().in(Units.Radians);
-        rawValue /= 2 * Math.PI; // Convert from radians to a 0-1 range
+        double rawValue = super.getPosition().getValue().in(Units.Radians);
+        //rawValue *= 2 * Math.PI; // Convert from radians to a 0-1 range
+        //SmartDashboard.putNumber("encoder value", super.getPosition().getValue().in(Units.Radians));
         return rawValue;
     }
 
