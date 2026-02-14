@@ -56,7 +56,7 @@ public class SwerveEncoder extends CoreCANcoder {
     public double get() {
         // StatusSignal<Angle> signal = super.getAbsolutePosition();
         // return signal.getValue().in(Radians);
-        double rawValue = super.getPosition().getValue().in(Units.Radians);
+        double rawValue = (super.getPosition().getValue().in(Units.Radians)) % Math.PI;
         //rawValue *= 2 * Math.PI; // Convert from radians to a 0-1 range
         //SmartDashboard.putNumber("encoder value", super.getPosition().getValue().in(Units.Radians));
         return rawValue;

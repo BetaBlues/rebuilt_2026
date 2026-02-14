@@ -170,8 +170,9 @@ public class SwerveWheel {
     }
 
     public double getTurningPosition() {
-        return steerEncoder.getPosition(); // / Constants.steerEncoderRatio;
+        return absoluteEncoder.get(); // / Constants.steerEncoderRatio;
     }
+    
 
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
