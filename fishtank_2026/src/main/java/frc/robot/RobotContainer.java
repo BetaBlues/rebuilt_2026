@@ -97,6 +97,7 @@ public class RobotContainer {
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test") : null;
     private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher") : null;
+    private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake") : null;
 
 
 
@@ -135,10 +136,20 @@ public class RobotContainer {
     }
     
     if (Constants.hasLauncher) {
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.5)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.5)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.3)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.3)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+      }
+
+    if (Constants.hasIntake) {
+        //in
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(0.5)));
+        //out
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Intake.MoveMotor(-0.5)));
+        //stops
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Intake.MoveMotor(0.0)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Intake.MoveMotor(0.0)));
       }
         
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));

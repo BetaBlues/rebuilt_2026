@@ -15,7 +15,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.Subsystems.SwerveEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.k_chassis;
@@ -32,7 +32,7 @@ public class SwerveWheel {
     private RelativeEncoder driveEncoder, steerEncoder;
 
     // Each wheel also has a "through-bore" encoder to give an absolute reference point
-    private DutyCycleEncoder absoluteEncoder;
+    private SwerveEncoder absoluteEncoder;
     private int absEncPort;
     private final double absoluteEncoderOffsetRad;
 
@@ -107,10 +107,10 @@ public class SwerveWheel {
         targetDriveDirection = 1.0;
         drivePidActive=false;
     
-        // SparkClosedLoopController driveCon = driveMotor.getClosedLoopController();
+        SparkClosedLoopController driveCon = driveMotor.getClosedLoopController();
 
         absEncPort = absPort;
-        absoluteEncoder = new DutyCycleEncoder(absPort, 1.0, 0.0);
+        absoluteEncoder = new SwerveEncoder(absPort, 1.0, 0.0);
         // absoluteEncoder.setDutyCycleRange(1.0/1024.0, 1.0);
         absoluteEncoderOffsetRad = absoluteOffset;
 
@@ -215,6 +215,8 @@ public class SwerveWheel {
         SmartDashboard.putNumber(loc+" Raw Angle", getAbsEncoderRaw());
         SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
         SmartDashboard.putNumber(loc+" Encoder Val", getTurningPosition());
+        SmartDashboard.putNumber(loc + " Drive Velocity", this.driveMotor.getEncoder().getPosition()); //  getDriveVelocity());
+        SmartDashboard.putNumber(loc + " Steer Velocity", this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
     }
 
     public void setState(SwerveModuleState state, boolean manualControl) {
