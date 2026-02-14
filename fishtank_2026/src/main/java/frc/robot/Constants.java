@@ -8,14 +8,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
     public final static boolean hasGyro = true;
-    public final static boolean hasSwerve = true;
+    public final static boolean hasSwerve = false;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;
     public final static boolean hasConveyorTwo = false;
     public final static boolean hasIntakeRotation = false;
     public final static boolean hasIntakeWheels = false;
-    public final static boolean hasLauncher = false;
+    public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
     public static boolean testMotors = false;
 
@@ -230,13 +230,13 @@ public class Constants {
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
     
     
-        public static final double kTrackWidth = Units.inchesToMeters(22.75);
-        public static final double kWheelBase = Units.inchesToMeters(22.75);
+        public static final double kTrackWidth = Units.inchesToMeters(22.75); //width?
+        public static final double kWheelBase = Units.inchesToMeters(22.75); //length?
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-              new Translation2d(kWheelBase / 2, -kTrackWidth / 2), 
               new Translation2d(kWheelBase / 2, kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); 
+              new Translation2d(kWheelBase / 2, -kTrackWidth / 2), 
+              new Translation2d(-kWheelBase / 2, kTrackWidth / 2), 
+              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); 
               
         //Chassis Motor ports
         /* x1 on can, drive motors*/ 
