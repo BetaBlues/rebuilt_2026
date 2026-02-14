@@ -95,9 +95,9 @@ public class RobotContainer {
     private final XboxController m_MechanismController = new XboxController(1); // connect XboxController to port 1
     private final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
-    private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test") : null;
-    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher") : null;
-    private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake") : null;
+    private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 4) : null;
+    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher", 8) : null;
+    private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake", 9) : null;
 
 
 
