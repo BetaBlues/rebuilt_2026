@@ -1,9 +1,13 @@
 package frc.robot.Subsystems;
+import frc.robot.Subsystems.Cameras.MiddleCamera;
+import frc.robot.Subsystems.Cameras.RightCamera;
+import frc.robot.Subsystems.Cameras.LeftCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public class PoseEstimation {
 
+public class PoseEstimation {
+    
     // /**
     //  * Fuses three pose estimates into one using weighted averaging.
     //  * @param p1 First pose
