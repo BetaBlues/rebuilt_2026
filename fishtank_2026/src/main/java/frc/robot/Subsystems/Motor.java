@@ -68,7 +68,7 @@ public class Motor extends SubsystemBase{
 
     }
 
-    public Motor(String name) {
+    public Motor(String name, int canID) {
         motorName = name;
 
     SysIdRoutine routine = new SysIdRoutine(
@@ -76,7 +76,7 @@ public class Motor extends SubsystemBase{
         new SysIdRoutine.Mechanism(this::sysIdDrive, this::sysIdLog, this)
         );    
 
-    spinMotor = new SparkMax(Constants.SpinMotorConstants.kCanId, MotorType.kBrushless);
+    spinMotor = new SparkMax(canID, MotorType.kBrushless);
     motorEncoder = spinMotor.getEncoder();
     config = new SparkMaxConfig();
     motorClosedLoop = spinMotor.getClosedLoopController();

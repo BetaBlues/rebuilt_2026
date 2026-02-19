@@ -95,8 +95,8 @@ public class RobotContainer {
     private final XboxController m_MechanismController = new XboxController(1); // connect XboxController to port 1
     public final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
-    private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test") : null;
-    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher") : null;
+    private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 4) : null;
+    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher", 10) : null;
 
 
 
@@ -135,10 +135,9 @@ public class RobotContainer {
     }
     
     if (Constants.hasLauncher) {
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(SpinMotorConstants.launcherSpin)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-SpinMotorConstants.launcherSpin)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onTrue(new InstantCommand(()-> m_Launcher.MovePos(0.0)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Launcher.MovePos(5.0)));
+      
       }
         
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
