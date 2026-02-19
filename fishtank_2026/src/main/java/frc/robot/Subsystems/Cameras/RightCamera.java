@@ -1,26 +1,29 @@
 package frc.robot.Subsystems.Cameras;
-
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+
+import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Subsystems.ChassisGyro;
 
-public class LeftCamera {
-    public static PhotonCamera LeftCamera;
 
-    public static AprilTagFieldLayout kTagLayout;
+public class RightCamera {
+     public static PhotonCamera LeftCamera;
+     public static PhotonCamera MiddleCamera;
+     public static PhotonCamera RightCamera;
+
+     public static AprilTagFieldLayout kTagLayout;
 
      public static Transform3d kRobotToCam;
      private PhotonTrackedTarget m_target;
@@ -28,20 +31,20 @@ public class LeftCamera {
      private int m_apriltagId = -1;
      private boolean isIndex = false;
 
-     public LeftCamera() {
+     public RightCamera() {
           //LeftCamera = new PhotonCamera("LeftCamera");
-          LeftCamera = new PhotonCamera("LeftCamera");
-          // RightCamera = new PhotonCamera("RightCamera");
+         // MiddleCamera = new PhotonCamera("MiddleCamera");
+          RightCamera = new PhotonCamera("RightCamera");
 
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
           kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
      }
 
-     public Pose3d estimateLeftPose(Field2d field, ChassisGyro gyro) {
-          List<PhotonPipelineResult> results = LeftCamera.getAllUnreadResults();
+     public void estimateMiddlePose(Field2d field, ChassisGyro gyro) {
+          List<PhotonPipelineResult> results = RightCamera.getAllUnreadResults();
           
           if(results.size() < 1) {
-               return null;
+               return;
           }
           SmartDashboard.putNumber("Results size", results.size());
           try {
@@ -53,18 +56,15 @@ public class LeftCamera {
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
                          field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), gyro.getRotation2d());
-                        return m_robotPose;
                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
                     }
                }
-            //    SmartDashboard.putNumber("Distance x", m_robotPose.getX());
-            //    SmartDashboard.putNumber("Distance y", m_robotPose.getY());
-            //    SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
-            //    SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
-            //    SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
-            //    SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
-
-               
+               SmartDashboard.putNumber("Distance x", m_robotPose.getX());
+               SmartDashboard.putNumber("Distance y", m_robotPose.getY());
+               SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
+               SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
+               SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
+               SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
           }
 
           catch(Exception e) {
@@ -75,14 +75,15 @@ public class LeftCamera {
 
           }
 
-        return null;
+
      }
 
      public void showData() {
           //SmartDashboard.putNumber("Left Apriltag Id", m_target.getFiducialId());
-          SmartDashboard.putString("Left Camera Name", LeftCamera.getName());
-          SmartDashboard.putBoolean("Left Camera Connected", LeftCamera.isConnected());
-          SmartDashboard.putNumber("Left Camera Apriltag Id", m_apriltagId);
+          SmartDashboard.putString("Right Camera Name", RightCamera.getName());
+          SmartDashboard.putBoolean("Right Camera Connected", RightCamera.isConnected());
+          SmartDashboard.putNumber("Right Cam Apriltag Id", m_apriltagId);
           // SmartDashboard.put
      } 
+
 }
