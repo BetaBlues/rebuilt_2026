@@ -29,6 +29,7 @@ public class Vision {
      private PhotonTrackedTarget m_target;
      private Pose3d m_robotPose;
      private int m_apriltagId = -1;
+     private boolean isIndex = false;
 
      public Vision() {
           //LeftCamera = new PhotonCamera("LeftCamera");
@@ -39,7 +40,7 @@ public class Vision {
           kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
      }
 
-     public void estimatePose(Field2d field, ChassisGyro gyro) {
+     public void estimateMiddlePose(Field2d field, ChassisGyro gyro) {
           List<PhotonPipelineResult> results = MiddleCamera.getAllUnreadResults();
           
           if(results.size() < 1) {
@@ -49,6 +50,7 @@ public class Vision {
           try {
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
+                    isIndex = true;
                     m_target = result.getBestTarget();
                     m_apriltagId = m_target.getFiducialId();
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
@@ -66,16 +68,12 @@ public class Vision {
           }
 
           catch(Exception e) {
-               System.out.println("Out of index");
+               SmartDashboard.putBoolean("Has april tag target:", isIndex);
           }
 
           finally {
 
           }
-
-
-     // Get a list of currently tracked targets.
-     //List<PhotonTrackedTarget> targets = result.getTargets();
 
 
      }

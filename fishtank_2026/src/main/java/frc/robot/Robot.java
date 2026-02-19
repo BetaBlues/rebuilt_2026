@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    m_vision.estimatePose(m_field, m_robotContainer.m_gyro);
+    m_vision.estimateMiddlePose(m_field, m_robotContainer.m_gyro);
     m_vision.showData();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
