@@ -98,6 +98,7 @@ public class RobotContainer {
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 4) : null;
     private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher", 10) : null;
     private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake", 9) : null;
+    private final Motor m_Climber = Constants.hasClimber ? new Motor("Climber", 7) : null;
 
 
 
@@ -152,6 +153,11 @@ public class RobotContainer {
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Intake.MoveMotor(0.0)));
       }
         
+    if (Constants.hasClimber) {
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(0.0)));
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(5.0)));
+       
+      }
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(Commands.runOnce(SignalLogger::stop));
 

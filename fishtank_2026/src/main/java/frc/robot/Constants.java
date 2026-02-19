@@ -17,6 +17,9 @@ public class Constants {
     public final static boolean hasIntakeWheels = false;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
+    public final static boolean hasClimber = false;
+    public final static boolean hasCanCoder = true;
+    public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
 
     public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
