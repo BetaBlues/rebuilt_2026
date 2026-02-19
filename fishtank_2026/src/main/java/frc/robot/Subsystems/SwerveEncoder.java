@@ -43,8 +43,10 @@ public class SwerveEncoder {
     private double expectedZero;
     private CoreCANcoder m_CanCoder;
     private DutyCycleEncoder m_DutyCycleEncoder;
+    private double encoderOffset;
 
-    public SwerveEncoder(int port) {
+    public SwerveEncoder(int port, double offset) {
+        this.encoderOffset = offset;
         if (Constants.hasCanCoder)
         {
             m_CanCoder = new CoreCANcoder(port);
@@ -58,7 +60,7 @@ public class SwerveEncoder {
         this.expectedZero = 0.0;
     }
 
-    public SwerveEncoder(int port, double fullRange, double expectedZero) {
+    public SwerveEncoder(int port, double fullRange, double expectedZero, double offset) {
         //m_CanCoder = new CoreCANcoder(port, CANBus.roboRIO());
         if (Constants.hasCanCoder)
         {
@@ -72,6 +74,7 @@ public class SwerveEncoder {
         // super(port, CANBus.roboRIO());
         this.fullRange = fullRange;
         this.expectedZero = expectedZero;
+        this.encoderOffset = offset;
        
     }
 
@@ -88,6 +91,7 @@ public class SwerveEncoder {
         else
         {
             rawValue = (m_DutyCycleEncoder.get() * 2 * Math.PI);
+            rawValue -= encoderOffset;
             
         }
         return rawValue;

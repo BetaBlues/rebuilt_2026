@@ -110,7 +110,7 @@ public class SwerveWheel {
         SparkClosedLoopController driveCon = driveMotor.getClosedLoopController();
 
         absEncPort = absPort;
-        absoluteEncoder = new SwerveEncoder(absPort, 1.0, 0.0);
+        absoluteEncoder = new SwerveEncoder(absPort, 1.0, 0.0, absoluteOffset);
         // absoluteEncoder.setDutyCycleRange(1.0/1024.0, 1.0);
         absoluteEncoderOffsetRad = absoluteOffset;
 
