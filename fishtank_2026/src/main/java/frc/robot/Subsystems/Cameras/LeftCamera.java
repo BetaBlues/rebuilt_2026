@@ -27,6 +27,9 @@ public class LeftCamera {
      private Pose3d m_robotPose;
      private int m_apriltagId = -1;
      private boolean isIndex = false;
+     private double[] xValues = new double[5];
+     private double[] yValues = new double[5];
+    private int count = 0;
 
      public LeftCamera() {
           //LeftCamera = new PhotonCamera("LeftCamera");
@@ -53,6 +56,14 @@ public class LeftCamera {
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
                          field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), gyro.getRotation2d());
+                        xValues[count] = m_robotPose.getX();
+                        yValues[count] = m_robotPose.getY();
+                        count++;
+                        if (count > 4) {
+                            count = 0;
+                        }
+                        if 
+                        field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
                         return m_robotPose;
                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
                     }
@@ -76,6 +87,22 @@ public class LeftCamera {
           }
 
         return null;
+     }
+
+     public double getXAverage() {
+        double sum = 0;
+        for (double x : xValues) {
+            sum += x;
+        }
+        return sum / xValues.length;
+     }
+
+     public double getYAverage() {
+        double sum = 0;
+        for (double y : yValues) {
+            sum += y;
+        }
+        return sum / yValues.length;
      }
 
      public void showData() {
