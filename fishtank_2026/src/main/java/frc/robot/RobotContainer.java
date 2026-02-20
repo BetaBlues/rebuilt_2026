@@ -156,6 +156,7 @@ public class RobotContainer {
     if (Constants.hasClimber) {
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(0.0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(-70.0)));
+        new POVButton(m_MechanismController, 180).onTrue(new InstantCommand(()-> m_Climber.MovePos(70.0)));
        
       }
     //  new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(Commands.runOnce(SignalLogger::start));
