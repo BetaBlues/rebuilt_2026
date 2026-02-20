@@ -15,10 +15,10 @@ public class Constants {
     public final static boolean hasConveyorTwo = false;
     public final static boolean hasIntakeRotation = false;
     public final static boolean hasIntakeWheels = false;
-    public final static boolean hasLauncher = true;
-    public final static boolean hasIntake = true;
-    public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = true;
+    public final static boolean hasLauncher = false;
+    public final static boolean hasIntake = false;
+    public final static boolean hasClimber = true;
+    public final static boolean hasCanCoder = false;
     public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
 
