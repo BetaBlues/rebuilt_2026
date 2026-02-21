@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class Constants {
     public final static boolean hasGyro = true;
-    public final static boolean hasSwerve = false;
+    public final static boolean hasSwerve = true;
     public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
     public final static boolean hasConveyorOne = false;
@@ -17,16 +17,24 @@ public class Constants {
     public final static boolean hasIntakeWheels = false;
     public final static boolean hasLauncher = false;
     public final static boolean hasIntake = false;
-    public final static boolean hasClimber = true;
-    public final static boolean hasCanCoder = false;
+    public final static boolean hasClimber = false;
+    public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
 
-    public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
-    public static final double leftFrontAbsOffset =  0;//1.47;
-    public static final double rightFrontAbsOffset = 0;//2.19;
-    public static final double leftRearAbsOffset = 0;//-1.57;
-    public static final double rightRearAbsOffset= 0;//2.145;
+    //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
+    public static int enc = 0;
+
+   
+    public static final int[] rightFrontAbsEncPort = {13, 1};
+    public static final int[] leftFrontAbsEncPort = {23, 2};
+    public static final int[] leftRearAbsEncPort = {33, 3};
+    public static final int[] rightRearAbsEncPort = {43, 4};
+    //public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
+    public static final double leftFrontAbsOffset =  1.48;//1.51;//1.47;
+    public static final double rightFrontAbsOffset = 2.17;//2.19;
+    public static final double leftRearAbsOffset = 1.55;//-1.57;
+    public static final double rightRearAbsOffset= 0.78;//2.145;
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 

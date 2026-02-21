@@ -189,7 +189,7 @@ public class SwerveWheel {
                     double tmp = getAbsEncoderRad();
                     SmartDashboard.putNumber(loc+"InitialAdj", tmp);
                     driveEncoder.setPosition(0);
-                    steerEncoder.setPosition(0); //tmp* Constants.steerEncoderRatio);
+                    steerEncoder.setPosition(tmp* Constants.steerEncoderRatio); //0);
                 } catch (Exception e) {
                 }
             }).start();
@@ -215,8 +215,12 @@ public class SwerveWheel {
         // SmartDashboard.putNumber(loc+"-adjustedAngle", Math.toDegrees(getAbsEncoderRad()) % 360);
         // SmartDashboard.putNumber(loc+"-encoderVal", Math.toDegrees(getTurningPosition()) % 360);
         SmartDashboard.putNumber(loc+" Port", absEncPort);
-        SmartDashboard.putNumber(loc+" Raw Angle", getAbsEncoderRaw());
-        SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
+        if (Constants.hasPWMEncoder)
+        {
+            SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
+        }
+        SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
+        SmartDashboard.putNumber(loc+"-1 * Angle", getAbsEncoderRad());
         SmartDashboard.putNumber(loc+" Encoder Val", getTurningPosition());
         SmartDashboard.putNumber(loc + " Drive Velocity", this.driveMotor.getEncoder().getPosition()); //  getDriveVelocity());
         SmartDashboard.putNumber(loc + " Steer Velocity", this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());

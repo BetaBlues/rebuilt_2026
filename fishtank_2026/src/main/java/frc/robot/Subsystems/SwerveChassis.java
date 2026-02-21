@@ -101,22 +101,23 @@ public class SwerveChassis extends SubsystemBase {
         configRight.apply(configLeft);
 
         configRight.inverted(false); //usually false
+        
 
         leftFrontWheel = new SwerveWheel("LF", Constants.k_chassis.leftFrontMotorPort,
                                          Constants.k_chassis.leftFrontMotorSteerPort,
-                                         Constants.leftFrontAbsEncPort /* move to Constants */, configLeft,
+                                         Constants.leftFrontAbsEncPort[Constants.enc] /* move to Constants */, configLeft,
                                          Constants.leftFrontAbsOffset);
         rightFrontWheel = new SwerveWheel("RF", Constants.k_chassis.rightFrontMotorPort,
                                          Constants.k_chassis.rightFrontMotorSteerPort,
-                                         Constants.rightFrontAbsEncPort /* move to Constants */, configRight,
+                                         Constants.rightFrontAbsEncPort[Constants.enc] /* move to Constants */, configRight,
                                          Constants.rightFrontAbsOffset);
         leftRearWheel = new SwerveWheel("LR", Constants.k_chassis.leftRearMotorPort,
                                          Constants.k_chassis.leftRearMotorSteerPort,
-                                         Constants.leftRearAbsEncPort /* move to Constants */, configLeft,
+                                         Constants.leftRearAbsEncPort[Constants.enc] /* move to Constants */, configLeft,
                                          Constants.leftRearAbsOffset);
         rightRearWheel = new SwerveWheel("RR", Constants.k_chassis.rightRearMotorPort,
                                          Constants.k_chassis.rightRearMotorSteerPort,
-                                         Constants.rightRearAbsEncPort /* move to Constants */, configRight,
+                                         Constants.rightRearAbsEncPort[Constants.enc] /* move to Constants */, configRight,
                                          Constants.rightRearAbsOffset);
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));

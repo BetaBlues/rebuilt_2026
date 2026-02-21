@@ -34,6 +34,7 @@ import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import frc.robot.Constants;
+import com.revrobotics.RelativeEncoder;
 
 //(device_id: int, canbus: phoenix6.canbus.CANBus | str = CANBus())
 
@@ -43,6 +44,7 @@ public class SwerveEncoder {
     private double expectedZero;
     private CoreCANcoder m_CanCoder;
     private DutyCycleEncoder m_DutyCycleEncoder;
+    private RelativeEncoder m_relEncoder;
     private double encoderOffset;
 
     public SwerveEncoder(int port, double offset) {
@@ -70,6 +72,7 @@ public class SwerveEncoder {
         else
         {
             m_DutyCycleEncoder = new DutyCycleEncoder(port);
+          
         }
         // super(port, CANBus.roboRIO());
         this.fullRange = fullRange;
@@ -90,12 +93,16 @@ public class SwerveEncoder {
         }
         else
         {
-            rawValue = (m_DutyCycleEncoder.get() * 2 * Math.PI);
-            rawValue -= encoderOffset;
+            rawValue = m_DutyCycleEncoder.get() * 2 * Math.PI;//((m_DutyCycleEncoder.get()) % 2 * Math.PI); // * 2 * Math.PI);
             
+            rawValue -= encoderOffset;
+            rawValue = rawValue % (Math.PI);
         }
         return rawValue;
         
+    }
+    public double getRawDutyCycle() {
+        return m_DutyCycleEncoder.get();
     }
 
     
