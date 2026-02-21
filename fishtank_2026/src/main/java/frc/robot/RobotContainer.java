@@ -140,10 +140,10 @@ public class RobotContainer {
         SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
           m_kinematics, m_gyro.getRotation2d(),
           new SwerveModulePosition[] {
-            m_frontLeftModule.getPosition(),
-            m_frontRightModule.getPosition(),
-            m_backLeftModule.getPosition(),
-            m_backRightModule.getPosition()
+            leftFrontWheel.getPosition(),
+            rightFrontWheel.getPosition(),
+            leftRearWheel.getPosition(),
+            rightRearWheel.getPosition()
           }, new Pose2d(5.0, 13.5, new Rotation2d()));
 
       
