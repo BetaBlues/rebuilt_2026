@@ -220,10 +220,11 @@ public class SwerveWheel {
             SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
         }
         SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
-        SmartDashboard.putNumber(loc+"-1 * Angle", getAbsEncoderRad());
-        SmartDashboard.putNumber(loc+" Encoder Val", getTurningPosition());
-        SmartDashboard.putNumber(loc + " Drive Velocity", this.driveMotor.getEncoder().getPosition()); //  getDriveVelocity());
-        SmartDashboard.putNumber(loc + " Steer Velocity", this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
+        SmartDashboard.putNumber(loc+" -1 * Angle", getAbsEncoderRad());
+        SmartDashboard.putNumber(loc+" Steer Encoder Val", getTurningPosition());
+        SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
+        SmartDashboard.putNumber(loc + " Drive Velocity", getDriveVelocity());//getEncoder().getPosition()); //  getDriveVelocity());
+        SmartDashboard.putNumber(loc + " Steer Velocity", getTurningVelocity(steerEncoder));//this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
     }
 
     public void setState(SwerveModuleState state, boolean manualControl) {

@@ -35,6 +35,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 
 //(device_id: int, canbus: phoenix6.canbus.CANBus | str = CANBus())
 
@@ -104,8 +106,53 @@ public class SwerveEncoder {
     public double getRawDutyCycle() {
         return m_DutyCycleEncoder.get();
     }
+   
 
-    
+public class DutyCycleEncoderVelocity {
+    private final DutyCycleEncoder encoder;
+    private double lastPosition;
+    private double lastTimestamp;
+    private double velocity; // rotations per second
+
+    public DutyCycleEncoderVelocity(int port) {
+        m_DutyCycleEncoder.setDistancePerRotation(1.0); // 1 rotation = 1 unit distance
+        lastPosition = m_DutyCycleEncoder.get();
+        lastTimestamp = Timer.getFPGATimestamp();
+        velocity = 0.0;
+    }
+
+    /** Call this periodically (e.g., in robotPeriodic) */
+    public void update() {
+        double currentPosition = m_DutyCycleEncoder.get();
+        double currentTime = Timer.getFPGATimestamp();
+
+        double deltaPos = currentPosition - lastPosition;
+        double deltaTime = currentTime - lastTimestamp;
+
+        if (deltaTime > 0) {
+            velocity = deltaPos / deltaTime; // rotations per second
+        }
+
+        lastPosition = currentPosition;
+        lastTimestamp = currentTime;
+    }
+
+    /** Get velocity in rotations per second */
+    public double getVelocity() {
+        if (Constants.hasCanCoder)
+        {
+            return m_CanCoder.getVelocity().getValue().in(Units.MetersPerSecond);
+        }
+        return velocity;
+    }
+
+    /** Get velocity in meters per second (if you know wheel circumference) */
+    public double getVelocityMetersPerSecond(double wheelCircumferenceMeters) {
+        return velocity * wheelCircumferenceMeters;
+    }
+}
+
+   
     // public static final double leftFrontAbsOffset = 1.47;
     // public static final double rightFrontAbsOffset = 2.19;
     // public static final double leftRearAbsOffset = -1.57;
