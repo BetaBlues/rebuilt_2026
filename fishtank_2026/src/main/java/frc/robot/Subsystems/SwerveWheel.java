@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.datalog.DataLog;
@@ -194,6 +195,13 @@ public class SwerveWheel {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+    }
+
+    //get the module position for odometry in (p, θ) of (m, deg)
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(
+            driveEncoder.getPosition(),
+            Rotation2d.fromDegrees(absoluteEncoder.get()));
     }
 
     public void turnWheel(double angle) {

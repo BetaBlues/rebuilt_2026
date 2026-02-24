@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -21,7 +23,10 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.commands.SwerveDriveCommand;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +51,11 @@ public class SwerveChassis extends SubsystemBase {
     // Swerve Drive Kinematics (for calculating wheel speeds and angles)
     private SwerveDriveKinematics m_kinematics;
     private double worldRotation;
+
+    public SwerveDriveOdometry odometry;
+    public StructArrayPublisher<SwerveModuleState> statePublish; //For AdvantageScope (Data publishing)
+    public StructPublisher<Pose2d> odometryPublish; 
+
 
     public void setWorldRotation(double nWR)
     {
@@ -120,6 +130,11 @@ public class SwerveChassis extends SubsystemBase {
                                          Constants.rightRearAbsOffset);
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
+
+      
+        odometry = new SwerveDriveOdometry(Constants.k_chassis.kDriveKinematics, gyro.getRotation2d(), getModulePosition());
+        // statePublish = NetworkTableInstance.getDefault().getStructArrayTopic("SwerveDrive",SwerveModuleState.struct).publish(PubSubOption.keepDuplicates(false));
+        // odometryPublish = NetworkTableInstance.getDefault().getStructTopic("Odometry", Pose2d.struct).publish(PubSubOption.keepDuplicates(false));
     }
       
     public void testMotors(double roll_speed, double rot_speed) {
@@ -148,6 +163,25 @@ public class SwerveChassis extends SubsystemBase {
         rightFrontWheel.setState(states[1], manualState);
         leftRearWheel.setState(states[2], manualState);
         rightRearWheel.setState(states[3], manualState);
+    }
+
+        //get the module positions
+    public SwerveModulePosition[] getModulePosition(){
+        return new SwerveModulePosition[]{
+            leftFrontWheel.getPosition(),
+            rightFrontWheel.getPosition(),
+            leftRearWheel.getPosition(),
+            rightRearWheel.getPosition()
+        };
+    }
+
+    public SwerveModuleState[] getModuleStates(){
+        return new SwerveModuleState[]{
+            leftFrontWheel.getState(),
+            rightFrontWheel.getState(),
+            leftRearWheel.getState(),
+            rightRearWheel.getState()
+        };
     }
 
     public void setDriveTargetRelativePosition(double relPos, double degrees){
@@ -190,6 +224,7 @@ public class SwerveChassis extends SubsystemBase {
         }).start();
     }
 
+    
 
     public void stopModules() {
         rightFrontWheel.stop();
@@ -207,6 +242,11 @@ public class SwerveChassis extends SubsystemBase {
         rightRearWheel.publishData();
         leftFrontWheel.publishData();
         leftRearWheel.publishData();
+
+        odometry.update(gyro.getRotation2d(), getModulePosition());
+        //odometryPublish.set(odometry.getPoseMeters());
+        //SmartDashboard.putData("Odometry pose", odometry.getPoseMeters());
+        //statePublish.set(this.getModuleStates());
     }
 
 }
