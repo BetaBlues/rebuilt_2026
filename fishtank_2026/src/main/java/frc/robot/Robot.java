@@ -223,8 +223,8 @@ public class Robot extends TimedRobot {
     // Update the pose
     m_pose = m_odometry.update(gyroAngle,
     new SwerveModulePosition[] {
-      m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
-      m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+      leftRearWheel.getPosition(), rightRearWheel.getPosition()
     });
   }
 
@@ -249,8 +249,8 @@ public class Robot extends TimedRobot {
     // Update the pose
     m_pose = m_odometry.update(gyroAngle,
     new SwerveModulePosition[] {
-      m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
-      m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+      leftRearWheel.getPosition(), rightRearWheel.getPosition()
     });
    
     //added to test sim movement without swerve code
