@@ -62,7 +62,6 @@ public class LeftCamera {
                         if (count > 4) {
                             count = 0;
                         }
-                        if 
                         field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
                         return m_robotPose;
                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
