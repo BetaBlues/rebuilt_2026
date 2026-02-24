@@ -219,13 +219,13 @@ public class Robot extends TimedRobot {
     //     // swerveChassis.driveTime(2,0.7,0.0);
     //     break;
     // }
-    var gyroAngle = m_gyro.getRotation2d();
-    // Update the pose
-    m_pose = m_odometry.update(gyroAngle,
-    new SwerveModulePosition[] {
-      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
-      leftRearWheel.getPosition(), rightRearWheel.getPosition()
-    });
+    // var gyroAngle = m_gyro.getRotation2d();
+    // // Update the pose
+    // m_pose = m_odometry.update(gyroAngle,
+    // new SwerveModulePosition[] {
+    //   m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
+    //   m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+    // });
   }
 
   
@@ -245,13 +245,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    var gyroAngle = m_gyro.getRotation2d();
-    // Update the pose
-    m_pose = m_odometry.update(gyroAngle,
-    new SwerveModulePosition[] {
-      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
-      leftRearWheel.getPosition(), rightRearWheel.getPosition()
-    });
+    // var gyroAngle = m_gyro.getRotation2d();
+    // // Update the pose
+    // m_pose = m_odometry.update(gyroAngle,
+    // new SwerveModulePosition[] {
+    //   m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
+    //   m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+    // });
    
     //added to test sim movement without swerve code
     // double forward =- m_SwerveController.getLeftY();

@@ -137,18 +137,18 @@ public class RobotContainer {
         // Creating my odometry object from the kinematics object and the initial wheel positions.
         // Here, our starting pose is 5 meters along the long end of the field and in the
         // center of the field along the short end, facing the opposing alliance wall.
-        SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-          m_kinematics, m_gyro.getRotation2d(),
-          new SwerveModulePosition[] {
-            leftFrontWheel.getPosition(),
-            rightFrontWheel.getPosition(),
-            leftRearWheel.getPosition(),
-            rightRearWheel.getPosition()
-          }, new Pose2d(5.0, 13.5, new Rotation2d()));
+    //     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+    //       m_kinematics, m_gyro.getRotation2d(),
+    //       new SwerveModulePosition[] {
+    //         m_frontLeftModule.getPosition(),
+    //         m_frontRightModule.getPosition(),
+    //         m_backLeftModule.getPosition(),
+    //         m_backRightModule.getPosition()
+    //       }, new Pose2d(5.0, 13.5, new Rotation2d()));
 
       
          
-    }
+    // }
 
   
    
@@ -198,5 +198,6 @@ public class RobotContainer {
 
     
       // }
+}
 }
  
