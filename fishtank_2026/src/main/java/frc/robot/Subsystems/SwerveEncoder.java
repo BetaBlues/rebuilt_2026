@@ -99,8 +99,9 @@ public class SwerveEncoder {
             
             //rawValue -= encoderOffset;
            // rawValue = rawValue % (Math.PI);
+           rawValue *= -1;
         }
-        rawValue *= -1;
+        //rawValue *= -1;
         return rawValue;
         
     }

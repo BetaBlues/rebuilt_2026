@@ -18,12 +18,12 @@ public class Constants {
     public final static boolean hasLauncher = false;
     public final static boolean hasIntake = false;
     public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = false;
-    public final static boolean hasPWMEncoder = true;
+    public final static boolean hasCanCoder = true;
+    public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 1;
+    public static int enc = 0;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
