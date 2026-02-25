@@ -1,4 +1,4 @@
-package frc.robot.Subsystems.Cameras;
+package frc.robot.Subsystems;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +17,11 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Subsystems.ChassisGyro;
+
 import org.photonvision.PhotonPoseEstimator;
 
-public class LeftCamera {
-    public static PhotonCamera LeftCamera;
+public class Camera {
+    public static PhotonCamera camera;
 
     public static AprilTagFieldLayout kTagLayout;
 
@@ -38,30 +38,28 @@ public class LeftCamera {
      private double[] zValues = new double[5];
     private int count = 0;
 
-     public LeftCamera() {
-          //LeftCamera = new PhotonCamera("LeftCamera");
-          LeftCamera = new PhotonCamera("LeftCamera");
-          // RightCamera = new PhotonCamera("RightCamera");
+     public Camera(String cameraName) {
+          camera = new PhotonCamera(cameraName);
 
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
           kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
      }
 
-     public Pose3d averagePose(Field2d field, ChassisGyro gyro) {
-          xValues[count] = m_Pose3d.getX();
-          yValues[count] = m_Pose3d.getY();
-          zValues[count] = m_Pose3d.getZ();
-          count++;
-          if (count > 4) {
-               count = 0;
-          }
-          field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
-          m_robotPose = new Pose3d(getXAverage(), getYAverage(), m_Pose3d.getZ(), gyro.getRotation3d());
-          return m_robotPose;
-     }
+     // public Pose3d averagePose(Field2d field, ChassisGyro gyro) {
+     //      xValues[count] = m_Pose3d.getX();
+     //      yValues[count] = m_Pose3d.getY();
+     //      zValues[count] = m_Pose3d.getZ();
+     //      count++;
+     //      if (count > 4) {
+     //           count = 0;
+     //      }
+     //      field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
+     //      m_robotPose = new Pose3d(getXAverage(), getYAverage(), m_Pose3d.getZ(), gyro.getRotation3d());
+     //      return m_robotPose;
+     // }
 
-     public Pose3d estimateLeftPoseMultTarg() {
-          List<PhotonPipelineResult> results = LeftCamera.getAllUnreadResults();
+     public Pose3d estimateLeftPoseMultTarg(Field2d field, ChassisGyro gyro) {
+          List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           if(results.size() < 1) {
                return null;
@@ -71,13 +69,24 @@ public class LeftCamera {
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
                     isIndex = true;
+                    m_target = result.getBestTarget();
+                    m_apriltagId = m_target.getFiducialId();
                     Optional<EstimatedRobotPose> pose = m_estimator.estimateCoprocMultiTagPose(result);
                     if (pose.isEmpty()) {
                          pose = m_estimator.estimateLowestAmbiguityPose(result);
                     }
                     EstimatedRobotPose p = pose.get();
                     m_Pose3d = p.estimatedPose;
-                    return m_Pose3d;
+                    xValues[count] = m_Pose3d.getX();
+                    yValues[count] = m_Pose3d.getY();
+                    zValues[count] = m_Pose3d.getZ();
+                    count++;
+                    if (count > 4) {
+                         count = 0;
+                    }
+                    field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
+                    m_robotPose = new Pose3d(getXAverage(), getYAverage(), m_Pose3d.getZ(), gyro.getRotation3d());
+                    return m_robotPose;
                }
           }
 
@@ -93,7 +102,7 @@ public class LeftCamera {
      }
 
      public Pose3d estimateLeftPose(Field2d field, ChassisGyro gyro) {
-          List<PhotonPipelineResult> results = LeftCamera.getAllUnreadResults();
+          List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           if(results.size() < 1) {
                return null;
@@ -166,9 +175,9 @@ public class LeftCamera {
 
      public void showData() {
           //SmartDashboard.putNumber("Left Apriltag Id", m_target.getFiducialId());
-          SmartDashboard.putString("Left Camera Name", LeftCamera.getName());
-          SmartDashboard.putBoolean("Left Camera Connected", LeftCamera.isConnected());
-          SmartDashboard.putNumber("Left Camera Apriltag Id", m_apriltagId);
+          SmartDashboard.putString("Camera Name", camera.getName());
+          SmartDashboard.putBoolean(camera.getName() + " Camera Connected", camera.isConnected());
+          SmartDashboard.putNumber(camera.getName() + " Camera Apriltag Id", m_apriltagId);
           // SmartDashboard.put
      } 
 }

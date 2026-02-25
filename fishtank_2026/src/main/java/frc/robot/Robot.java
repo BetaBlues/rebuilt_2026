@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Camera;
 import frc.robot.Subsystems.SwerveChassis;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
 
   private Field2d m_field = new Field2d();
   private Vision m_vision = new Vision();
+  private Camera m_leftCamera = new Camera("LeftCamera");
   
 
   //simulation testing
@@ -129,8 +131,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    m_vision.estimateMiddlePose(m_field, m_robotContainer.m_gyro);
-    m_vision.showData();
+    //m_leftCamera.estimateLeftPose(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.estimateLeftPoseMultTarg(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.showData();
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
