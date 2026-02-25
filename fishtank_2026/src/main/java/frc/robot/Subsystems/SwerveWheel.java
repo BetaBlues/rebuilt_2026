@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -223,9 +224,10 @@ public class SwerveWheel {
         //SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
         SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
         SmartDashboard.putNumber(loc+" Steer Encoder Val", getTurningPosition());
-       // SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
-        SmartDashboard.putNumber(loc + " Drive Velocity", getDriveVelocity());//getEncoder().getPosition()); //  getDriveVelocity());
-        SmartDashboard.putNumber(loc + " Steer Velocity", getTurningVelocity(steerEncoder));//this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
+
+        //SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
+        //SmartDashboard.putNumber(loc + " Drive Velocity", getDriveVelocity());//getEncoder().getPosition()); //  getDriveVelocity());
+        //SmartDashboard.putNumber(loc + " Steer Velocity", getTurningVelocity(steerEncoder));//this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
     }
 
     public void setState(SwerveModuleState state, boolean manualControl) {

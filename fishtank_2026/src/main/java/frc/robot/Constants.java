@@ -9,14 +9,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
-    public final static boolean hasSeesaw = false;
     public final static boolean hasMotor = false;
-    public final static boolean hasConveyorOne = false;
-    public final static boolean hasConveyorTwo = false;
-    public final static boolean hasIntakeRotation = false;
-    public final static boolean hasIntakeWheels = false;
-    public final static boolean hasLauncher = false;
-    public final static boolean hasIntake = false;
+    public final static boolean hasLauncher = true;
+    public final static boolean hasIntake = true;
     public final static boolean hasClimber = false;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
@@ -194,7 +189,27 @@ public class Constants {
     }
 
     
+    public static class ClimberConstants {
+      public static final int absoluteEncCAN = 5;
+      
 
+      
+      public static final int kCurrentLimit = 60;
+      public static final double kPERotation = 0.1;
+      public static final double kIERotation = 0.0;
+      public static final double kDERotation = 0.0;
+      public static final double MaxRotationSpeed= 0.1;
+      public static final double ClimberOffset = 0.0; //-0.428;
+    
+      public static final double absoluteOffset = 0.0;
+      public static final double distanceConversionFactor= 1.0; //meters to rotation
+      public static final double setpoint0 = 0.0;
+      public static final double setpoint1 = -70.0;
+  
+      
+      public static final double kSoftLimitReverse = -25000;
+      public static final double kSoftLimitForward = 35000;
+    }
 
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
