@@ -129,18 +129,19 @@ public class SwerveWheel {
     }
 
     // Return the absolute encoder value in radians.
-    public double getAbsEncoderRaw() {
-        //double angle = (absoluteEncoder.get() - 0.5) * 2.0 * Math.PI;
-        // double angle = absoluteEncoder.get();
-        double angle = absoluteEncoder.get();
-        return angle;
-    }
+    // public double getAbsEncoderRaw() {
+    //     //double angle = (absoluteEncoder.get() - 0.5) * 2.0 * Math.PI;
+    //     // double angle = absoluteEncoder.get();
+    //     double angle = absoluteEncoder.get();
+    //     return angle;
+    // }
 
     // Return the absolute encoder value in radians.
     public double getAbsEncoderRad() {
-        double angle = getAbsEncoderRaw(); 
+        double angle = absoluteEncoder.get();//getAbsEncoderRaw(); 
        // angle -= absoluteEncoderOffsetRad;
-        return -1.0 *angle; //-1.0*angle
+        //return -1.0 *angle; //-1.0*angle
+        return angle;
         //return angle;
     }
 
@@ -219,10 +220,10 @@ public class SwerveWheel {
         {
             SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
         }
-        SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
-        SmartDashboard.putNumber(loc+" -1 * Angle", getAbsEncoderRad());
+        //SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
+        SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
         SmartDashboard.putNumber(loc+" Steer Encoder Val", getTurningPosition());
-        SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
+       // SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
         SmartDashboard.putNumber(loc + " Drive Velocity", getDriveVelocity());//getEncoder().getPosition()); //  getDriveVelocity());
         SmartDashboard.putNumber(loc + " Steer Velocity", getTurningVelocity(steerEncoder));//this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
     }

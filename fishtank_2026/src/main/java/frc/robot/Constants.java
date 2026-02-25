@@ -18,12 +18,12 @@ public class Constants {
     public final static boolean hasLauncher = false;
     public final static boolean hasIntake = false;
     public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = true;
-    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasCanCoder = false;
+    public final static boolean hasPWMEncoder = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 0;
+    public static int enc = 1;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -31,10 +31,10 @@ public class Constants {
     public static final int[] leftRearAbsEncPort = {33, 3};
     public static final int[] rightRearAbsEncPort = {43, 4};
     //public static final int rightFrontAbsEncPort = 13, leftFrontAbsEncPort = 23, leftRearAbsEncPort = 33, rightRearAbsEncPort = 43; //1,2,3,4 in order
-    public static final double leftFrontAbsOffset =  1.48;//1.51;//1.47;
-    public static final double rightFrontAbsOffset = 2.17;//2.19;
-    public static final double leftRearAbsOffset = 1.55;//-1.57;
-    public static final double rightRearAbsOffset= 0.78;//2.145;
+    public static final double leftFrontAbsOffset =  0.226;//1.48;//1.51;//1.47;
+    public static final double rightFrontAbsOffset = 0.351;//2.17;//2.19;
+    public static final double leftRearAbsOffset = 0.743;//1.55;//-1.57;
+    public static final double rightRearAbsOffset= 0.361;//0.78;//2.145;
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 
@@ -240,14 +240,15 @@ public class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
     
-    
+     
         public static final double kTrackWidth = Units.inchesToMeters(22.75); //width?
         public static final double kWheelBase = Units.inchesToMeters(22.75); //length?
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-              new Translation2d(kWheelBase / 2, kTrackWidth / 2), 
               new Translation2d(kWheelBase / 2, -kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); 
+              new Translation2d(kWheelBase / 2, kTrackWidth / 2), 
+              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), 
+              new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); 
+      
               
         //Chassis Motor ports
         /* x1 on can, drive motors*/ 

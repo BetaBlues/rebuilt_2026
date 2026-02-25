@@ -73,7 +73,7 @@ public class SwerveEncoder {
         }
         else
         {
-            m_DutyCycleEncoder = new DutyCycleEncoder(port);
+            m_DutyCycleEncoder = new DutyCycleEncoder(port, fullRange, offset);
           
         }
         // super(port, CANBus.roboRIO());
@@ -95,11 +95,12 @@ public class SwerveEncoder {
         }
         else
         {
-            rawValue = m_DutyCycleEncoder.get() * 2 * Math.PI;//((m_DutyCycleEncoder.get()) % 2 * Math.PI); // * 2 * Math.PI);
+            rawValue = (m_DutyCycleEncoder.get() - 0.5) * 2 * Math.PI;//((m_DutyCycleEncoder.get()) % 2 * Math.PI); // * 2 * Math.PI);
             
-            rawValue -= encoderOffset;
-            rawValue = rawValue % (Math.PI);
+            //rawValue -= encoderOffset;
+           // rawValue = rawValue % (Math.PI);
         }
+        rawValue *= -1;
         return rawValue;
         
     }
@@ -108,49 +109,49 @@ public class SwerveEncoder {
     }
    
 
-public class DutyCycleEncoderVelocity {
-    private final DutyCycleEncoder encoder;
-    private double lastPosition;
-    private double lastTimestamp;
-    private double velocity; // rotations per second
+// public class DutyCycleEncoderVelocity {
+//     private final DutyCycleEncoder encoder;
+//     private double lastPosition;
+//     private double lastTimestamp;
+//     private double velocity; // rotations per second
 
-    public DutyCycleEncoderVelocity(int port) {
-        m_DutyCycleEncoder.setDistancePerRotation(1.0); // 1 rotation = 1 unit distance
-        lastPosition = m_DutyCycleEncoder.get();
-        lastTimestamp = Timer.getFPGATimestamp();
-        velocity = 0.0;
-    }
+//     public DutyCycleEncoderVelocity(int port) {
+//         m_DutyCycleEncoder.setDistancePerRotation(1.0); // 1 rotation = 1 unit distance
+//         lastPosition = m_DutyCycleEncoder.get();
+//         lastTimestamp = Timer.getFPGATimestamp();
+//         velocity = 0.0;
+//     }
 
-    /** Call this periodically (e.g., in robotPeriodic) */
-    public void update() {
-        double currentPosition = m_DutyCycleEncoder.get();
-        double currentTime = Timer.getFPGATimestamp();
+//     /** Call this periodically (e.g., in robotPeriodic) */
+//     public void update() {
+//         double currentPosition = m_DutyCycleEncoder.get();
+//         double currentTime = Timer.getFPGATimestamp();
 
-        double deltaPos = currentPosition - lastPosition;
-        double deltaTime = currentTime - lastTimestamp;
+//         double deltaPos = currentPosition - lastPosition;
+//         double deltaTime = currentTime - lastTimestamp;
 
-        if (deltaTime > 0) {
-            velocity = deltaPos / deltaTime; // rotations per second
-        }
+//         if (deltaTime > 0) {
+//             velocity = deltaPos / deltaTime; // rotations per second
+//         }
 
-        lastPosition = currentPosition;
-        lastTimestamp = currentTime;
-    }
+//         lastPosition = currentPosition;
+//         lastTimestamp = currentTime;
+//     }
 
-    /** Get velocity in rotations per second */
-    public double getVelocity() {
-        if (Constants.hasCanCoder)
-        {
-            return m_CanCoder.getVelocity().getValue().in(Units.MetersPerSecond);
-        }
-        return velocity;
-    }
+//     /** Get velocity in rotations per second */
+//     public double getVelocity() {
+//         if (Constants.hasCanCoder)
+//         {
+//             return m_CanCoder.getVelocity().getValue().in(Units.MetersPerSecond);
+//         }
+//         return velocity;
+//     }
 
-    /** Get velocity in meters per second (if you know wheel circumference) */
-    public double getVelocityMetersPerSecond(double wheelCircumferenceMeters) {
-        return velocity * wheelCircumferenceMeters;
-    }
-}
+//     /** Get velocity in meters per second (if you know wheel circumference) */
+//     public double getVelocityMetersPerSecond(double wheelCircumferenceMeters) {
+//         return velocity * wheelCircumferenceMeters;
+//     }
+// }
 
    
     // public static final double leftFrontAbsOffset = 1.47;
