@@ -10,15 +10,15 @@ public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
     public final static boolean hasMotor = false;
-    public final static boolean hasLauncher = true;
-    public final static boolean hasIntake = true;
+    public final static boolean hasLauncher = false;
+    public final static boolean hasIntake = false;
     public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = true;
-    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasCanCoder = false;
+    public final static boolean hasPWMEncoder = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 0;
+    public static int enc = 1;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -255,15 +255,17 @@ public class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
     
-     
-        public static final double kTrackWidth = Units.inchesToMeters(22.75); //width?
-        public static final double kWheelBase = Units.inchesToMeters(22.75); //length?
-        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-              new Translation2d(kWheelBase / 2, -kTrackWidth / 2), 
-              new Translation2d(kWheelBase / 2, kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), 
-              new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); 
       
+        // public static final double kTrackWidth = Units.inchesToMeters(22.75); //width?
+        // public static final double kWheelBase = Units.inchesToMeters(22.75); //length?
+        // public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
+        // public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
+        // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        //       new Translation2d(chassisLength[enc] / 2, chassisWidth[enc] / 2), //kWheelBase then kTrackWidth
+        //       new Translation2d(chassisLength[enc] / 2, -chassisWidth[enc] / 2), 
+        //       new Translation2d(-chassisLength[enc] / 2, chassisWidth[enc] / 2), 
+        //       new Translation2d(-chassisLength[enc] / 2, -chassisWidth[enc] / 2)); 
+
               
         //Chassis Motor ports
         /* x1 on can, drive motors*/ 

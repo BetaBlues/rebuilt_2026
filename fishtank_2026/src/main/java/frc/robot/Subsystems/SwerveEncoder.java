@@ -89,7 +89,9 @@ public class SwerveEncoder {
         double rawValue = 0;
         if(Constants.hasCanCoder)
         {
-            rawValue = (m_CanCoder.getPosition().getValue().in(Units.Radians)) % Math.PI;
+            rawValue = m_CanCoder.getAbsolutePosition().getValueAsDouble();
+            rawValue = rawValue * 2 * Math.PI;
+            //rawValue = (m_CanCoder.getPosition().getValue().in(Units.Radians)) % Math.PI;
             //rawValue *= 2 * Math.PI; // Convert from radians to a 0-1 range
             //SmartDashboard.putNumber("encoder value", super.getPosition().getValue().in(Units.Radians));
         }

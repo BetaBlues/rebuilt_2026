@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Constants;
 
 
 public class SwerveChassis extends SubsystemBase {
@@ -46,6 +48,9 @@ public class SwerveChassis extends SubsystemBase {
     // Swerve Drive Kinematics (for calculating wheel speeds and angles)
     private SwerveDriveKinematics m_kinematics;
     private double worldRotation;
+    public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
+    public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
+    public SwerveDriveKinematics m_driveKinematics;
 
     public void setWorldRotation(double nWR)
     {
@@ -101,7 +106,22 @@ public class SwerveChassis extends SubsystemBase {
         configRight.apply(configLeft);
 
         configRight.inverted(false); //usually false
-        
+        if (Constants.hasCanCoder)
+        {
+            m_driveKinematics = new SwerveDriveKinematics(
+                new Translation2d(chassisLength[Constants.enc] / 2, chassisWidth[Constants.enc] / 2), //kWheelBase then kTrackWidth
+                new Translation2d(chassisLength[Constants.enc] / 2, -chassisWidth[Constants.enc] / 2), 
+                new Translation2d(-chassisLength[Constants.enc] / 2, chassisWidth[Constants.enc] / 2), 
+                new Translation2d(-chassisLength[Constants.enc] / 2, -chassisWidth[Constants.enc] / 2)); 
+        }
+        else
+        {
+            m_driveKinematics = new SwerveDriveKinematics(
+                new Translation2d(chassisLength[Constants.enc] / 2, -chassisWidth[Constants.enc] / 2), //kWheelBase then kTrackWidth
+                new Translation2d(chassisLength[Constants.enc] / 2, chassisWidth[Constants.enc] / 2), 
+                new Translation2d(-chassisLength[Constants.enc] / 2, -chassisWidth[Constants.enc] / 2), 
+                new Translation2d(-chassisLength[Constants.enc] / 2, chassisWidth[Constants.enc] / 2)); 
+        }
 
         leftFrontWheel = new SwerveWheel("LF", Constants.k_chassis.leftFrontMotorPort,
                                          Constants.k_chassis.leftFrontMotorSteerPort,
@@ -136,8 +156,11 @@ public class SwerveChassis extends SubsystemBase {
         leftRearWheel.setMotors(roll_speed, rot_speed);
         rightRearWheel.setMotors(roll_speed, rot_speed);
 
+        
+
         turnWheel(angleTest);
     }
+
     public void zeroHeading() {
         gyro.reset();
     }
@@ -197,6 +220,11 @@ public class SwerveChassis extends SubsystemBase {
         rightRearWheel.stop();
         leftFrontWheel.stop();
         leftRearWheel.stop();
+    }
+
+    public SwerveDriveKinematics driveKinematics()
+    {
+        return m_driveKinematics;
     }
 
     @Override

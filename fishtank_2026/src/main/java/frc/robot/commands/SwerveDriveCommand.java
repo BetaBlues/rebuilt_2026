@@ -58,7 +58,16 @@ public class SwerveDriveCommand extends Command {
         // double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
 
         double xVal = m_controller.getLeftX();
-        double yVal = m_controller.getLeftY();
+        
+        double yVal;
+        if (Constants.hasCanCoder)
+        {
+            yVal = -1 * m_controller.getLeftY();
+        }
+        else
+        {
+            yVal = m_controller.getLeftY();
+        }
 
         
         double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
@@ -92,7 +101,7 @@ public class SwerveDriveCommand extends Command {
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, turningSpeed, m_chassis.getRotation2d());
-        SwerveModuleState[] moduleStates = k_chassis.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = m_chassis.driveKinematics().toSwerveModuleStates(chassisSpeeds);
         
         
         // Need to replace this with kinematics calculations
