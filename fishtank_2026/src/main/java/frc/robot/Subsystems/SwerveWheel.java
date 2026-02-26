@@ -1,6 +1,5 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModuleState;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,14 +15,11 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-import frc.robot.Subsystems.SwerveEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.k_chassis;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+
 
 public class SwerveWheel {
     // Each wheel has a motor for driving and another for steering
@@ -35,7 +31,6 @@ public class SwerveWheel {
     // Each wheel also has a "through-bore" encoder to give an absolute reference point
     private SwerveEncoder absoluteEncoder;
     private int absEncPort;
-    private final double absoluteEncoderOffsetRad;
 
     // Use PID to control steering.  This will make the wheel turn faster when it has
     // a longer way to turn, and slower when it gets close to the target angle
@@ -49,11 +44,6 @@ public class SwerveWheel {
 
     // A label for the dashboard that describes this wheel's location
     private String loc;
-
-    // A handle to the log entries for this wheel
-    private DoubleLogEntry absRawLog;
-    private DoubleLogEntry absPosLog;
-    private DoubleLogEntry steerPosLog;
 
     private boolean drivePidActive;
 
@@ -77,19 +67,11 @@ public class SwerveWheel {
     // this wheel.  Also needs a motor config
     public SwerveWheel(String location, int drivePort, int steerPort, int absPort,
                        SparkFlexConfig config, double absoluteOffset) {
-        //   SysIdRoutine routine = new SysIdRoutine(
-        //     new SysIdRoutine.Config(), 
-        //     new SysIdRoutine.Mechanism(this::sysIdDrive, this::sysIdLog, this)
-        //     );      
+      
         loc = location;
         
         steerMotor = new SparkFlex(steerPort, MotorType.kBrushless);
         SparkFlexConfig turnConfig = new SparkFlexConfig();
-        // turnConfig.closedLoop
-        //     .p(k_chassis.kPTurning)
-        //     .i(0)
-        //     .d(0)
-        //     .outputRange(0.005, 0.3);
 
       
         steerMotor.configure(config, ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
@@ -108,12 +90,10 @@ public class SwerveWheel {
         targetDriveDirection = 1.0;
         drivePidActive=false;
     
-        SparkClosedLoopController driveCon = driveMotor.getClosedLoopController();
 
         absEncPort = absPort;
         absoluteEncoder = new SwerveEncoder(absPort, 1.0, 0.0, absoluteOffset);
-        // absoluteEncoder.setDutyCycleRange(1.0/1024.0, 1.0);
-        absoluteEncoderOffsetRad = absoluteOffset;
+    
 
         // Create the PID controller for steering the wheel
         steerPID = new PIDController(k_chassis.kPTurning, 0, 0);
@@ -123,27 +103,13 @@ public class SwerveWheel {
         drivePID = new PIDController(k_chassis.kPDrive, k_chassis.kI, k_chassis.kD);
 
         resetEncoders();
-        DataLog log = DataLogManager.getLog();
-        // absRawLog = new DoubleLogEntry(log, loc+" absRaw");
-        // absPosLog = new DoubleLogEntry(log, loc+" absPos");
-        // steerPosLog = new DoubleLogEntry(log, loc+" steerPos");        
+           
     }
 
-    // Return the absolute encoder value in radians.
-    // public double getAbsEncoderRaw() {
-    //     //double angle = (absoluteEncoder.get() - 0.5) * 2.0 * Math.PI;
-    //     // double angle = absoluteEncoder.get();
-    //     double angle = absoluteEncoder.get();
-    //     return angle;
-    // }
 
     // Return the absolute encoder value in radians.
     public double getAbsEncoderRad() {
-        double angle = absoluteEncoder.get();//getAbsEncoderRaw(); 
-       // angle -= absoluteEncoderOffsetRad;
-        //return -1.0 *angle; //-1.0*angle
-        return angle;
-        //return angle;
+        return absoluteEncoder.get();
     }
 
     public double getDrivePosition() {
@@ -172,7 +138,7 @@ public class SwerveWheel {
     }
 
     public double getTurningPosition() {
-        return absoluteEncoder.get(); // / Constants.steerEncoderRatio;
+        return absoluteEncoder.get(); 
     }
     
 
@@ -191,7 +157,7 @@ public class SwerveWheel {
                     double tmp = getAbsEncoderRad();
                     SmartDashboard.putNumber(loc+"InitialAdj", tmp);
                     driveEncoder.setPosition(0);
-                    steerEncoder.setPosition(tmp* Constants.steerEncoderRatio); //0);
+                    steerEncoder.setPosition(tmp* Constants.steerEncoderRatio); 
                 } catch (Exception e) {
                 }
             }).start();
@@ -204,9 +170,6 @@ public class SwerveWheel {
     public void turnWheel(double angle) {
         double turnSpeed = steerPID.calculate(getTurningPosition(), angle);
         if (Math.abs(turnSpeed) > 0.0005) {
-            // absRawLog.append(getAbsEncoderRaw());
-            // absPosLog.append(getAbsEncoderRad()); // Includes offset adjustment
-            // steerPosLog.append(getTurningPosition());
             steerMotor.set(turnSpeed);
         } else {
             stop();
@@ -214,20 +177,15 @@ public class SwerveWheel {
     }
 
     public void publishData() {
-        // SmartDashboard.putNumber(loc+"-adjustedAngle", Math.toDegrees(getAbsEncoderRad()) % 360);
-        // SmartDashboard.putNumber(loc+"-encoderVal", Math.toDegrees(getTurningPosition()) % 360);
         SmartDashboard.putNumber(loc+" Port", absEncPort);
         if (Constants.hasPWMEncoder)
         {
             SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
         }
-        //SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRaw());
         SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
         SmartDashboard.putNumber(loc+" Steer Encoder Val", getTurningPosition());
 
-        //SmartDashboard.putNumer(loc+ "Absolute Vel", this.absoluteEncoder.getVelocity());
-        //SmartDashboard.putNumber(loc + " Drive Velocity", getDriveVelocity());//getEncoder().getPosition()); //  getDriveVelocity());
-        //SmartDashboard.putNumber(loc + " Steer Velocity", getTurningVelocity(steerEncoder));//this.steerMotor.getEncoder().getPosition()); // steerEncoder.getVelocity());
+        
     }
 
     public void setState(SwerveModuleState state, boolean manualControl) {
@@ -236,7 +194,7 @@ public class SwerveWheel {
         // Set drive motor speeds (using percentage output or velocity mode)
         if (manualControl){
             if (Math.abs(state.speedMetersPerSecond) < 0.001){
-                // stop();
+            
                 return;
             }
             state = SwerveModuleState.optimize(state, getState().angle);
@@ -283,8 +241,6 @@ public class SwerveWheel {
 
         driveMotor.set(roll_speed);
         steerMotor.set(rot_speed);
-        // double angle = getAbsEncoderRaw();
-        // SmartDashboard.putNumber(loc+"-encoderVal", steerEncoder.getPosition());
     }
     
     public void stop() {

@@ -4,7 +4,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -14,26 +13,15 @@ import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 
 import frc.robot.Constants;
-import frc.robot.Constants.SeeSawConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Distance;
-//import edu.wpi.first.units.measure.;
 
 
 
@@ -57,7 +45,7 @@ public class Motor extends SubsystemBase{
     private String loc;
 
     private SysIdRoutine log;
-    //private final SysIdRoutine m_sysIdRoutine;
+  
 
 
     public void sysIdDrive(Voltage outputVolts)
@@ -88,7 +76,7 @@ public class Motor extends SubsystemBase{
     
 
     config.idleMode(IdleMode.kBrake);
-    // config.encoder.positionConversionFactor(44.77);
+   
     config.encoder.positionConversionFactor(1.0);
     config.encoder.velocityConversionFactor(1.0/1000);//1.0/5676);
     config.smartCurrentLimit(Constants.SpinMotorConstants.kCurrentLimit); // edit depending on arm vs seesaw
@@ -101,9 +89,7 @@ public class Motor extends SubsystemBase{
 
     config.inverted(false);
 
-    // Create the PID controller for turning the arm
-    // spinMotorPID = new PIDController(Constants.SpinMotorConstants.kPSSRotation, 0, 0);
-    // spinMotorPID.enableContinuousInput(-180, 180);
+ 
     
     config.closedLoop.pid(Constants.SpinMotorConstants.pos_kP, Constants.SpinMotorConstants.pos_kI, Constants.SpinMotorConstants.pos_kD, ClosedLoopSlot.kSlot0);
     config.closedLoop.pid(Constants.SpinMotorConstants.vel_kP, Constants.SpinMotorConstants.vel_kI, Constants.SpinMotorConstants.vel_kD, ClosedLoopSlot.kSlot1);
@@ -146,11 +132,8 @@ public class Motor extends SubsystemBase{
         motorClosedLoop.setIAccum(0);
         targetPosition = pGoal;
         
-        // if (curPos != pGoal) {
-        //     m_setpoint = pGoal;
-        //     m_Active = true; // this needs to be true to enable the motor
         System.out.println("proceeding to setpoint = " + pGoal);
-        //}
+     
     }
 
     public void setTargetVelocity(double pGoal, boolean relative) {
@@ -163,11 +146,7 @@ public class Motor extends SubsystemBase{
         motorClosedLoop.setIAccum(0);
         targetVelocity = pGoal;
         
-        // if (curPos != pGoal) {
-        //     m_setpoint = pGoal;
-        //     m_Active = true; // this needs to be true to enable the motor
         System.out.println("proceeding to setpoint = " + pGoal);
-        //}
     }
 
     public void MovePos(double angle, boolean relative) {
@@ -212,7 +191,6 @@ public class Motor extends SubsystemBase{
 
         public void stopMotor() {
             System.out.println("Stop Motor");
-            // System.out.println("current position = " + seeSawEncoder.getPosition());
             spinMotor.stopMotor();
         }
         
@@ -262,7 +240,7 @@ public class Motor extends SubsystemBase{
                 spinMotor.set(rotationSpeed);
             } else {
                 stopMotor();
-                // m_Active = false;
+              
             }
         }
     }

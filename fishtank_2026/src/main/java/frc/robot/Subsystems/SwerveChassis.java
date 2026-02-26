@@ -3,20 +3,12 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.k_chassis;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
 
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -24,29 +16,17 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 import frc.robot.commands.SwerveDriveCommand;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
-import frc.robot.Constants;
-
 
 public class SwerveChassis extends SubsystemBase {
 
-    // Constants for track width and wheel base (in meters)
-    private final double kTrackWidth = 0.5; // meters
-    private final double kWheelBase = 0.5; // meters
+
 
     private SwerveWheel leftFrontWheel, rightFrontWheel, leftRearWheel, rightRearWheel;
 
     // Gyro for robot orientation
     private ChassisGyro gyro;
-    
-    // Controller for driving robot
-    private XboxController controller;
 
-    // Swerve Drive Kinematics (for calculating wheel speeds and angles)
-    private SwerveDriveKinematics m_kinematics;
+    
     private double worldRotation;
     public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
     public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
@@ -88,16 +68,13 @@ public class SwerveChassis extends SubsystemBase {
     }
     public SwerveChassis(XboxController controller, ChassisGyro gyro) {
        
-
-        this.controller = controller;
         this.gyro = gyro;
         resetGyro();
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
 
-        configLeft.idleMode(IdleMode.kCoast);
-        // configLeft.idleMode(IdleMode.kCoast);
+        configLeft.idleMode(IdleMode.kBrake);
         configLeft.encoder.positionConversionFactor(1.0);
         configLeft.encoder.velocityConversionFactor(1.0);
         configLeft.smartCurrentLimit(Constants.k_chassis.kCurrentLimit);
@@ -144,8 +121,6 @@ public class SwerveChassis extends SubsystemBase {
     }
       
     public void testMotors(double roll_speed, double rot_speed) {
-        double gyroAngle = gyro.getAngle();
-        double radianAngle = Math.toRadians(gyroAngle);
      
 
         SmartDashboard.putNumber("Roll", roll_speed);
@@ -184,19 +159,7 @@ public class SwerveChassis extends SubsystemBase {
     public void advance(double posX, double posY) {
     }
 
-    public void drive(double xSpeed, double ySpeed, double rot) {
-        // Get the robot's current orientation (yaw) from the gyro
-        double currentAngle = gyro.getAngle() % 360; // In degrees
-
-        // Convert joystick inputs to field-relative speeds
-        // Transform the joystick values from robot-relative to field-relative
-        // coordinates
-        double tempX = xSpeed * Math.cos(Math.toRadians(currentAngle))
-                + ySpeed * Math.sin(Math.toRadians(currentAngle));
-        double tempY = -xSpeed * Math.sin(Math.toRadians(currentAngle))
-                + ySpeed * Math.cos(Math.toRadians(currentAngle));
-        
-    }
+   
 
     public void driveTime(double seconds, double kAutoDriveSpeed, double kAutoRotationSp) {
         new Thread(() -> {

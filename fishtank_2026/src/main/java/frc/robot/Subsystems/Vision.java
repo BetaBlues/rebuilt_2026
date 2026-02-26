@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Subsystems.ChassisGyro;
+
 
 
 public class Vision {
@@ -32,9 +32,8 @@ public class Vision {
      private boolean isIndex = false;
 
      public Vision() {
-          //LeftCamera = new PhotonCamera("LeftCamera");
+        
           MiddleCamera = new PhotonCamera("MiddleCamera");
-          // RightCamera = new PhotonCamera("RightCamera");
 
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
           kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
