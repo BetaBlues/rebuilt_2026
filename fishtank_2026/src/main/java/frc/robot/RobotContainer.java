@@ -86,6 +86,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 
 
 
@@ -93,7 +95,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
     private final XboxController m_chassisController = new XboxController(0); // connect XboxController to port 0
     private final XboxController m_MechanismController = new XboxController(1); // connect XboxController to port 1
-    private final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
+    public final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 4) : null;
     private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher", 10) : null;
@@ -114,8 +116,44 @@ public class RobotContainer {
 
       new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
 
+        /*
+          * Swerve Drive Kinematics and Odometry Setup
+          * 
+          * The kinematics object allows us to convert between chassis speeds and individual wheel speeds.
+          * The odometry object allows us to track the robot's position on the field over time using the kinematics and sensor data.
+          * 
+          * Below, we define the locations of our swerve modules relative to the robot center, create our kinematics object from those locations,
+          * and then create our odometry object from the kinematics and our initial wheel positions.
+          */
+        // Locations for the swerve drive modules relative to the robot center.
+        Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
+        Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
+        Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
+        Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+        // Creating my kinematics object using the module locations
+        SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
+        );
+        // Creating my odometry object from the kinematics object and the initial wheel positions.
+        // Here, our starting pose is 5 meters along the long end of the field and in the
+        // center of the field along the short end, facing the opposing alliance wall.
+    //     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+    //       m_kinematics, m_gyro.getRotation2d(),
+    //       new SwerveModulePosition[] {
+    //         m_frontLeftModule.getPosition(),
+    //         m_frontRightModule.getPosition(),
+    //         m_backLeftModule.getPosition(),
+    //         m_backRightModule.getPosition()
+    //       }, new Pose2d(5.0, 13.5, new Rotation2d()));
+
+      
          
-    }
+    // }
+
+  
+   
+
+
 
 
     if (Constants.hasMotor) {
@@ -186,5 +224,6 @@ public class RobotContainer {
 
     
       // }
+}
 }
  

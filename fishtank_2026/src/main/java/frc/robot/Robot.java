@@ -16,11 +16,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Camera;
 import frc.robot.Subsystems.SwerveChassis;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Subsystems.Vision;
 
 
 /**
@@ -39,9 +41,10 @@ public class Robot extends TimedRobot {
   private static final String kRightAuto = "Right Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final Field2d field = new Field2d();
 
   private Field2d m_field = new Field2d();
+  private Vision m_vision = new Vision();
+  private Camera m_leftCamera = new Camera("LeftCamera");
   
 
   //simulation testing
@@ -99,10 +102,14 @@ public class Robot extends TimedRobot {
       // This will get the simulated sensor readings that we set
       // in the previous article while in simulation, but will use
       // real values on the robot itself.
+      
+      
+      
   }
   @Override
   public void robotInit() {
-    SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("Field", m_field);
+    //SmartDashboard.putData("adlkfbsda", m_field);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -124,6 +131,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    //m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.estimateLeftPoseMultTarg(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.showData();
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -213,6 +224,13 @@ public class Robot extends TimedRobot {
     //     // swerveChassis.driveTime(2,0.7,0.0);
     //     break;
     // }
+    // var gyroAngle = m_gyro.getRotation2d();
+    // // Update the pose
+    // m_pose = m_odometry.update(gyroAngle,
+    // new SwerveModulePosition[] {
+    //   m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
+    //   m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+    // });
   }
 
   
@@ -231,6 +249,14 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+
+    // var gyroAngle = m_gyro.getRotation2d();
+    // // Update the pose
+    // m_pose = m_odometry.update(gyroAngle,
+    // new SwerveModulePosition[] {
+    //   m_frontLeftModule.getPosition(), m_frontRightModule.getPosition(),
+    //   m_backLeftModule.getPosition(), m_backRightModule.getPosition()
+    // });
    
     //added to test sim movement without swerve code
     // double forward =- m_SwerveController.getLeftY();

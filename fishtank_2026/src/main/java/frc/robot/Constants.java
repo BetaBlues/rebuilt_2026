@@ -165,7 +165,8 @@ public class Constants {
       //gear box is 1:10
       public static final int kCanId = 9;
       public static final int kCurrentLimit = 40;
-      public static final double MaxRotationSpeed= 0.04; //change to a lower speed to make smoother //0.04
+      public static final double MaxRotationSpeed= 0.5; //change to a lower speed to make smoother //0.04
+      public static final double launcherSpin = .75;
      
     
 
@@ -342,6 +343,10 @@ public class Constants {
          */
         
   
+      }
+
+      public static class VisionConstants {
+        
       }
 
 
