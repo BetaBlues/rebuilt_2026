@@ -72,11 +72,14 @@ public class Camera {
                     m_target = result.getBestTarget();
                     m_apriltagId = m_target.getFiducialId();
                     Optional<EstimatedRobotPose> pose = m_estimator.estimateCoprocMultiTagPose(result);
-                    if (pose.isEmpty()) {
-                         pose = m_estimator.estimateLowestAmbiguityPose(result);
+                    if (pose == null) {
+                         //pose = m_estimator.estimateLowestAmbiguityPose(result);
+                         m_Pose3d = estimatePose(field, gyro);
                     }
-                    EstimatedRobotPose p = pose.get();
-                    m_Pose3d = p.estimatedPose;
+                    else {
+                         EstimatedRobotPose p = pose.get();
+                         m_Pose3d = p.estimatedPose;
+                    }
                     xValues[count] = m_Pose3d.getX();
                     yValues[count] = m_Pose3d.getY();
                     zValues[count] = m_Pose3d.getZ();
@@ -84,8 +87,9 @@ public class Camera {
                     if (count > 4) {
                          count = 0;
                     }
-                    field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
-                    m_robotPose = new Pose3d(getXAverage(), getYAverage(), m_Pose3d.getZ(), gyro.getRotation3d());
+                    //field.setRobotPose(getXAverage(), getYAverage(), gyro.getRotation2d());
+                    field.setRobotPose(m_Pose3d.getX(), m_Pose3d.getY(), gyro.getRotation2d());
+                    m_robotPose = new Pose3d(getXAverage(), getYAverage(), getZAverage(), gyro.getRotation3d());
                     return m_robotPose;
                }
           }
@@ -101,7 +105,7 @@ public class Camera {
         return null;
      }
 
-     public Pose3d estimateLeftPose(Field2d field, ChassisGyro gyro) {
+     public Pose3d estimatePose(Field2d field, ChassisGyro gyro) {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           if(results.size() < 1) {
