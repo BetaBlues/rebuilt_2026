@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 
 
@@ -43,6 +44,8 @@ public class Motor extends SubsystemBase{
     private PIDController climberPID;
     private double m_eSetpoint = 0.0;
     private String loc;
+    private DutyCycleEncoder absoluteEncoder;
+    private final double absoluteEncoderOffsetRad;
 
     private SysIdRoutine log;
   
@@ -72,6 +75,9 @@ public class Motor extends SubsystemBase{
     config = new SparkMaxConfig();
     motorClosedLoop = spinMotor.getClosedLoopController();
     double batteryVoltage = RobotController.getBatteryVoltage();
+    absoluteEncoder = new DutyCycleEncoder(Constants.SpinMotorConstants.absPort, 1.0, 0.0);
+    // absoluteEncoder.setDutyCycleRange(1.0/1024.0, 1.0);
+    absoluteEncoderOffsetRad = Constants.SpinMotorConstants.absoluteOffset;
     
     
 
@@ -142,7 +148,7 @@ public class Motor extends SubsystemBase{
             double curVel = getMotorVelocity();
             pGoal += curVel;
         }
-        motorClosedLoop.setReference(pGoal, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        motorClosedLoop.setSetpoint(pGoal, ControlType.kVelocity, ClosedLoopSlot.kSlot1);
         motorClosedLoop.setIAccum(0);
         targetVelocity = pGoal;
         

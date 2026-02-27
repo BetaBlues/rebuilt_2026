@@ -16,6 +16,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 import frc.robot.commands.SwerveDriveCommand;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.geometry.Pose2d;
 
 public class SwerveChassis extends SubsystemBase {
 
@@ -25,12 +28,14 @@ public class SwerveChassis extends SubsystemBase {
 
     // Gyro for robot orientation
     private ChassisGyro gyro;
+    private boolean m_fieldForward = true;
 
     
     private double worldRotation;
     public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
     public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
     public SwerveDriveKinematics m_driveKinematics;
+    public SwerveDriveOdometry m_odometry;
 
     public void setWorldRotation(double nWR)
     {
@@ -50,13 +55,21 @@ public class SwerveChassis extends SubsystemBase {
             }
         }).start();
     }
-
+    public void fieldForward(boolean isForward)
+    {
+        m_fieldForward = isForward;
+    }
     public Rotation2d getRotation2d() {
-        double angle = Math.IEEEremainder(gyro.getAngle(), 360);
+        double angle = 0;
+        if (m_fieldForward)
+        {
+            angle = Math.IEEEremainder(gyro.getAngle(), 360);
+        }
         SmartDashboard.putNumber("bot gyro", angle);
 
         return Rotation2d.fromDegrees(angle - 90);
     }
+    
     private int angleTest = 0;
     public void turnWheel(int degrees) {
        double angle = Math.toRadians(degrees);
@@ -100,6 +113,7 @@ public class SwerveChassis extends SubsystemBase {
                 new Translation2d(-chassisLength[Constants.enc] / 2, chassisWidth[Constants.enc] / 2)); 
         }
 
+
         leftFrontWheel = new SwerveWheel("LF", Constants.k_chassis.leftFrontMotorPort,
                                          Constants.k_chassis.leftFrontMotorSteerPort,
                                          Constants.leftFrontAbsEncPort[Constants.enc] /* move to Constants */, configLeft,
@@ -117,7 +131,19 @@ public class SwerveChassis extends SubsystemBase {
                                          Constants.rightRearAbsEncPort[Constants.enc] /* move to Constants */, configRight,
                                          Constants.rightRearAbsOffset);
 
+
+        //motors for odometry
+        // m_odometry = new SwerveDriveOdometry(
+        // m_driveKinematics, gyro.getRotation2d(),
+        // new SwerveModulePosition[] {
+        //     leftFrontWheel.getPosition(),
+        //     rightFrontWheel.getPosition(),
+        //     leftRearWheel.getPosition(),
+        //     rightRearWheel.getPosition()
+        // }, new Pose2d(5.0, 13.5, new Rotation2d()));
+
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
+        
     }
       
     public void testMotors(double roll_speed, double rot_speed) {

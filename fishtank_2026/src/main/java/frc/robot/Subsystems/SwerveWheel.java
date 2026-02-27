@@ -47,18 +47,6 @@ public class SwerveWheel {
 
     private boolean drivePidActive;
 
-    public void sysIdDrive(Voltage outputVolts)
-    {
-        driveMotor.setVoltage(outputVolts);
-        steerMotor.setVoltage(outputVolts);
-    }
-
-    public void sysIdLog(SysIdRoutineLog stuff)
-    {
-        
-
-    }
-
    
 
 

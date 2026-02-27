@@ -5,15 +5,15 @@ public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
     public final static boolean hasMotor = false;
-    public final static boolean hasLauncher = false;
-    public final static boolean hasIntake = false;
-    public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = false;
-    public final static boolean hasPWMEncoder = true;
+    public final static boolean hasLauncher = true;
+    public final static boolean hasIntake = true;
+    public final static boolean hasClimber = true;
+    public final static boolean hasCanCoder = true;
+    public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 1;
+    public static int enc = 0;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -35,6 +35,8 @@ public class Constants {
       public static final int kCurrentLimit = 40;
       public static final double MaxRotationSpeed= 0.5; //change to a lower speed to make smoother //0.04
       public static final double launcherSpin = .75;
+      public static final int absPort = 8; //5
+      public static final double absoluteOffset = 0.0;
      
     
 
@@ -69,7 +71,7 @@ public class Constants {
       public static final double kDERotation = 0.0;
       public static final double MaxRotationSpeed= 0.1;
       public static final double ClimberOffset = 0.0; //-0.428;
-    
+      public static final int absPort = 8; //5
       public static final double absoluteOffset = 0.0;
       public static final double distanceConversionFactor= 1.0; //meters to rotation
       public static final double setpoint0 = 0.0;

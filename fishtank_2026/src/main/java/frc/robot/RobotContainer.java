@@ -12,6 +12,9 @@ import frc.robot.Subsystems.Motor;
 import frc.robot.Constants.SpinMotorConstants;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.Subsystems.ChassisGyro;
+import frc.robot.Subsystems.Launcher;
+import frc.robot.Subsystems.Vision;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -33,11 +36,11 @@ public class RobotContainer {
     public final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
     private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 4) : null;
-    private final Motor m_Launcher = Constants.hasLauncher ? new Motor("Launcher", 10) : null;
+    private final Launcher m_Launcher = Constants.hasLauncher ? new Launcher("Launcher", 10) : null;
     private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake", 9) : null;
     private final Motor m_Climber = Constants.hasClimber ? new Motor("Climber", 7) : null;
 
-
+    private Pose3d targetPose3d = new Pose3d();
 
 
     public RobotContainer() {
@@ -49,6 +52,9 @@ public class RobotContainer {
 
       
       new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
+
+    
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(()-> m_SwerveSubsystem.fieldForward(m_chassisController.getLeftBumperButton())));
 
         /*
           * Swerve Drive Kinematics and Odometry Setup
@@ -90,7 +96,12 @@ public class RobotContainer {
     }
     
     if (Constants.hasLauncher) {
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.3)));
+        // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(0.3)));
+        // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.3)));
+        // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+        // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
+
+        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.launchFuel(targetPose3d)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.3)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
@@ -101,8 +112,8 @@ public class RobotContainer {
         () ->
           m_Climber.runAutomatic(),
           m_Climber));
-          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Climber.MoveArm(Constants.ClimberConstants.setpoint1)));
-          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onTrue(new InstantCommand(()-> m_Climber.MoveArm(Constants.ClimberConstants.setpoint0)));
+          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MoveArm(Constants.ClimberConstants.setpoint1)));
+          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.MoveArm(Constants.ClimberConstants.setpoint0)));
       }
 
     if (Constants.hasIntake) {
