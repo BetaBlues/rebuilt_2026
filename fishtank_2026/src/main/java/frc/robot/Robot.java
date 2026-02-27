@@ -1,6 +1,10 @@
 package frc.robot;
 
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -34,7 +38,7 @@ public class Robot extends TimedRobot {
 
   private Field2d m_field = new Field2d();
   private Vision m_vision = new Vision();
-  private Camera m_leftCamera = new Camera("LeftCamera");
+  private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180);
   
 
 
@@ -47,7 +51,8 @@ public class Robot extends TimedRobot {
 
 
 
-  PneumaticsModuleType ctrepcm = PneumaticsModuleType.CTREPCM;
+  StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
+  //StructArrayPublisher<Pose3d> arrayPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
 
   
   public Robot() {
@@ -99,8 +104,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    m_leftCamera.estimateLeftPoseMultTarg(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
+    //m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
     m_leftCamera.showData();
+    publisher.set(m_leftCamera.getPose3d());
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
