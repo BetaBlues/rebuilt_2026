@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   private Vision m_vision = new Vision();
   private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180);
   
+  
 
 
 
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     //m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
     m_leftCamera.showData();
     publisher.set(m_leftCamera.getPose3d());
+    m_robotContainer.showData();
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

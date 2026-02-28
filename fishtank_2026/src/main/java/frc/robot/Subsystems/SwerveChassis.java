@@ -55,10 +55,12 @@ public class SwerveChassis extends SubsystemBase {
             }
         }).start();
     }
+    
     public void fieldForward(boolean isForward)
     {
         m_fieldForward = isForward;
     }
+
     public Rotation2d getRotation2d() {
         double angle = 0;
         if (m_fieldForward)

@@ -5,15 +5,15 @@ public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
     public final static boolean hasMotor = false;
-    public final static boolean hasLauncher = true;
-    public final static boolean hasIntake = true;
-    public final static boolean hasClimber = true;
-    public final static boolean hasCanCoder = true;
-    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasLauncher = false;
+    public final static boolean hasIntake = false;
+    public final static boolean hasClimber = false;
+    public final static boolean hasCanCoder = false;
+    public final static boolean hasPWMEncoder = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 0;
+    public static int enc = 1;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -56,30 +56,19 @@ public class Constants {
 
       public static final double kSoftLimitReverse = -25000;
       public static final double kSoftLimitForward = 35000;
+      public static final double rotsPerMeter = 1;
 
     }
 
     
     public static class ClimberConstants {
-      public static final int absoluteEncCAN = 5;
-      
-
-      
-      public static final int kCurrentLimit = 60;
-      public static final double kPERotation = 0.1;
-      public static final double kIERotation = 0.0;
-      public static final double kDERotation = 0.0;
-      public static final double MaxRotationSpeed= 0.1;
-      public static final double ClimberOffset = 0.0; //-0.428;
-      public static final int absPort = 8; //5
-      public static final double absoluteOffset = 0.0;
-      public static final double distanceConversionFactor= 1.0; //meters to rotation
-      public static final double setpoint0 = 0.0;
-      public static final double setpoint1 = -70.0;
+     
+      public static final int absPort = 5; //5
+      public static final double startPos = 0.0;
+      public static final double ticsPerMeters= 1.0; //meters to rotation
+      public static final double setpoint0 = 10.0;
+      public static final double setpoint1 = 11.0;
   
-      
-      public static final double kSoftLimitReverse = -25000;
-      public static final double kSoftLimitForward = 35000;
     }
 
     public static class OperatorConstants {
