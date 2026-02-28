@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import org.ejml.dense.block.MatrixOps_DDRB;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,6 +18,7 @@ import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.Constants;
 import frc.robot.Constants.k_chassis;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -42,6 +45,7 @@ public class SwerveWheel {
     private double targetDriveRadians;
     private double targetDriveDirection;
 
+    private SwerveModulePosition m_currentPosition;
     // A label for the dashboard that describes this wheel's location
     private String loc;
 
@@ -91,7 +95,7 @@ public class SwerveWheel {
         drivePID = new PIDController(k_chassis.kPDrive, k_chassis.kI, k_chassis.kD);
 
         resetEncoders();
-           
+        m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
     }
 
 
@@ -132,6 +136,11 @@ public class SwerveWheel {
 
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
+    }
+
+    public SwerveModulePosition getPosition()
+    {
+        return m_currentPosition;
     }
 
     public double getTurningVelocity(RelativeEncoder turningEncoder) {
@@ -234,5 +243,10 @@ public class SwerveWheel {
     public void stop() {
         driveMotor.set(0);
         steerMotor.set(0);
+    }
+
+    public void updatePosition(double gyroAngle)
+    {
+        
     }
 }

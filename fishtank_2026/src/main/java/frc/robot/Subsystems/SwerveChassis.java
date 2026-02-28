@@ -55,7 +55,7 @@ public class SwerveChassis extends SubsystemBase {
             }
         }).start();
     }
-    
+
     public void fieldForward(boolean isForward)
     {
         m_fieldForward = isForward;
@@ -135,14 +135,14 @@ public class SwerveChassis extends SubsystemBase {
 
 
         //motors for odometry
-        // m_odometry = new SwerveDriveOdometry(
-        // m_driveKinematics, gyro.getRotation2d(),
-        // new SwerveModulePosition[] {
-        //     leftFrontWheel.getPosition(),
-        //     rightFrontWheel.getPosition(),
-        //     leftRearWheel.getPosition(),
-        //     rightRearWheel.getPosition()
-        // }, new Pose2d(5.0, 13.5, new Rotation2d()));
+        m_odometry = new SwerveDriveOdometry(
+        m_driveKinematics, gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            leftFrontWheel.getPosition(),
+            rightFrontWheel.getPosition(),
+            leftRearWheel.getPosition(),
+            rightRearWheel.getPosition()
+        }, new Pose2d(5.0, 13.5, new Rotation2d()));
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
         
@@ -220,13 +220,21 @@ public class SwerveChassis extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double gyroAngle = gyro.getAngle();
+        rightFrontWheel.updatePosition(gyroAngle);
+        rightRearWheel.updatePosition(gyroAngle);
+        leftFrontWheel.updatePosition(gyroAngle);
+        leftRearWheel.updatePosition(gyroAngle);
         // Update the dashboard with the gyro angle for debugging
-        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+        SmartDashboard.putNumber("Gyro Angle", gyroAngle);
+
 
         rightFrontWheel.publishData();
         rightRearWheel.publishData();
         leftFrontWheel.publishData();
         leftRearWheel.publishData();
+
+     
     }
 
 }
