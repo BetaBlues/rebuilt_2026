@@ -47,6 +47,7 @@ public class Vision {
           }
           SmartDashboard.putNumber("Results size", results.size());
           try {
+               isIndex = false;
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
                     isIndex = true;
@@ -54,13 +55,15 @@ public class Vision {
                     m_apriltagId = m_target.getFiducialId();
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
-                         field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), gyro.getRotation2d());
+                         field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), m_robotPose.getRotation().toRotation2d()); //gyro.getRotation2d()
                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
                     }
                }
+             
                SmartDashboard.putNumber("Distance x", m_robotPose.getX());
                SmartDashboard.putNumber("Distance y", m_robotPose.getY());
                SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
+              
                SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
                SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
                SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());

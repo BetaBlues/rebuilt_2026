@@ -46,7 +46,7 @@ public class Camera {
           camera = new PhotonCamera(cameraName);
 
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-          kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, yaw));
+          kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.435), new Rotation3d(0, 0, yaw));
      }
 
      // public Pose3d averagePose(Field2d field, ChassisGyro gyro) {
@@ -122,7 +122,9 @@ public class Camera {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           if(results.size() < 1) {
+               isIndex = false;
                return null;
+
           }
           SmartDashboard.putNumber("Results size", results.size());
           try {
