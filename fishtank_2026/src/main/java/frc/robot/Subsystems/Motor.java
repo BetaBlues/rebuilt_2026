@@ -60,7 +60,7 @@ public class Motor extends SubsystemBase{
 
     }
 
-    public Motor(String name, int canId) {
+    public Motor(String name, int canId, double kpPID, double kiPID, double kdPID) {
         motorName = name;
 
     SysIdRoutine routine = new SysIdRoutine(
@@ -93,7 +93,7 @@ public class Motor extends SubsystemBase{
 
  
     
-    config.closedLoop.pid(Constants.SpinMotorConstants.pos_kP, Constants.SpinMotorConstants.pos_kI, Constants.SpinMotorConstants.pos_kD, ClosedLoopSlot.kSlot0);
+    config.closedLoop.pid(kpPID, kiPID, kdPID, ClosedLoopSlot.kSlot0);
     config.closedLoop.pid(Constants.SpinMotorConstants.vel_kP, Constants.SpinMotorConstants.vel_kI, Constants.SpinMotorConstants.vel_kD, ClosedLoopSlot.kSlot1);
     
     
