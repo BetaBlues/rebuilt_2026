@@ -60,6 +60,17 @@ public class Constants {
 
     }
 
+    public static class LauncherConstants {
+      public static final double pos_kP = 0.4;
+      public static final double pos_kI = 0.0;
+      public static final double pos_kD = 0.0;
+    }
+
+    public static class IntakeConstants {
+      public static final double pos_kP = 0.4;
+      public static final double pos_kI = 0.0;
+      public static final double pos_kD = 0.0;
+    }
     
     public static class ClimberConstants {
      
@@ -68,6 +79,10 @@ public class Constants {
       public static final double ticsPerMeters= 1.0; //meters to rotation
       public static final double setpoint0 = 10.0;
       public static final double setpoint1 = 11.0;
+
+      public static final double pos_kP = 0.4;
+      public static final double pos_kI = 0.0;
+      public static final double pos_kD = 0.0;
   
     }
 

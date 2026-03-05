@@ -142,6 +142,12 @@ public class SwerveWheel {
     {
         return m_currentPosition;
     }
+    // public SwerveModulePosition getPosition(){
+    //     return new SwerveModulePosition(
+    //         driveEncoder.getPosition(),
+    //         Rotation2d.fromDegrees(absoluteEncoder.get().getValueAsDouble())
+    //     );
+    // }
 
     public double getTurningVelocity(RelativeEncoder turningEncoder) {
         return steerEncoder.getVelocity();

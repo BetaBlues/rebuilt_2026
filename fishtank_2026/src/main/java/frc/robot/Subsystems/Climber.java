@@ -15,15 +15,17 @@ import frc.robot.Subsystems.Motor;
 public class Climber extends Motor{
     private DutyCycleEncoder absoluteEncoder;
     private double curPos;
+    private PIDController climberPID;
 
     private SysIdRoutine log;
-    public Climber (String name, int canId, int encoderPort)
+    public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID)
     {
-        super(name, canId);
+        super(name, canId, kpPID, kiPID, kdPID);
         absoluteEncoder = new DutyCycleEncoder(encoderPort);
         curPos = absoluteEncoder.get();
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
         curPos -= Constants.ClimberConstants.startPos; //where it turns on
+        climberPID.enableContinuousInput(-180, 180);
     }
 
     public void showData()
