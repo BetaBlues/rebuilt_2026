@@ -55,7 +55,7 @@ public class Vision {
                     m_apriltagId = m_target.getFiducialId();
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
-                         field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), m_robotPose.getRotation().toRotation2d()); //gyro.getRotation2d()
+                         //field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), m_robotPose.getRotation().toRotation2d()); //gyro.getRotation2d()
                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
                     }
                }

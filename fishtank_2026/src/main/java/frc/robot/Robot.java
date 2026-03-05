@@ -1,7 +1,9 @@
 package frc.robot;
 
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -38,7 +40,11 @@ public class Robot extends TimedRobot {
 
   private Field2d m_field = new Field2d();
   private Vision m_vision = new Vision();
-  private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180);
+  private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
+  private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
+  private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
+
+  private boolean debugPose = false;
   
   
 
@@ -89,6 +95,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
+    m_field.setRobotPose(1.0, 1.0, Rotation2d.fromDegrees(0.0));
     SmartDashboard.putData("Field", m_field);
     m_robotContainer = new RobotContainer();
     
@@ -105,11 +112,29 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
-    //m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
+    m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    if (debugPose == true) {
+      Pose2d pose = m_field.getRobotPose();
+      double x = pose.getX();
+      double y = pose.getY();
+      Rotation2d deg = pose.getRotation().plus(Rotation2d.fromDegrees(0.1));
+
+      if (x < 16.0) {
+        x += 0.01;
+      }
+      else if (y < 8.0) {
+        y += 0.01;
+      }
+      m_field.setRobotPose(x, y, deg);
+    }
+
+
     m_leftCamera.showData();
     publisher.set(m_leftCamera.getPose3d());
     m_robotContainer.showData();
+
+
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

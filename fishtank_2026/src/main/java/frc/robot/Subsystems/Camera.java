@@ -11,7 +11,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -42,11 +44,11 @@ public class Camera {
     private int count = 0;
     
 
-     public Camera(String cameraName, double yaw) {
+     public Camera(String cameraName, double yaw, double x, double y, double pitch) {
           camera = new PhotonCamera(cameraName);
 
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-          kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.435), new Rotation3d(0, 0, yaw));
+          kRobotToCam = new Transform3d(new Translation3d(x, y, 0.435), new Rotation3d(0, pitch, yaw));
      }
 
      // public Pose3d averagePose(Field2d field, ChassisGyro gyro) {
@@ -66,6 +68,7 @@ public class Camera {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           if(results.size() < 1) {
+               isIndex = false;
                return null;
           }
           SmartDashboard.putNumber("Results size", results.size());
@@ -121,21 +124,24 @@ public class Camera {
      public Pose3d estimatePose(Field2d field, ChassisGyro gyro) {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
+          SmartDashboard.putNumber("Results size", results.size());
+
           if(results.size() < 1) {
                isIndex = false;
                return null;
 
           }
-          SmartDashboard.putNumber("Results size", results.size());
           try {
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
+                    SmartDashboard.putNumber("Targets size", result.getTargets().size());
                     isIndex = true;
                     m_target = result.getBestTarget();
                     m_apriltagId = m_target.getFiducialId();
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
                          field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), m_robotPose.getRotation().toRotation2d());
+                         //field.setRobotPose(1.0, 1.0, Rotation2d.fromDegrees(0.0));
                         xValues[count] = m_robotPose.getX();
                         yValues[count] = m_robotPose.getY();
                         count++;
@@ -203,6 +209,7 @@ public class Camera {
           SmartDashboard.putString("Camera Name", camera.getName());
           SmartDashboard.putBoolean(camera.getName() + " Camera Connected", camera.isConnected());
           SmartDashboard.putNumber(camera.getName() + " Camera Apriltag Id", m_apriltagId);
+          //SmartDashboard.putBoolean("is present", kTagLayout.getTagPose(m_target.getFiducialId()).isPresent());
           // SmartDashboard.put
      } 
 }
