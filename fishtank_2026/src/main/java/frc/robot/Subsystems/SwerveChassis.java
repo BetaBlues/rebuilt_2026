@@ -19,6 +19,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class SwerveChassis extends SubsystemBase {
 
@@ -28,6 +29,7 @@ public class SwerveChassis extends SubsystemBase {
 
     // Gyro for robot orientation
     private ChassisGyro gyro;
+    private Field2d m_odoField;
     private boolean m_fieldForward = true;
 
     
@@ -88,6 +90,8 @@ public class SwerveChassis extends SubsystemBase {
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
+
+        m_odoField = new Field2d();
 
         configLeft.idleMode(IdleMode.kBrake);
         configLeft.encoder.positionConversionFactor(1.0);
@@ -220,13 +224,18 @@ public class SwerveChassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double gyroAngle = gyro.getAngle();
-        rightFrontWheel.updatePosition(gyroAngle);
-        rightRearWheel.updatePosition(gyroAngle);
-        leftFrontWheel.updatePosition(gyroAngle);
-        leftRearWheel.updatePosition(gyroAngle);
+        Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
+        m_odometry.update(gyroAngle,
+        new SwerveModulePosition[] {
+      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+      leftRearWheel.getPosition(), rightRearWheel.getPosition()
+    });
+    
+    m_odoField.setRobotPose(m_odometry.getPoseMeters());
+
+      
         // Update the dashboard with the gyro angle for debugging
-        SmartDashboard.putNumber("Gyro Angle", gyroAngle);
+        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 
 
         rightFrontWheel.publishData();

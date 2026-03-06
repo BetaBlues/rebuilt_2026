@@ -95,7 +95,7 @@ public class SwerveWheel {
         drivePID = new PIDController(k_chassis.kPDrive, k_chassis.kI, k_chassis.kD);
 
         resetEncoders();
-        m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
+       // m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
     }
 
 
@@ -138,16 +138,20 @@ public class SwerveWheel {
         return driveEncoder.getVelocity();
     }
 
-    public SwerveModulePosition getPosition()
-    {
-        return m_currentPosition;
-    }
-    // public SwerveModulePosition getPosition(){
-    //     return new SwerveModulePosition(
-    //         driveEncoder.getPosition(),
-    //         Rotation2d.fromDegrees(absoluteEncoder.get().getValueAsDouble())
-    //     );
+    // public SwerveModulePosition getPosition()
+    // {
+    //     return m_currentPosition;
     // }
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(
+            driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
+            Rotation2d.fromRadians(getTurningPosition())
+        );
+    }
+//     public SwerveModulePosition getPosition() {
+//      return new SwerveModulePosition(
+//         driveEncoder.getDistance(), new Rotation2d(steerEncoder.getDistance()));
+//   }
 
     public double getTurningVelocity(RelativeEncoder turningEncoder) {
         return steerEncoder.getVelocity();
@@ -251,8 +255,6 @@ public class SwerveWheel {
         steerMotor.set(0);
     }
 
-    public void updatePosition(double gyroAngle)
-    {
-        
-    }
+   
+
 }
