@@ -1,6 +1,7 @@
 package frc.robot.Subsystems;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -41,6 +42,9 @@ public class Camera {
      private double[] xValues = new double[5];
      private double[] yValues = new double[5];
      private double[] zValues = new double[5];
+
+     private ArrayList<Double> xList;
+     private ArrayList<Double> yList;
     private int count = 0;
     
 
@@ -120,6 +124,75 @@ public class Camera {
 
         return null;
      }
+
+     public Pose3d estimateAveragePose(Field2d field, ChassisGyro gyro) {
+          List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+          ArrayList<Pose3d> estimatedPoses = new ArrayList<Pose3d>();
+          
+          SmartDashboard.putNumber("Results size", results.size());
+
+          if(results.size() < 1) {
+               isIndex = false;
+               return null;
+
+          }
+          try {
+               PhotonPipelineResult result = results.get(results.size()-1);
+               if (result.hasTargets()) {
+                    SmartDashboard.putNumber("Targets size", result.getTargets().size());
+                    isIndex = true;
+                    //m_target = result.getBestTarget();
+                    List<PhotonTrackedTarget> targets = result.getTargets();
+                    for (int i = 0; i < targets.size(); i++) {
+                         m_target = targets.get(i);
+                         if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
+                              estimatedPoses.add(PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam));
+                         }
+                    }
+                    double x = 0.0;
+                    double y = 0.0;
+                    double z = 0.0;
+                    Rotation3d rot = new Rotation3d();
+                    for (int i = 0; i < estimatedPoses.size(); i++) {
+                         x += estimatedPoses.get(i).getX();
+                         y += estimatedPoses.get(i).getY();
+                         z += estimatedPoses.get(i).getZ();
+                         rot = rot.plus(estimatedPoses.get(i).getRotation());
+                    }
+                    x /= estimatedPoses.size();
+                    y /= estimatedPoses.size();
+                    z /= estimatedPoses.size();
+                    rot = rot.div(estimatedPoses.size());
+                    m_robotPose = new Pose3d(x, y, z, rot);
+
+                    m_apriltagId = m_target.getFiducialId();
+                        field.setRobotPose(m_robotPose.toPose2d());
+                        //field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), gyro.getRotation2d());
+                        SmartDashboard.putNumber("Distance x", m_robotPose.getX());
+                         SmartDashboard.putNumber("Distance y", m_robotPose.getY());
+                         SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
+                         SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
+                         SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
+                         SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
+                        return m_robotPose;
+                         //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
+               }
+
+
+               
+          }
+
+          catch(Exception e) {
+               SmartDashboard.putBoolean("Has april tag target:", isIndex);
+          }
+
+          finally {
+
+          }
+
+        return null;
+     }
+     
 
      public Pose3d estimatePose(Field2d field, ChassisGyro gyro) {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();

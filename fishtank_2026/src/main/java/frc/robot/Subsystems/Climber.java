@@ -25,7 +25,7 @@ public class Climber extends Motor{
         curPos = absoluteEncoder.get();
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
         curPos -= Constants.ClimberConstants.startPos; //where it turns on
-        climberPID.enableContinuousInput(-180, 180);
+        // climberPID.enableContinuousInput(-180, 180);
     }
 
     public void showData()
