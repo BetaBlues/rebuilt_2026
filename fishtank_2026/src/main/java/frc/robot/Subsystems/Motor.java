@@ -197,6 +197,17 @@ public class Motor extends SubsystemBase{
             System.out.println("Stop Motor");
             spinMotor.stopMotor();
         }
+        public void setMovement(double desiredSpeedOn)
+        {
+            if (motorEncoder.getVelocity() == 0)
+            {
+                MoveMotor(desiredSpeedOn);
+            }
+            else
+            {
+                MoveMotor(0);
+            }
+        }
         
         public void showData()
         {

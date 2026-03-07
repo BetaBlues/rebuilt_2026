@@ -7,7 +7,7 @@ public class Constants {
     public final static boolean hasMotor = false;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
-    public final static boolean hasClimber = false;
+    public final static boolean hasClimber = true;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
     public static boolean testMotors = false;
@@ -32,7 +32,7 @@ public class Constants {
     public static class SpinMotorConstants {
       //gear box is 1:10
       public static final int kCanId = 9;
-      public static final int kCurrentLimit = 40;
+      public static final int kCurrentLimit = 60;
       public static final double MaxRotationSpeed= 0.5; //change to a lower speed to make smoother //0.04
       public static final double launcherSpin = .75;
       public static final int absPort = 8; //5

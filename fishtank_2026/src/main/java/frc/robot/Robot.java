@@ -1,6 +1,9 @@
 package frc.robot;
 
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -44,6 +47,9 @@ public class Robot extends TimedRobot {
   // private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
   // private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
 
+  UsbCamera intakeCamera;
+  VideoSink server;
+
   private boolean debugPose = false;
   
   
@@ -71,7 +77,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Right Auto", kRightAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    
+    intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+    server = CameraServer.getServer();
   }
 
   /**
