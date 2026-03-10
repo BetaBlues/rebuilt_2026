@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Field2d m_field = new Field2d();
-  private Vision m_vision = new Vision();
+  // private Vision m_vision = new Vision();
   private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
   private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
   private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
@@ -160,7 +160,29 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
 
     System.out.println("Auto selected: " + m_autoSelected);
-  
+
+    // should find where it currently is, where it should be, 
+    // how far it is from that position and move there to shoot
+    // mix of vision and odo??
+    // 
+    switch (m_autoSelected) {
+      case kLeftAuto:
+        m_leftCamera.getPose3d().getTranslation();
+        break;
+
+      case kMiddleAuto:
+        
+        break;
+
+      case kRightAuto:
+        
+        break;
+
+      case kDefaultAuto:
+      default:
+        
+        break;
+    }
   }
 
   /** This function is called periodically during autonomous. */
