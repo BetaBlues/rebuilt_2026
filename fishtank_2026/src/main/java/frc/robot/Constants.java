@@ -5,15 +5,15 @@ public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
     public final static boolean hasMotor = false;
-    public final static boolean hasLauncher = true;
-    public final static boolean hasIntake = true;
-    public final static boolean hasClimber = true;
-    public final static boolean hasCanCoder = true;
-    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasLauncher = false;
+    public final static boolean hasIntake = false;
+    public final static boolean hasClimber = false;
+    public final static boolean hasCanCoder = false;
+    public final static boolean hasPWMEncoder = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 0;
+    public static int enc = 1;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -21,7 +21,7 @@ public class Constants {
     public static final int[] leftRearAbsEncPort = {33, 3};
     public static final int[] rightRearAbsEncPort = {43, 4};
     
-    public static final double leftFrontAbsOffset =  0.226;
+    public static final double leftFrontAbsOffset =  0.226; //0.48;//0.226;
     public static final double rightFrontAbsOffset = 0.351;
     public static final double leftRearAbsOffset = 0.743;
     public static final double rightRearAbsOffset= 0.361;

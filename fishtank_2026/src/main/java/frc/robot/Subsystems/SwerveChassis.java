@@ -30,6 +30,7 @@ public class SwerveChassis extends SubsystemBase {
     // Gyro for robot orientation
     private ChassisGyro gyro;
     private Field2d m_odoField;
+    private Pose2d m_pose;
     private boolean m_fieldForward = true;
 
     
@@ -42,6 +43,14 @@ public class SwerveChassis extends SubsystemBase {
     public void setWorldRotation(double nWR)
     {
         worldRotation = nWR;
+        periodic();
+        Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
+         m_odometry.resetPosition(gyroAngle,
+        new SwerveModulePosition[] {
+        leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+        leftRearWheel.getPosition(), rightRearWheel.getPosition()
+        }, m_pose);
+    
     }
     public double getWorldRotation()
     {
@@ -90,10 +99,12 @@ public class SwerveChassis extends SubsystemBase {
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
-
+       
         m_odoField = new Field2d();
+        m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
 
-        configLeft.idleMode(IdleMode.kBrake);
+
+        configLeft.idleMode(IdleMode.kCoast);
         configLeft.encoder.positionConversionFactor(1.0);
         configLeft.encoder.velocityConversionFactor(1.0);
         configLeft.smartCurrentLimit(Constants.k_chassis.kCurrentLimit);
@@ -225,13 +236,17 @@ public class SwerveChassis extends SubsystemBase {
     @Override
     public void periodic() {
         Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
-        m_odometry.update(gyroAngle,
+       m_pose = m_odometry.update(gyroAngle,
         new SwerveModulePosition[] {
       leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
       leftRearWheel.getPosition(), rightRearWheel.getPosition()
     });
     
-    m_odoField.setRobotPose(m_odometry.getPoseMeters());
+    m_odoField.setRobotPose(m_pose);
+    SmartDashboard.putData("OdoField", m_odoField);
+    SmartDashboard.putNumber("Robot X", m_pose.getX());
+    SmartDashboard.putNumber("Robot Y", m_pose.getY());
+  
 
       
         // Update the dashboard with the gyro angle for debugging

@@ -60,7 +60,7 @@ public class Motor extends SubsystemBase{
 
     }
 
-    public Motor(String name, int canId, double kpPID, double kiPID, double kdPID) {
+    public Motor(String name, int canId, double kpPID, double kiPID, double kdPID, boolean continuous) {
         motorName = name;
 
     SysIdRoutine routine = new SysIdRoutine(
@@ -74,7 +74,10 @@ public class Motor extends SubsystemBase{
     motorClosedLoop = spinMotor.getClosedLoopController();
     double batteryVoltage = RobotController.getBatteryVoltage();
 
-    
+    if (continuous)
+    {
+        motorPID.enableContinuousInput(-180, 180);
+    }
     
 
     config.idleMode(IdleMode.kBrake);

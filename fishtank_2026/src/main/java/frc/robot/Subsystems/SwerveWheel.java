@@ -64,14 +64,17 @@ public class SwerveWheel {
         
         steerMotor = new SparkFlex(steerPort, MotorType.kBrushless);
         SparkFlexConfig turnConfig = new SparkFlexConfig();
+        SparkFlexConfig driveConfig = new SparkFlexConfig();
 
+        driveConfig.inverted(false);
+        turnConfig.inverted(false);
       
         steerMotor.configure(config, ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
-
+        
         // Set up both motors
         driveMotor  = new SparkFlex(drivePort, MotorType.kBrushless);
         driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  // Needed?
-
+        
         // Set up all three encoders
         driveEncoder = driveMotor.getEncoder();
         steerEncoder = steerMotor.getEncoder();
@@ -94,7 +97,10 @@ public class SwerveWheel {
         // Create PID controller for driving the wheel
         drivePID = new PIDController(k_chassis.kPDrive, k_chassis.kI, k_chassis.kD);
 
+        
+        
         resetEncoders();
+
        // m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
     }
 
@@ -143,10 +149,13 @@ public class SwerveWheel {
     //     return m_currentPosition;
     // }
     public SwerveModulePosition getPosition(){
+        SmartDashboard.putNumber(loc + "driveEnc * 1", driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation);
         return new SwerveModulePosition(
             driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
-            Rotation2d.fromRadians(getTurningPosition())
+            Rotation2d.fromRadians(0.0)
+            //Rotation2d.fromRadians(getTurningPosition())
         );
+        
     }
 //     public SwerveModulePosition getPosition() {
 //      return new SwerveModulePosition(

@@ -18,14 +18,14 @@ public class Climber extends Motor{
     private PIDController climberPID;
 
     private SysIdRoutine log;
-    public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID)
+    public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID, boolean continuous)
     {
-        super(name, canId, kpPID, kiPID, kdPID);
+        super(name, canId, kpPID, kiPID, kdPID, continuous);
         absoluteEncoder = new DutyCycleEncoder(encoderPort);
         curPos = absoluteEncoder.get();
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
         curPos -= Constants.ClimberConstants.startPos; //where it turns on
-       // climberPID.enableContinuousInput(-180, 180);
+
     }
 
     public void showData()
