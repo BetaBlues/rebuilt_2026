@@ -138,8 +138,17 @@ public class RobotContainer {
     //     new POVButton(m_MechanismController, 180).onTrue(new InstantCommand(()-> m_Climber.MovePos(70.0)));
        
     //   }
+
    
     }
+
+    public Command getAutonomousCommand() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("Example Auto");
+    }
+
 
 }
   public void showData()
