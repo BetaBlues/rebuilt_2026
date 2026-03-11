@@ -29,7 +29,7 @@ public class SwerveWheel {
     private SparkFlex driveMotor, steerMotor;
 
     // Each motor has a built-in encoder so we can tell how far it has turned
-    private RelativeEncoder driveEncoder, steerEncoder;
+    private RelativeEncoder driveEncoder;//, steerEncoder;
 
     // Each wheel also has a "through-bore" encoder to give an absolute reference point
     private SwerveEncoder absoluteEncoder;
@@ -63,18 +63,17 @@ public class SwerveWheel {
         loc = location;
         
         steerMotor = new SparkFlex(steerPort, MotorType.kBrushless);
-        SparkFlexConfig turnConfig = new SparkFlexConfig();
 
       
         steerMotor.configure(config, ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
-
+        
         // Set up both motors
         driveMotor  = new SparkFlex(drivePort, MotorType.kBrushless);
         driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  // Needed?
-
+        
         // Set up all three encoders
         driveEncoder = driveMotor.getEncoder();
-        steerEncoder = steerMotor.getEncoder();
+        //steerEncoder = steerMotor.getEncoder();
 
         targetDrivePositionSet = false;
         targetDrivePosition = 0.0;
@@ -94,8 +93,11 @@ public class SwerveWheel {
         // Create PID controller for driving the wheel
         drivePID = new PIDController(k_chassis.kPDrive, k_chassis.kI, k_chassis.kD);
 
+        
+        
         resetEncoders();
-        m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
+
+       // m_currentPosition = new SwerveModulePosition(0,new Rotation2d(0));
     }
 
 
@@ -138,20 +140,27 @@ public class SwerveWheel {
         return driveEncoder.getVelocity();
     }
 
-    public SwerveModulePosition getPosition()
-    {
-        return m_currentPosition;
-    }
-    // public SwerveModulePosition getPosition(){
-    //     return new SwerveModulePosition(
-    //         driveEncoder.getPosition(),
-    //         Rotation2d.fromDegrees(absoluteEncoder.get().getValueAsDouble())
-    //     );
+    // public SwerveModulePosition getPosition()
+    // {
+    //     return m_currentPosition;
     // }
-
-    public double getTurningVelocity(RelativeEncoder turningEncoder) {
-        return steerEncoder.getVelocity();
+    public SwerveModulePosition getPosition(){
+        SmartDashboard.putNumber(loc + "driveEnc * 1", driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation);
+        return new SwerveModulePosition(
+            driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
+            //Rotation2d.fromRadians(0.0)
+            Rotation2d.fromRadians(getAbsEncoderRad())
+        );
+        
     }
+//     public SwerveModulePosition getPosition() {
+//      return new SwerveModulePosition(
+//         driveEncoder.getDistance(), new Rotation2d(steerEncoder.getDistance()));
+//   }
+
+    // public double getTurningVelocity(RelativeEncoder turningEncoder) {
+    //     return steerEncoder.getVelocity();
+    // }
 
     public void resetEncoders() {
             new Thread(() -> {
@@ -160,7 +169,7 @@ public class SwerveWheel {
                     double tmp = getAbsEncoderRad();
                     SmartDashboard.putNumber(loc+"InitialAdj", tmp);
                     driveEncoder.setPosition(0);
-                    steerEncoder.setPosition(tmp* Constants.steerEncoderRatio); 
+                   // steerEncoder.setPosition(tmp* Constants.steerEncoderRatio); 
                 } catch (Exception e) {
                 }
             }).start();
@@ -185,8 +194,8 @@ public class SwerveWheel {
         {
             SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
         }
-        SmartDashboard.putNumber(loc+" Adjusted Angle", getAbsEncoderRad());
-        SmartDashboard.putNumber(loc+" Steer Encoder Val", getTurningPosition());
+        
+        SmartDashboard.putNumber(loc+" Steer Encoder Val", Math.round(getAbsEncoderRad() * 100.0) /100.0);
 
         
     }
@@ -251,8 +260,6 @@ public class SwerveWheel {
         steerMotor.set(0);
     }
 
-    public void updatePosition(double gyroAngle)
-    {
-        
-    }
+   
+
 }

@@ -19,6 +19,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class SwerveChassis extends SubsystemBase {
 
@@ -28,6 +29,8 @@ public class SwerveChassis extends SubsystemBase {
 
     // Gyro for robot orientation
     private ChassisGyro gyro;
+    private Field2d m_odoField;
+    private Pose2d m_pose;
     private boolean m_fieldForward = true;
 
     
@@ -40,6 +43,14 @@ public class SwerveChassis extends SubsystemBase {
     public void setWorldRotation(double nWR)
     {
         worldRotation = nWR;
+        periodic();
+        Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
+         m_odometry.resetPosition(gyroAngle,
+        new SwerveModulePosition[] {
+        leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+        leftRearWheel.getPosition(), rightRearWheel.getPosition()
+        }, m_pose);
+    
     }
     public double getWorldRotation()
     {
@@ -69,7 +80,7 @@ public class SwerveChassis extends SubsystemBase {
         }
         SmartDashboard.putNumber("bot gyro", angle);
 
-        return Rotation2d.fromDegrees(angle - 90);
+        return Rotation2d.fromDegrees(angle); //angle - 90
     }
     
     private int angleTest = 0;
@@ -88,8 +99,12 @@ public class SwerveChassis extends SubsystemBase {
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
+       
+        m_odoField = new Field2d();
+        //m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
 
-        configLeft.idleMode(IdleMode.kBrake);
+
+        configLeft.idleMode(IdleMode.kCoast);
         configLeft.encoder.positionConversionFactor(1.0);
         configLeft.encoder.velocityConversionFactor(1.0);
         configLeft.smartCurrentLimit(Constants.k_chassis.kCurrentLimit);
@@ -142,7 +157,7 @@ public class SwerveChassis extends SubsystemBase {
             rightFrontWheel.getPosition(),
             leftRearWheel.getPosition(),
             rightRearWheel.getPosition()
-        }, new Pose2d(5.0, 13.5, new Rotation2d()));
+        }, new Pose2d(5.0, 6.5, new Rotation2d())); //x and y is robot starting position in field
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
         
@@ -218,15 +233,27 @@ public class SwerveChassis extends SubsystemBase {
         return m_driveKinematics;
     }
 
+
+
     @Override
     public void periodic() {
-        double gyroAngle = gyro.getAngle();
-        rightFrontWheel.updatePosition(gyroAngle);
-        rightRearWheel.updatePosition(gyroAngle);
-        leftFrontWheel.updatePosition(gyroAngle);
-        leftRearWheel.updatePosition(gyroAngle);
+        Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
+       m_pose = m_odometry.update(gyroAngle,
+        new SwerveModulePosition[] {
+      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+      leftRearWheel.getPosition(), rightRearWheel.getPosition()
+    });
+    
+    m_odoField.setRobotPose(m_pose);
+    SmartDashboard.putData("OdoField", m_odoField);
+    SmartDashboard.putString("odometry gyro", gyroAngle.toString());
+    SmartDashboard.putNumber("Robot X", Math.round(m_pose.getX() * 100.0)/100.0);
+    SmartDashboard.putNumber("Robot Y", Math.round(m_pose.getY() * 100.0) / 100.0);
+  
+    SmartDashboard.putString("rotation2d", getRotation2d().toString());
+      
         // Update the dashboard with the gyro angle for debugging
-        SmartDashboard.putNumber("Gyro Angle", gyroAngle);
+        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 
 
         rightFrontWheel.publishData();

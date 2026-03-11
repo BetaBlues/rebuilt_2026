@@ -21,10 +21,11 @@ public class Constants {
     public static final int[] leftRearAbsEncPort = {33, 3};
     public static final int[] rightRearAbsEncPort = {43, 4};
     
-    public static final double leftFrontAbsOffset =  0.226;
-    public static final double rightFrontAbsOffset = 0.351;
-    public static final double leftRearAbsOffset = 0.743;
-    public static final double rightRearAbsOffset= 0.361;
+    public static final double leftFrontAbsOffset =  0.238;
+    public static final double rightFrontAbsOffset = 0.353;
+    public static final double leftRearAbsOffset = 0.749;
+    public static final double rightRearAbsOffset= 0.363;
+
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 
@@ -32,7 +33,7 @@ public class Constants {
     public static class SpinMotorConstants {
       //gear box is 1:10
       public static final int kCanId = 9;
-      public static final int kCurrentLimit = 40;
+      public static final int kCurrentLimit = 60;
       public static final double MaxRotationSpeed= 0.5; //change to a lower speed to make smoother //0.04
       public static final double launcherSpin = .75;
       public static final int absPort = 8; //5
@@ -129,7 +130,7 @@ public class Constants {
         //dunno
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-    
+        public static final double kDriveEncoderDistancePerRotation = 1;
     
 
               
