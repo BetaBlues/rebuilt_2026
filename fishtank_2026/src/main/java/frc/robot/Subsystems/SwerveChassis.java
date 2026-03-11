@@ -80,7 +80,7 @@ public class SwerveChassis extends SubsystemBase {
         }
         SmartDashboard.putNumber("bot gyro", angle);
 
-        return Rotation2d.fromDegrees(angle - 90);
+        return Rotation2d.fromDegrees(angle); //angle - 90
     }
     
     private int angleTest = 0;
@@ -101,7 +101,7 @@ public class SwerveChassis extends SubsystemBase {
         SparkFlexConfig configRight = new SparkFlexConfig();
        
         m_odoField = new Field2d();
-        m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
+        //m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
 
 
         configLeft.idleMode(IdleMode.kCoast);
@@ -157,7 +157,7 @@ public class SwerveChassis extends SubsystemBase {
             rightFrontWheel.getPosition(),
             leftRearWheel.getPosition(),
             rightRearWheel.getPosition()
-        }, new Pose2d(5.0, 13.5, new Rotation2d()));
+        }, new Pose2d(5.0, 6.5, new Rotation2d())); //x and y is robot starting position in field
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
         
@@ -233,9 +233,11 @@ public class SwerveChassis extends SubsystemBase {
         return m_driveKinematics;
     }
 
+
+
     @Override
     public void periodic() {
-        Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
+        Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
        m_pose = m_odometry.update(gyroAngle,
         new SwerveModulePosition[] {
       leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
@@ -244,10 +246,11 @@ public class SwerveChassis extends SubsystemBase {
     
     m_odoField.setRobotPose(m_pose);
     SmartDashboard.putData("OdoField", m_odoField);
-    SmartDashboard.putNumber("Robot X", m_pose.getX());
-    SmartDashboard.putNumber("Robot Y", m_pose.getY());
+    SmartDashboard.putString("odometry gyro", gyroAngle.toString());
+    SmartDashboard.putNumber("Robot X", Math.round(m_pose.getX() * 100.0)/100.0);
+    SmartDashboard.putNumber("Robot Y", Math.round(m_pose.getY() * 100.0) / 100.0);
   
-
+    SmartDashboard.putString("rotation2d", getRotation2d().toString());
       
         // Update the dashboard with the gyro angle for debugging
         SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());

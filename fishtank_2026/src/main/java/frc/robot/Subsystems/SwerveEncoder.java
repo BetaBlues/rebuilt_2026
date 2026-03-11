@@ -42,7 +42,7 @@ public class SwerveEncoder {
         else
         {
             m_DutyCycleEncoder = new DutyCycleEncoder(port, fullRange, offset);
-            m_DutyCycleEncoder.setInverted(true);
+            m_DutyCycleEncoder.setInverted(false);
           
         }
         this.fullRange = fullRange;
@@ -61,7 +61,7 @@ public class SwerveEncoder {
         else
         {
             rawValue = (m_DutyCycleEncoder.get() - 0.5) * 2 * Math.PI;
-            //rawValue *= -1;
+            rawValue *= -1;
         }
         
         return rawValue;

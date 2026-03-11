@@ -21,10 +21,11 @@ public class Constants {
     public static final int[] leftRearAbsEncPort = {33, 3};
     public static final int[] rightRearAbsEncPort = {43, 4};
     
-    public static final double leftFrontAbsOffset =  0.226; //0.48;//0.226;
-    public static final double rightFrontAbsOffset = 0.351;
-    public static final double leftRearAbsOffset = 0.743;
-    public static final double rightRearAbsOffset= 0.361;
+    public static final double leftFrontAbsOffset =  0.238;
+    public static final double rightFrontAbsOffset = 0.353;
+    public static final double leftRearAbsOffset = 0.749;
+    public static final double rightRearAbsOffset= 0.363;
+
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 
