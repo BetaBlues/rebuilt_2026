@@ -3,13 +3,20 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.k_chassis;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Rotation2d;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Subsystems.Camera;
 
 public class SwerveChassis extends SubsystemBase {
 
@@ -32,6 +40,7 @@ public class SwerveChassis extends SubsystemBase {
     private Field2d m_odoField;
     private Pose2d m_pose;
     private boolean m_fieldForward = true;
+    private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
 
     
     private double worldRotation;
@@ -160,7 +169,52 @@ public class SwerveChassis extends SubsystemBase {
         }, new Pose2d(5.0, 13.5, new Rotation2d()));
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
+
+        try{
+        RobotConfig config = RobotConfig.fromGUISettings();
+
+        // Configure AutoBuilder
+        AutoBuilder.configure(
+            m_leftCamera::getPose2d, 
+            m_leftCamera::resetPose, 
+            this::getSpeeds, 
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards 
+            new PPHolonomicDriveController(
+                new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config,
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this
+            );
+            }catch(Exception e){
+                DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+            }
         
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        SwerveModuleState[] states = m_driveKinematics.toSwerveModuleStates(speeds);
+        setModuleStates(states, false);
+    }
+
+    public ChassisSpeeds getSpeeds() {
+        return m_driveKinematics.toChassisSpeeds(
+            leftFrontWheel.getState(),
+            rightFrontWheel.getState(),
+            leftRearWheel.getState(),
+            rightRearWheel.getState()
+        );
     }
       
     public void testMotors(double roll_speed, double rot_speed) {
