@@ -1,8 +1,10 @@
 package frc.robot;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -131,6 +133,7 @@ public class RobotContainer {
         // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onChange(new InstantCommand(()-> m_Intake.setMovement(0.5)));
         // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onChange(new InstantCommand(()-> m_Intake.setMovement(-0.5)));
       }
+    }
         
     // if (Constants.hasClimber) {
     //     00new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(0.0)));
@@ -150,7 +153,7 @@ public class RobotContainer {
     }
 
 
-}
+
   public void showData()
   {
     if (m_Climber != null) // checks if null
