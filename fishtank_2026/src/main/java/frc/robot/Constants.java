@@ -79,12 +79,16 @@ public class Constants {
       public static final int absPort = 5; //5
       public static final double startPos = 0.0;
       public static final double ticsPerMeters= 1.0; //meters to rotation
-      public static final double setpoint0 = 10.0;
-      public static final double setpoint1 = 11.0;
+      public static final double setpoint0 = 0.0;
+      public static final double setpoint1 = 10.0;
+      public static final double setpoint2 = -10.0;
 
       public static final double pos_kP = 0.4;
       public static final double pos_kI = 0.0;
       public static final double pos_kD = 0.0;
+
+      public static final double Max_Height = 10.0;
+      public static final double Min_Height = 0.0;
   
     }
 

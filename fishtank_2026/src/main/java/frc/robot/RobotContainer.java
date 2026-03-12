@@ -112,10 +112,10 @@ public class RobotContainer {
       }
       if (Constants.hasClimber) {
      
-           // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.setTargetPosition(Constants.ClimberConstants.setpoint1, false))); //up
+          // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.setTargetPosition(Constants.ClimberConstants.setpoint1, false))); //up
           // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.setTargetPosition(Constants.ClimberConstants.setpoint0, false))); //0 or down
-          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MoveMotor(0.15))); //up?
-          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.MoveMotor(-0.15))); //down?
+          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MoveToLimit(0.35))); //up?
+          new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onTrue(new InstantCommand(()-> m_Climber.MoveToLimit(-0.35))); //down?
           new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onFalse(new InstantCommand(()-> m_Climber.MoveMotor(0))); 
           new JoystickButton(m_MechanismController, Constants.k_xbox.buttonRightBumper).onFalse(new InstantCommand(()-> m_Climber.MoveMotor(0))); 
         }

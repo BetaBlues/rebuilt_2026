@@ -26,6 +26,8 @@ public class Climber extends Motor{
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
         curPos -= Constants.ClimberConstants.startPos; //where it turns on
 
+        
+
     }
 
     public void showData()

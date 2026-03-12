@@ -41,7 +41,6 @@ public class Motor extends SubsystemBase{
     private String motorName;
     private double targetVelocity;
     private double targetPosition;
-    private PIDController climberPID;
     private double m_eSetpoint = 0.0;
     private String loc;
 
@@ -74,10 +73,13 @@ public class Motor extends SubsystemBase{
     motorClosedLoop = spinMotor.getClosedLoopController();
     double batteryVoltage = RobotController.getBatteryVoltage();
 
-    if (continuous)
-    {
-        motorPID.enableContinuousInput(-180, 180);
-    }
+    // motorPID = new PIDController(kpPID, kiPID, kdPID);
+     
+
+    // if (continuous)
+    // {
+    //     motorPID.enableContinuousInput(-180, 180);
+    // }
     
 
     config.idleMode(IdleMode.kBrake);
@@ -184,6 +186,13 @@ public class Motor extends SubsystemBase{
     // turns the arm
     public void MoveMotor(double speed) {
         spinMotor.set(speed);
+    }
+
+    public void MoveToLimit(double speed) {
+        while (motorEncoder.getPosition() < Constants.ClimberConstants.Max_Height && motorEncoder.getPosition() > Constants.ClimberConstants.Min_Height) {
+            spinMotor.set(speed);
+        }
+        spinMotor.set(0.0);
     }
 
     
