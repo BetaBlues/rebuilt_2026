@@ -283,14 +283,26 @@ public class Camera {
           if (targets != null) {
                if (DriverStation.getAlliance().get() == Alliance.Blue) {
                     for (int i = 0; i < targets.size(); i++) {
-                         //Photontargets.get(i)
-                         if (targets.get(i).getFiducialId() == 18 || targets.get(i).getFiducialId() == 19) {
-                              
+                         PhotonTrackedTarget t = targets.get(i);
+                         int id = t.getFiducialId();
+                         if (id == 18 || id == 19 || id == 20 || id == 21 || id == 24 || id == 25 || id == 26 || id == 27) {
+                              if (t.getPoseAmbiguity() < 0.2) {
+                                   t.bestCameraToTarget().getX();
+                              }
                          }
                     }
                }
                else if (DriverStation.getAlliance().get() == Alliance.Red) {
-                    
+                    for (int i = 0; i < targets.size(); i++) {
+                         PhotonTrackedTarget t = targets.get(i);
+                         int id = t.getFiducialId();
+                         //need to change these
+                         if (id == 18 || id == 19 || id == 20 || id == 21 || id == 24 || id == 25 || id == 26 || id == 27) {
+                              if (t.getPoseAmbiguity() < 0.2) {
+                                   t.bestCameraToTarget().getX();
+                              }
+                         }
+                    }
                }
           }
           return false;
