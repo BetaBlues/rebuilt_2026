@@ -1,91 +1,66 @@
-// package frc.robot.Subsystems;
-// import java.util.List;
+package frc.robot.Subsystems;
+import edu.wpi.first.math.geometry.Pose3d;
 
-// import org.photonvision.PhotonCamera;
-// import org.photonvision.PhotonUtils;
-// import org.photonvision.targeting.PhotonTrackedTarget;
-
-// import edu.wpi.first.apriltag.AprilTagFieldLayout;
-// import edu.wpi.first.apriltag.AprilTagFields;
-// import edu.wpi.first.math.geometry.Pose3d;
-// import edu.wpi.first.math.geometry.Transform3d;
-
-// import org.photonvision.targeting.PhotonPipelineResult;
-// import edu.wpi.first.math.geometry.Translation3d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.math.geometry.Rotation3d;
-// import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants;
+import edu.wpi.first.math.geometry.Rotation3d;
 
 
 
-// public class Vision {
-//      public static PhotonCamera LeftCamera;
-//      public static PhotonCamera MiddleCamera;
-//      public static PhotonCamera RightCamera;
 
-//      public static AprilTagFieldLayout kTagLayout;
+public class Vision {
 
-//      public static Transform3d kRobotToCam;
-//      private PhotonTrackedTarget m_target;
-//      private Pose3d m_robotPose;
-//      private int m_apriltagId = -1;
-//      private boolean isIndex = false;
+    private Camera m_leftCamera;
+    private Camera m_middleCamera;
+    private Camera m_rightCamera;
 
-//      public Vision() {
-        
-//           MiddleCamera = new PhotonCamera("MiddleCamera");
+    private Pose3d m_leftPose;
+    private Pose3d m_middlePose;
+    private Pose3d m_rightPose;
+    private Pose3d m_calcPose;
 
-//           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-//           kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
-//      }
+    private double x;
+    private double y;
+    private double z;
+    private Rotation3d rot;
+  
+    public Vision() {
+        // need to measure offsets
+        m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+        m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, Math.toRadians(15));
+        m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+    }
 
-//      public void estimateMiddlePose(Field2d field, ChassisGyro gyro) {
-//           List<PhotonPipelineResult> results = MiddleCamera.getAllUnreadResults();
-          
-//           if(results.size() < 1) {
-//                return;
-//           }
-//           SmartDashboard.putNumber("Results size", results.size());
-//           try {
-//                isIndex = false;
-//                PhotonPipelineResult result = results.get(results.size()-1);
-//                if (result.hasTargets()) {
-//                     isIndex = true;
-//                     m_target = result.getBestTarget();
-//                     m_apriltagId = m_target.getFiducialId();
-//                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
-//                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
-//                          //field.setRobotPose(m_robotPose.getX(), m_robotPose.getY(), m_robotPose.getRotation().toRotation2d()); //gyro.getRotation2d()
-//                          //field.setRobotPose(5.0, 5.0, gyro.getRotation2d());
-//                     }
-//                }
-             
-//                SmartDashboard.putNumber("Distance x", m_robotPose.getX());
-//                SmartDashboard.putNumber("Distance y", m_robotPose.getY());
-//                SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
-              
-//                SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
-//                SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
-//                SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
-//           }
+    public Pose3d estimatePoseAllCam() {
+        if (Constants.hasVision) {
+            m_leftPose = m_leftCamera.estimateAveragePose();
+            m_middlePose = m_middleCamera.estimateAveragePose();
+            m_rightPose = m_rightCamera.estimateAveragePose();
 
-//           catch(Exception e) {
-//                SmartDashboard.putBoolean("Has april tag target:", isIndex);
-//           }
+            if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
+                x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
+                y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
+                z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
+                rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
+                x /= 3;
+                y /= 3;
+                rot = rot.div(3);
+                m_calcPose = new Pose3d(x, y, z, rot);
+                return m_calcPose;
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
 
-//           finally {
-
-//           }
+    public void showAllData() {
+        m_leftCamera.showData();
+        m_middleCamera.showData();
+        m_rightCamera.showData();
+    }
 
 
-//      }
-
-//      public void showData() {
-//           //SmartDashboard.putNumber("Left Apriltag Id", m_target.getFiducialId());
-//           SmartDashboard.putString("Middle Camera Name", MiddleCamera.getName());
-//           SmartDashboard.putBoolean("Camera Connected", MiddleCamera.isConnected());
-//           SmartDashboard.putNumber("Apriltag Id", m_apriltagId);
-//           // SmartDashboard.put
-//      } 
-
-// }
+}

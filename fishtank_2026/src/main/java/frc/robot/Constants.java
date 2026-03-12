@@ -10,6 +10,7 @@ public class Constants {
     public final static boolean hasClimber = false;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
+    public final static boolean hasVision = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
@@ -57,7 +58,7 @@ public class Constants {
 
       public static final double kSoftLimitReverse = -25000;
       public static final double kSoftLimitForward = 35000;
-      public static final double rotsPerMeter = 1;
+      public static final double rotsPerMeter = 3.058;
 
     }
 
