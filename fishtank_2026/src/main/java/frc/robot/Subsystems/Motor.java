@@ -188,12 +188,7 @@ public class Motor extends SubsystemBase{
         spinMotor.set(speed);
     }
 
-    public void MoveToLimit(double speed) {
-        while (motorEncoder.getPosition() < Constants.ClimberConstants.Max_Height && motorEncoder.getPosition() > Constants.ClimberConstants.Min_Height) {
-            spinMotor.set(speed);
-        }
-        spinMotor.set(0.0);
-    }
+    
 
     
         public Command sysIdDynamic(SysIdRoutine.Direction direction) {

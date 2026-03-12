@@ -30,6 +30,20 @@ public class Climber extends Motor{
 
     }
 
+    public void MoveToLimit(double speed) {
+        double position = absoluteEncoder.get();
+        if (speed > 0 && position < Constants.ClimberConstants.Max_Height && position > Constants.ClimberConstants.Min_Height)
+        {
+            MoveMotor(speed);
+        }
+        else
+        {
+            MoveMotor(0.0);
+        }
+       
+    }
+    
+
     public void showData()
     {
         SmartDashboard.putNumber("Climber height", absoluteEncoder.get());
