@@ -58,7 +58,7 @@ public class Constants {
 
       public static final double kSoftLimitReverse = -25000;
       public static final double kSoftLimitForward = 35000;
-      public static final double rotsPerMeter = 1;
+      public static final double rotsPerMeter = 3.058;
 
     }
 

@@ -112,7 +112,7 @@ public class SwerveChassis extends SubsystemBase {
         //m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
 
 
-        configLeft.idleMode(IdleMode.kCoast);
+        configLeft.idleMode(IdleMode.kBrake);
         configLeft.encoder.positionConversionFactor(1.0);
         configLeft.encoder.velocityConversionFactor(1.0);
         configLeft.smartCurrentLimit(Constants.k_chassis.kCurrentLimit);

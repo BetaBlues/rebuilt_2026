@@ -102,9 +102,10 @@ public class RobotContainer {
         // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
 
         //new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.launchFuel(targetPose3d)));
-        new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.setTargetVelocity(40.0, false)));
-        new POVButton(m_MechanismController, 90).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(1.0)));
-               new POVButton(m_MechanismController, 90).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0.0)));
+        // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.setTargetVelocity(40.0, false)));
+        // new POVButton(m_MechanismController, 90).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(1.0)));
+         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onTrue(new InstantCommand(()-> m_Launcher.setTargetVelocity(5.0, false)));
+        new POVButton(m_MechanismController, 90).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0.0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_Launcher.MoveMotor(-0.3 )));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonY).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
         new JoystickButton(m_MechanismController, Constants.k_xbox.buttonA).onFalse(new InstantCommand(()-> m_Launcher.MoveMotor(0)));
