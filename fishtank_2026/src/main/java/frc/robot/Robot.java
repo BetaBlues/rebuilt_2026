@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
 
   private Vision m_vision;
   private Pose3d m_pose;
-  
+  private Transform3d m_hubDistance;
 
 
 
@@ -124,11 +125,18 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
     // m_leftCamera.estimatePose(m_field, m_roXbotContainer.m_gyro);
-      m_pose = m_vision.estimatePoseAllCam();
+    m_pose = m_vision.estimatePoseAllCam();
       if (m_pose != null && m_vision != null) {
         publisher.set(m_pose);
-      }
+    }
+
+    m_hubDistance = m_vision.getHubDistanceAll();
     
+    if (m_hubDistance != null) {
+      SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
+      SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
+      SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
+    }
     
     m_robotContainer.showData();
 

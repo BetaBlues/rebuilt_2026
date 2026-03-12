@@ -169,12 +169,6 @@ public class Camera {
         return null;
      }
 
-     public Camera(String cameraName, double yaw, double x, double y, double pitch) {
-          camera = new PhotonCamera(cameraName);
-
-          kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-          kRobotToCam = new Transform3d(new Translation3d(x, y, 0.435), new Rotation3d(0, pitch, yaw));
-     }
 
      // public Pose3d averagePose(Field2d field, ChassisGyro gyro) {
      //      xValues[count] = m_Pose3d.getX();
