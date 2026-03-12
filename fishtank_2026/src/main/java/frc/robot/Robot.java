@@ -1,6 +1,9 @@
 package frc.robot;
 
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,7 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Camera;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Subsystems.Vision;
+import edu.wpi.first.cameraserver.CameraServer;
+// import frc.robot.Subsystems.Vision;
 
 
 /**
@@ -44,6 +48,9 @@ public class Robot extends TimedRobot {
   private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
   private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
   private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
+
+  private UsbCamera intakeCamera;
+  VideoSink server;
 
   private boolean debugPose = false;
 
@@ -81,7 +88,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Right Auto", kRightAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    
+    intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+    server = CameraServer.getServer();
   }
 
   /**
@@ -106,7 +114,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_field.setRobotPose(1.0, 1.0, Rotation2d.fromDegrees(0.0));
-    SmartDashboard.putData("Field", m_field);
+    // SmartDashboard.putData("Field", m_field);
     m_robotContainer = new RobotContainer();
     
 
@@ -154,14 +162,14 @@ public class Robot extends TimedRobot {
       double y = pose.getY();
       Rotation2d deg = pose.getRotation().plus(Rotation2d.fromDegrees(0.1));
 
-      if (x < 16.0) {
-        x += 0.01;
-      }
-      else if (y < 8.0) {
-        y += 0.01;
-      }
-      m_field.setRobotPose(x, y, deg);
-    }
+    //   if (x < 16.0) {
+    //     x += 0.01;
+    //   }
+    //   else if (y < 8.0) {
+    //     y += 0.01;
+    //   }
+    //   m_field.setRobotPose(x, y, deg);
+    // }
 
 
 

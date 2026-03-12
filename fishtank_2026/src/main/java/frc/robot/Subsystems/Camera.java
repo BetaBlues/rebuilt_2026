@@ -27,11 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.photonvision.PhotonPoseEstimator;
 
 public class Camera {
-    public static PhotonCamera camera;
+     public static PhotonCamera camera;
 
-    public static AprilTagFieldLayout kTagLayout;
+     public static AprilTagFieldLayout kTagLayout;
 
-    public static PhotonPoseEstimator m_estimator;
+     public static PhotonPoseEstimator m_estimator;
 
      public static Transform3d kRobotToCam;
      private PhotonTrackedTarget m_target;
@@ -45,7 +45,7 @@ public class Camera {
 
      private ArrayList<Double> xList;
      private ArrayList<Double> yList;
-    private int count = 0;
+     private int count = 0;
     
 
      public Camera(String cameraName, double yaw, double x, double y, double pitch) {

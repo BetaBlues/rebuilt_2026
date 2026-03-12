@@ -9,7 +9,7 @@ public class Launcher extends Motor {
 
     public Launcher(String name, int canId, double kpPID, double kiPID, double kdPID)
     {
-        super(name, canId, kpPID, kiPID, kdPID);
+        super(name, canId, kpPID, kiPID, kdPID, false);
 
 
     }

@@ -57,16 +57,16 @@ public class SwerveDriveCommand extends Command {
 
         // double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
 
-        double xVal = m_controller.getLeftX();
+        double xVal = -m_controller.getLeftY();
         
         double yVal;
         if (Constants.hasCanCoder)
         {
-            yVal = -1 * m_controller.getLeftY();
+            yVal = m_controller.getLeftX(); /*-1 */
         }
         else
         {
-            yVal = m_controller.getLeftY();
+            yVal = m_controller.getLeftX();
         }
 
         
