@@ -4,6 +4,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -45,7 +46,16 @@ public class Robot extends TimedRobot {
   private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
 
   private boolean debugPose = false;
-  
+
+  private Pose3d m_leftPose;
+  private Pose3d m_middlePose;
+  private Pose3d m_rightPose;
+  private Pose3d m_calcPose;
+
+  private double x;
+  private double y;
+  private double z;
+  private Rotation3d rot;
   
 
 
@@ -113,7 +123,31 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
-    m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    // m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    m_leftPose = m_leftCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
+    m_middlePose = m_middleCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
+    m_rightPose = m_rightCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
+
+    if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
+        x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
+        y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
+        z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
+        rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
+        x /= 3;
+        y /= 3;
+        rot = rot.div(3);
+        m_calcPose = new Pose3d(x, y, z, rot);
+    }
+
+    m_leftCamera.showData();
+    m_middleCamera.showData();
+    m_rightCamera.showData();
+    if (m_calcPose != null) {
+      publisher.set(m_calcPose);
+    }
+    
+    m_robotContainer.showData();
+
     if (debugPose == true) {
       Pose2d pose = m_field.getRobotPose();
       double x = pose.getX();
@@ -130,9 +164,6 @@ public class Robot extends TimedRobot {
     }
 
 
-    m_leftCamera.showData();
-    publisher.set(m_leftCamera.getPose3d());
-    m_robotContainer.showData();
 
 
 
