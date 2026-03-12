@@ -21,6 +21,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -43,8 +45,7 @@ public class Camera {
      private double[] yValues = new double[5];
      private double[] zValues = new double[5];
 
-     private ArrayList<Double> xList;
-     private ArrayList<Double> yList;
+     private List<PhotonTrackedTarget> targets;
      private int count = 0;
     
 
@@ -142,7 +143,7 @@ public class Camera {
                     SmartDashboard.putNumber("Targets size", result.getTargets().size());
                     isIndex = true;
                     //m_target = result.getBestTarget();
-                    List<PhotonTrackedTarget> targets = result.getTargets();
+                    targets = result.getTargets();
                     for (int i = 0; i < targets.size(); i++) {
                          if (targets.get(i).getPoseAmbiguity() < 0.2) {
                               m_target = targets.get(i);
@@ -278,7 +279,22 @@ public class Camera {
         return sum / zValues.length;
      }
 
-     
+     public boolean canGetHubDistance() {
+          if (targets != null) {
+               if (DriverStation.getAlliance().get() == Alliance.Blue) {
+                    for (int i = 0; i < targets.size(); i++) {
+                         //Photontargets.get(i)
+                         if (targets.get(i).getFiducialId() == 18 || targets.get(i).getFiducialId() == 19) {
+                              
+                         }
+                    }
+               }
+               else if (DriverStation.getAlliance().get() == Alliance.Red) {
+                    
+               }
+          }
+          return false;
+     }
 
      public void showData() {
           //SmartDashboard.putNumber("Left Apriltag Id", m_target.getFiducialId());
