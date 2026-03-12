@@ -132,9 +132,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
     // m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
-    m_leftPose = m_leftCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
-    m_middlePose = m_middleCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
-    m_rightPose = m_rightCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
+    m_leftPose = m_leftCamera.estimateAveragePose();
+    m_middlePose = m_middleCamera.estimateAveragePose();
+    m_rightPose = m_rightCamera.estimateAveragePose();
 
     if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
         x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
