@@ -162,14 +162,14 @@ public class Robot extends TimedRobot {
       double y = pose.getY();
       Rotation2d deg = pose.getRotation().plus(Rotation2d.fromDegrees(0.1));
 
-    //   if (x < 16.0) {
-    //     x += 0.01;
-    //   }
-    //   else if (y < 8.0) {
-    //     y += 0.01;
-    //   }
-    //   m_field.setRobotPose(x, y, deg);
-    // }
+      if (x < 16.0) {
+        x += 0.01;
+      }
+      else if (y < 8.0) {
+        y += 0.01;
+      }
+      m_field.setRobotPose(x, y, deg);
+    }
 
 
 
