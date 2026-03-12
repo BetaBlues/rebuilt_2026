@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
   private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
 
   private UsbCamera intakeCamera;
+  private UsbCamera climberCamera;
   VideoSink server;
 
   private boolean debugPose = false;
@@ -79,6 +80,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+    climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
     server = CameraServer.getServer();
   }
 
