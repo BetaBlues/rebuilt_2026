@@ -7,9 +7,10 @@ public class Constants {
     public final static boolean hasMotor = false;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
-    public final static boolean hasClimber = true;
+    public final static boolean hasClimber = false;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
+    public final static boolean hasVision = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
@@ -57,7 +58,7 @@ public class Constants {
 
       public static final double kSoftLimitReverse = -25000;
       public static final double kSoftLimitForward = 35000;
-      public static final double rotsPerMeter = 100/32.7; //32.7cm cicumference of wheel. 1 meter /circumference
+      public static final double rotsPerMeter = 1;
 
     }
 

@@ -126,7 +126,7 @@ public class Camera {
         return null;
      }
 
-     public Pose3d estimateAveragePose(Field2d field, ChassisGyro gyro) {
+     public Pose3d estimateAveragePose() {
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           ArrayList<Pose3d> estimatedPoses = new ArrayList<Pose3d>();
           

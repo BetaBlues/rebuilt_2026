@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Camera;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.cameraserver.CameraServer;
+import frc.robot.Subsystems.Vision;;
 // import frc.robot.Subsystems.Vision;
 
 
@@ -45,9 +46,6 @@ public class Robot extends TimedRobot {
 
   private Field2d m_field = new Field2d();
   // private Vision m_vision = new Vision();
-  private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
-  private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
-  private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
 
   private UsbCamera intakeCamera;
   private UsbCamera climberCamera;
@@ -55,15 +53,8 @@ public class Robot extends TimedRobot {
 
   private boolean debugPose = false;
 
-  private Pose3d m_leftPose;
-  private Pose3d m_middlePose;
-  private Pose3d m_rightPose;
-  private Pose3d m_calcPose;
-
-  private double x;
-  private double y;
-  private double z;
-  private Rotation3d rot;
+  private Vision m_vision;
+  private Pose3d m_pose;
   
 
 
@@ -92,13 +83,12 @@ public class Robot extends TimedRobot {
     intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
     climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
     server = CameraServer.getServer();
+    if(Constants.hasVision) {
+      m_vision = new Vision();
+    }
+    
   }
 
-  /**
-   * Uses the CameraServer class to automatically capture video from a USB webcam and send it to the
-   * FRC dashboard without doing any vision processing. This is the easiest way to get camera images
-   * to the dashboard. Just add this to the robotInit() method in your program.
-   */
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -134,27 +124,11 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
     // m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
-    m_leftPose = m_leftCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
-    m_middlePose = m_middleCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
-    m_rightPose = m_rightCamera.estimateAveragePose(m_field, m_robotContainer.m_gyro);
-
-    if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
-        x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
-        y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
-        z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
-        rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
-        x /= 3;
-        y /= 3;
-        rot = rot.div(3);
-        m_calcPose = new Pose3d(x, y, z, rot);
-    }
-
-    m_leftCamera.showData();
-    m_middleCamera.showData();
-    m_rightCamera.showData();
-    if (m_calcPose != null) {
-      publisher.set(m_calcPose);
-    }
+      m_pose = m_vision.estimatePoseAllCam();
+      if (m_pose != null && m_vision != null) {
+        publisher.set(m_pose);
+      }
+    
     
     m_robotContainer.showData();
 
@@ -172,6 +146,7 @@ public class Robot extends TimedRobot {
       }
       m_field.setRobotPose(x, y, deg);
     }
+  
 
 
 
@@ -208,7 +183,7 @@ public class Robot extends TimedRobot {
     // 
     switch (m_autoSelected) {
       case kLeftAuto:
-        m_leftCamera.getPose3d().getTranslation();
+        //m_leftCamera.getPose3d().getTranslation();
         break;
 
       case kMiddleAuto:

@@ -42,7 +42,15 @@ public class SwerveChassis extends SubsystemBase {
 
     public void setWorldRotation(double nWR)
     {
-        worldRotation = nWR;
+        //worldRotation = nWR;
+        worldRotation = 0.0;
+        gyro.reset();
+        try
+        {
+            wait(200);
+        } catch (Exception e) {
+        }
+
         periodic();
         Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
          m_odometry.resetPosition(gyroAngle,
@@ -57,7 +65,7 @@ public class SwerveChassis extends SubsystemBase {
         return worldRotation;
     }
     
-    public void resetGyro() {
+    public void waitResetGyro() {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -95,7 +103,7 @@ public class SwerveChassis extends SubsystemBase {
     public SwerveChassis(XboxController controller, ChassisGyro gyro) {
        
         this.gyro = gyro;
-        resetGyro();
+        waitResetGyro();
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
