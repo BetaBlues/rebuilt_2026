@@ -3,6 +3,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 
 
 
@@ -18,10 +19,22 @@ public class Vision {
     private Pose3d m_rightPose;
     private Pose3d m_calcPose;
 
+    private Transform3d m_leftHub;
+    private Transform3d m_middleHub;
+    private Transform3d m_rightHub;
+    private Transform3d m_hubDist;
+
     private double x;
     private double y;
     private double z;
     private Rotation3d rot;
+
+    private double xHub;
+    private double yHub;
+    private double zHub;
+    private Rotation3d rotHub;
+
+    private boolean canSeeHub;
   
     public Vision() {
         // need to measure offsets
@@ -54,6 +67,30 @@ public class Vision {
         else {
             return null;
         }
+    }
+
+    public Transform3d getHubDistanceAll() {
+
+        m_leftHub = m_leftCamera.getHubDistance();
+        m_middleHub = m_middleCamera.getHubDistance();
+        m_rightHub = m_rightCamera.getHubDistance();
+
+        if (m_leftHub != null && m_middleHub != null && m_rightHub != null) {
+                xHub += m_leftHub.getX() + m_middleHub.getX() + m_rightHub.getX();
+                yHub += m_leftHub.getY() + m_middleHub.getY() + m_rightHub.getY();
+                zHub += m_leftHub.getZ() + m_middleHub.getZ() + m_rightHub.getZ();
+                rotHub = rotHub.plus(m_leftHub.getRotation()).plus(m_middleHub.getRotation()).plus(m_rightHub.getRotation()); 
+                xHub /= 3;
+                yHub /= 3;
+                rotHub = rotHub.div(3);
+                m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                canSeeHub = true;
+                return m_hubDist;
+            }
+            else {
+                canSeeHub = false;
+                return null;
+            }
     }
 
     public void showAllData() {
