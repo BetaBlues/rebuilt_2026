@@ -85,7 +85,6 @@ public class Vision {
                 rotHub = rotHub.div(3);
                 m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                 canSeeHub = true;
-                return m_hubDist;
             }
             else {
                 if(m_leftHub != null && m_middleHub != null) {
@@ -98,7 +97,6 @@ public class Vision {
                     rotHub = rotHub.div(2);
                     m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                     canSeeHub = true;
-                    return m_hubDist;
                 }
                 else if(m_rightHub != null && m_middleHub != null) {
                     xHub = m_rightHub.getX() + m_middleHub.getX();
@@ -110,7 +108,6 @@ public class Vision {
                     rotHub = rotHub.div(2);
                     m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                     canSeeHub = true;
-                    return m_hubDist;
                 }
                 else if (m_leftHub != null && m_middleHub == null && m_rightHub == null) {
                     xHub = m_leftHub.getX();
@@ -119,7 +116,6 @@ public class Vision {
                     rotHub = m_leftHub.getRotation();
                     m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                     canSeeHub = true;
-                    return m_hubDist;
                 }
                 else if (m_leftHub == null && m_middleHub != null && m_rightHub == null) {
                     xHub = m_middleHub.getX();
@@ -128,7 +124,6 @@ public class Vision {
                     rotHub = m_middleHub.getRotation();
                     m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                     canSeeHub = true;
-                    return m_hubDist;
                 }
                 else if (m_leftHub == null && m_middleHub == null && m_rightHub != null) {
                     xHub = m_rightHub.getX();
@@ -137,14 +132,15 @@ public class Vision {
                     rotHub = m_rightHub.getRotation();
                     m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
                     canSeeHub = true;
-                    return m_hubDist;
                 }
                 else {
-                    return null;
+                    m_hubDist = null;
                 }
                 // canSeeHub = false;
                 // return null;
             }
+            
+            return m_hubDist;
     }
 
     public void showAllData() {
