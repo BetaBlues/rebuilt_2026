@@ -172,7 +172,7 @@ public class Camera {
           return m_robotPose;
      }
 
-
+     // might need to change april tags b/c they're all of them right now, do we want just the front two
      public Transform3d getHubDistance() {
           if (targets != null) {
                if (DriverStation.getAlliance().get() == Alliance.Blue) {

@@ -41,7 +41,6 @@ public class Motor extends SubsystemBase{
     private String motorName;
     private double targetVelocity;
     private double targetPosition;
-    private PIDController climberPID;
     private double m_eSetpoint = 0.0;
     private String loc;
 
@@ -74,10 +73,13 @@ public class Motor extends SubsystemBase{
     motorClosedLoop = spinMotor.getClosedLoopController();
     double batteryVoltage = RobotController.getBatteryVoltage();
 
-    if (continuous)
-    {
-        motorPID.enableContinuousInput(-180, 180);
-    }
+    // motorPID = new PIDController(kpPID, kiPID, kdPID);
+     
+
+    // if (continuous)
+    // {
+    //     motorPID.enableContinuousInput(-180, 180);
+    // }
     
 
     config.idleMode(IdleMode.kBrake);
@@ -187,6 +189,8 @@ public class Motor extends SubsystemBase{
     }
 
     
+
+    
         public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return routine.dynamic(direction);
         }
@@ -199,6 +203,10 @@ public class Motor extends SubsystemBase{
         public void stopMotor() {
             System.out.println("Stop Motor");
             spinMotor.stopMotor();
+        }
+
+        public double getRelativePosition() {
+            return motorEncoder.getPosition();
         }
         public void setMovement(double desiredSpeedOn)
         {
@@ -215,6 +223,7 @@ public class Motor extends SubsystemBase{
         public void showData()
         {
             SmartDashboard.putNumber("motor relative pos", motorEncoder.getPosition());
+             SmartDashboard.putNumber("Climber Speed", motorEncoder.getVelocity());
         }
    
 }

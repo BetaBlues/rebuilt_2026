@@ -44,7 +44,7 @@ public class SwerveChassis extends SubsystemBase {
     {
         //worldRotation = nWR;
         worldRotation = 0.0;
-        gyro.reset();
+        gyro.zeroHeading();
         try
         {
             wait(200);
@@ -187,9 +187,7 @@ public class SwerveChassis extends SubsystemBase {
         turnWheel(angleTest);
     }
 
-    public void zeroHeading() {
-        gyro.reset();
-    }
+    
     public void setModuleStates(SwerveModuleState[] states, boolean manualState) {
         // Note: need to normalize drive speeds here using kinematics.normalizeWheelSpeeds() !
         SwerveDriveKinematics.desaturateWheelSpeeds(states, k_chassis.MaxMetersPerSecond);
