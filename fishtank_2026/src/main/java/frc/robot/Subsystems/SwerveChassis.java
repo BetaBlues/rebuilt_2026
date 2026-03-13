@@ -43,8 +43,8 @@ public class SwerveChassis extends SubsystemBase {
     public void setWorldRotation(double nWR)
     {
         //worldRotation = nWR;
-        worldRotation = 0.0;
-        gyro.zeroHeading();
+        worldRotation = nWR;
+        
         try
         {
             wait(200);

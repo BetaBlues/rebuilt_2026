@@ -7,9 +7,9 @@ public class Launcher extends Motor {
 
 
 
-    public Launcher(String name, int canId, double kpPID, double kiPID, double kdPID)
+    public Launcher(String name, int canId, double kpPID, double kiPID, double kdPID, double feedforward)
     {
-        super(name, canId, kpPID, kiPID, kdPID, false);
+        super(name, canId, kpPID, kiPID, kdPID, feedforward, false);
 
 
     }
@@ -17,6 +17,8 @@ public class Launcher extends Motor {
     public void launchFuel(Pose3d targetPose)
     {
         double grav = -9.82;
-        setTargetVelocity(0.25, false);
+        //setTargetVelocity(0.25, false);
     }
+
+    
 }

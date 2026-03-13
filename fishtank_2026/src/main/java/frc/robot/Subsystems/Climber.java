@@ -18,9 +18,9 @@ public class Climber extends Motor{
     private PIDController climberPID;
 
     private SysIdRoutine log;
-    public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID, boolean continuous)
+    public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID, double feedforward, boolean continuous)
     {
-        super(name, canId, kpPID, kiPID, kdPID, continuous);
+        super(name, canId, kpPID, kiPID, kdPID, feedforward, continuous);
         absoluteEncoder = new DutyCycleEncoder(encoderPort, 1, 0);
         curPos = absoluteEncoder.get();
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
