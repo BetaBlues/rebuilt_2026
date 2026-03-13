@@ -76,9 +76,9 @@ public class Vision {
         m_rightHub = m_rightCamera.getHubDistance();
 
         if (m_leftHub != null && m_middleHub != null && m_rightHub != null) {
-                xHub += m_leftHub.getX() + m_middleHub.getX() + m_rightHub.getX();
-                yHub += m_leftHub.getY() + m_middleHub.getY() + m_rightHub.getY();
-                zHub += m_leftHub.getZ() + m_middleHub.getZ() + m_rightHub.getZ();
+                xHub = m_leftHub.getX() + m_middleHub.getX() + m_rightHub.getX();
+                yHub = m_leftHub.getY() + m_middleHub.getY() + m_rightHub.getY();
+                zHub = m_leftHub.getZ() + m_middleHub.getZ() + m_rightHub.getZ();
                 rotHub = rotHub.plus(m_leftHub.getRotation()).plus(m_middleHub.getRotation()).plus(m_rightHub.getRotation()); 
                 xHub /= 3;
                 yHub /= 3;
@@ -88,8 +88,62 @@ public class Vision {
                 return m_hubDist;
             }
             else {
-                canSeeHub = false;
-                return null;
+                if(m_leftHub != null && m_middleHub != null) {
+                    xHub = m_leftHub.getX() + m_middleHub.getX();
+                    yHub = m_leftHub.getY() + m_middleHub.getY();
+                    zHub = m_leftHub.getZ() + m_middleHub.getZ();
+                    rotHub = rotHub.plus(m_leftHub.getRotation()).plus(m_middleHub.getRotation()); 
+                    xHub /= 3;
+                    yHub /= 3;
+                    rotHub = rotHub.div(2);
+                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                    canSeeHub = true;
+                    return m_hubDist;
+                }
+                else if(m_rightHub != null && m_middleHub != null) {
+                    xHub = m_rightHub.getX() + m_middleHub.getX();
+                    yHub = m_rightHub.getY() + m_middleHub.getY();
+                    zHub = m_rightHub.getZ() + m_middleHub.getZ();
+                    rotHub = rotHub.plus(m_rightHub.getRotation()).plus(m_middleHub.getRotation()); 
+                    xHub /= 3;
+                    yHub /= 3;
+                    rotHub = rotHub.div(2);
+                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                    canSeeHub = true;
+                    return m_hubDist;
+                }
+                else if (m_leftHub != null && m_middleHub == null && m_rightHub == null) {
+                    xHub = m_leftHub.getX();
+                    yHub = m_leftHub.getY();
+                    zHub = m_leftHub.getZ();
+                    rotHub = m_leftHub.getRotation();
+                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                    canSeeHub = true;
+                    return m_hubDist;
+                }
+                else if (m_leftHub == null && m_middleHub != null && m_rightHub == null) {
+                    xHub = m_middleHub.getX();
+                    yHub = m_middleHub.getY();
+                    zHub = m_middleHub.getZ();
+                    rotHub = m_middleHub.getRotation();
+                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                    canSeeHub = true;
+                    return m_hubDist;
+                }
+                else if (m_leftHub == null && m_middleHub == null && m_rightHub != null) {
+                    xHub = m_rightHub.getX();
+                    yHub = m_rightHub.getY();
+                    zHub = m_rightHub.getZ();
+                    rotHub = m_rightHub.getRotation();
+                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
+                    canSeeHub = true;
+                    return m_hubDist;
+                }
+                else {
+                    return null;
+                }
+                // canSeeHub = false;
+                // return null;
             }
     }
 
