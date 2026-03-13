@@ -125,17 +125,19 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
     // m_leftCamera.estimatePose(m_field, m_roXbotContainer.m_gyro);
-      m_pose = m_vision.estimatePoseAllCam();
-      if (m_pose != null && m_vision != null) {
-        publisher.set(m_pose);
-      }
+    if (Constants.hasVision) {
+        m_pose = m_vision.estimatePoseAllCam();
+        if (m_pose != null && m_vision != null) {
+          publisher.set(m_pose);
+        }
+        
+        m_hubDistance = m_vision.getHubDistanceAll();
       
-      m_hubDistance = m_vision.getHubDistanceAll();
-    
-      if (m_hubDistance != null) {
-        SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
-        SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
-        SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
+        if (m_hubDistance != null) {
+          SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
+          SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
+          SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
+        } 
       }
     
     m_robotContainer.showData();

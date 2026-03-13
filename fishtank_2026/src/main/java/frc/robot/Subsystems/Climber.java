@@ -21,7 +21,7 @@ public class Climber extends Motor{
     public Climber (String name, int canId, int encoderPort, double kpPID, double kiPID, double kdPID, boolean continuous)
     {
         super(name, canId, kpPID, kiPID, kdPID, continuous);
-        absoluteEncoder = new DutyCycleEncoder(encoderPort);
+        absoluteEncoder = new DutyCycleEncoder(encoderPort, 1, 0);
         curPos = absoluteEncoder.get();
         curPos *= Constants.ClimberConstants.ticsPerMeters; //translating to meters
         curPos -= Constants.ClimberConstants.startPos; //where it turns on
@@ -32,8 +32,16 @@ public class Climber extends Motor{
 
     public void MoveToLimit(double speed) {
         double position = absoluteEncoder.get();
-        if (speed > 0 && position < Constants.ClimberConstants.Max_Height && position > Constants.ClimberConstants.Min_Height)
+        SmartDashboard.putNumber("Move abs get", position);
+        SmartDashboard.putNumber("Move speed", speed);
+        if ((speed > 0) && (position < Constants.ClimberConstants.Max_Height))
         {
+        SmartDashboard.putNumber("Move it now", speed);
+            MoveMotor(speed);
+        } 
+        else if ((speed < 0) && (position > Constants.ClimberConstants.Min_Height))
+        {
+        SmartDashboard.putNumber("Move it now", speed);
             MoveMotor(speed);
         }
         else
@@ -47,6 +55,8 @@ public class Climber extends Motor{
     public void showData()
     {
         SmartDashboard.putNumber("Climber height", absoluteEncoder.get());
+        SmartDashboard.putNumber("relative climb height", getRelativePosition());
+       
         super.showData();
         
     }

@@ -7,10 +7,10 @@ public class Constants {
     public final static boolean hasMotor = false;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
-    public final static boolean hasClimber = false;
+    public final static boolean hasClimber = true;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
-    public final static boolean hasVision = true;
+    public final static boolean hasVision = false;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
@@ -87,8 +87,8 @@ public class Constants {
       public static final double pos_kI = 0.0;
       public static final double pos_kD = 0.0;
 
-      public static final double Max_Height = 10.0;
-      public static final double Min_Height = 0.0;
+      public static final double Max_Height = 0.6;
+      public static final double Min_Height = 0.4;
   
     }
 

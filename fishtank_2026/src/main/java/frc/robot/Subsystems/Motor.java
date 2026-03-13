@@ -204,6 +204,10 @@ public class Motor extends SubsystemBase{
             System.out.println("Stop Motor");
             spinMotor.stopMotor();
         }
+
+        public double getRelativePosition() {
+            return motorEncoder.getPosition();
+        }
         public void setMovement(double desiredSpeedOn)
         {
             if (motorEncoder.getVelocity() == 0)
@@ -219,6 +223,7 @@ public class Motor extends SubsystemBase{
         public void showData()
         {
             SmartDashboard.putNumber("motor relative pos", motorEncoder.getPosition());
+             SmartDashboard.putNumber("Climber Speed", motorEncoder.getVelocity());
         }
    
 }
