@@ -137,6 +137,7 @@ public class Robot extends TimedRobot {
           SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
           SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
           SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
+          SmartDashboard.putBoolean("Can Launch", m_hubDistance.getX() <= 3.1 && m_hubDistance.getX() >= 3.0);
         } 
       }
     
