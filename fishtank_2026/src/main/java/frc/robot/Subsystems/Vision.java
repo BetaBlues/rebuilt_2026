@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -35,16 +36,19 @@ public class Vision {
     private Rotation3d rotHub;
 
     private boolean canSeeHub;
+    private boolean m_hasVision;
   
     public Vision() {
         // need to measure offsets
+        m_hasVision = Constants.hasVision;
         try{
             m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15));
             m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, Math.toRadians(15));
             m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+        
         }
         catch (Exception e) {
-
+            m_hasVision = false;
         }
     }
 
@@ -64,6 +68,7 @@ public class Vision {
                     y /= 3;
                     rot = rot.div(3);
                     m_calcPose = new Pose3d(x, y, z, rot);
+                     m_hasVision = true;
                     return m_calcPose;
                 }
                 else {
@@ -76,6 +81,7 @@ public class Vision {
         }
         catch(Exception e) {
             //System.out.println(e);
+             m_hasVision = false;
         }
         return null;
     }
@@ -155,9 +161,10 @@ public class Vision {
     }
 
     public void showAllData() {
-        m_leftCamera.showData();
-        m_middleCamera.showData();
-        m_rightCamera.showData();
+        //SmartDashboard.putBoolean("hasVision", m_hasVision);
+        // m_leftCamera.showData();
+        // m_middleCamera.showData();
+        // m_rightCamera.showData();
     }
 
 

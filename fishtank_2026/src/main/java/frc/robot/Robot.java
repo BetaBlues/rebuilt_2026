@@ -131,6 +131,7 @@ public class Robot extends TimedRobot {
           if (m_pose != null && m_vision != null) {
             publisher.set(m_pose);
           }
+          m_vision.showAllData();
           
           m_hubDistance = m_vision.getHubDistanceAll();
         
