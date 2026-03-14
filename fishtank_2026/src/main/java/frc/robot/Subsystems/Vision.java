@@ -38,35 +38,46 @@ public class Vision {
   
     public Vision() {
         // need to measure offsets
-        m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15));
-        m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, Math.toRadians(15));
-        m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+        try{
+            m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+            m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, Math.toRadians(15));
+            m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public Pose3d estimatePoseAllCam() {
-        if (Constants.hasVision) {
-            m_leftPose = m_leftCamera.estimateAveragePose();
-            m_middlePose = m_middleCamera.estimateAveragePose();
-            m_rightPose = m_rightCamera.estimateAveragePose();
+        try {
+            if (Constants.hasVision) {
+                m_leftPose = m_leftCamera.estimateAveragePose();
+                m_middlePose = m_middleCamera.estimateAveragePose();
+                m_rightPose = m_rightCamera.estimateAveragePose();
 
-            if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
-                x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
-                y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
-                z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
-                rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
-                x /= 3;
-                y /= 3;
-                rot = rot.div(3);
-                m_calcPose = new Pose3d(x, y, z, rot);
-                return m_calcPose;
+                if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
+                    x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
+                    y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
+                    z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
+                    rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
+                    x /= 3;
+                    y /= 3;
+                    rot = rot.div(3);
+                    m_calcPose = new Pose3d(x, y, z, rot);
+                    return m_calcPose;
+                }
+                else {
+                    return null;
+                }
             }
             else {
                 return null;
             }
         }
-        else {
-            return null;
+        catch(Exception e) {
+            //System.out.println(e);
         }
+        return null;
     }
 
     public Transform3d getHubDistanceAll() {

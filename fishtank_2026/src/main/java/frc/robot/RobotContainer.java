@@ -52,13 +52,12 @@ public class RobotContainer {
 
       
       // new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
-      // new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
-    
+       new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_gyro.zeroHeading()));
       new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(()-> m_SwerveSubsystem.fieldForward(!m_chassisController.getLeftBumperButton())));
 
         /*
           * Swerve Drive Kinematics and Odometry Setup
-          * 
+          *   
           * The kinematics object allows us to convert between chassis speeds and individual wheel speeds.
           * The odometry object allows us to track the robot's position on the field over time using the kinematics and sensor data.
           * 

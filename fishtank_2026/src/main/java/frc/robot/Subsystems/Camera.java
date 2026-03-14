@@ -179,7 +179,7 @@ public class Camera {
                     for (int i = 0; i < targets.size(); i++) {
                          PhotonTrackedTarget t = targets.get(i);
                          int id = t.getFiducialId();
-                         if (id == 18 || id == 19 || id == 20 || id == 21 || id == 24 || id == 25 || id == 26 || id == 27) {
+                         if (/*id == 18 || id == 19 || id == 20 || id == 21 || id == 24 ||*/ id == 25 || id == 26 /*|| id == 27*/) {
                               if (t.getPoseAmbiguity() < 0.2) {
                                    return t.getBestCameraToTarget();
                               }
@@ -190,8 +190,7 @@ public class Camera {
                     for (int i = 0; i < targets.size(); i++) {
                          PhotonTrackedTarget t = targets.get(i);
                          int id = t.getFiducialId();
-                         //need to change these
-                         if (id == 2 || id == 3 || id == 4 || id == 5 || id == 8 || id == 9 || id == 10 || id == 11) {
+                         if (/*id == 2 || id == 3 || id == 4 || id == 5 || id == 8 ||*/ id == 9 || id == 10 /*|| id == 11*/) {
                               if (t.getPoseAmbiguity() < 0.2) {
                                    return t.getBestCameraToTarget();
                               }

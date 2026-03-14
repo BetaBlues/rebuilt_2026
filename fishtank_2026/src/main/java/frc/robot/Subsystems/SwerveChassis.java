@@ -44,12 +44,9 @@ public class SwerveChassis extends SubsystemBase {
     {
         //worldRotation = nWR;
         worldRotation = nWR;
+        SmartDashboard.putNumber("WorldRotation", worldRotation);
         
-        try
-        {
-            wait(200);
-        } catch (Exception e) {
-        }
+        
 
         periodic();
         Rotation2d gyroAngle = new Rotation2d(gyro.getAngle());
@@ -84,9 +81,10 @@ public class SwerveChassis extends SubsystemBase {
         double angle = 0;
         if (m_fieldForward)
         {
-            angle = Math.IEEEremainder(gyro.getAngle(), 360);
+            angle = Math.IEEEremainder(gyro.getAngle(), 180);
         }
         SmartDashboard.putNumber("bot gyro", angle);
+        SmartDashboard.putBoolean("fieldForward", m_fieldForward);
 
         return Rotation2d.fromDegrees(angle); //angle - 90
     }

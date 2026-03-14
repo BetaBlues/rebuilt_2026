@@ -73,11 +73,11 @@ public class SwerveDriveCommand extends Command {
         double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
         double sin_w = Math.sin(Math.toRadians(m_chassis.getWorldRotation()));
 
-        double rotatedXInput = xVal * cos_w - yVal * sin_w;
-        double rotatedYInput = xVal * sin_w + yVal * cos_w;
+        // double rotatedXInput = xVal * cos_w - yVal * sin_w;
+        // double rotatedYInput = xVal * sin_w + yVal * cos_w;
 
-        // double rotatedXInput = xVal;
-        // double rotatedYInput = yVal;
+        double rotatedXInput = xVal;
+        double rotatedYInput = yVal;
 
 
         double xSpeed = rotatedXInput;

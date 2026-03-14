@@ -145,7 +145,7 @@ public class SwerveWheel {
     //     return m_currentPosition;
     // }
     public SwerveModulePosition getPosition(){
-        SmartDashboard.putNumber(loc + "driveEnc * 1", driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation);
+       // SmartDashboard.putNumber(loc + "driveEnc * 1", driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation);
         return new SwerveModulePosition(
             driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
             //Rotation2d.fromRadians(0.0)
