@@ -16,7 +16,8 @@ public class ChassisGyro extends com.studica.frc.AHRS {
 
 
     public double getAngle() {
-        return -1 * getYaw();
+        return -1*getYaw();
+        //return Math.IEEEremainder(((-1 * getYaw()) + 360), 360);
         //return super.getAngle() * -1.0;
        //return super.getAngle();
     }

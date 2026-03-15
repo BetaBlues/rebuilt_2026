@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -73,7 +74,7 @@ public class Robot extends TimedRobot {
 
   
   public Robot() {
-
+    DataLogManager.start();
     m_autoSelected = kDefaultAuto;
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Left Auto", kLeftAuto);
