@@ -57,41 +57,56 @@ public class SwerveDriveCommand extends Command {
 
         // double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
 
-        double xVal = m_controller.getLeftY();
+        // double xVal = m_controller.getLeftY();
         
-        double yVal;
-        if (Constants.hasCanCoder)
-        {
-            yVal = m_controller.getLeftX(); /*-1 */
-        }
-        else
-        {
-            yVal = m_controller.getLeftX();
-        }
+        // double yVal;
+        // if (Constants.hasCanCoder)
+        // {
+        //     yVal = m_controller.getLeftX(); /*-1 */
+        // }
+        // else
+        // {
+        //     yVal = m_controller.getLeftX();
+        // }
 
         
-        double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
-        double sin_w = Math.sin(Math.toRadians(m_chassis.getWorldRotation()));
+        // double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
+        // double sin_w = Math.sin(Math.toRadians(m_chassis.getWorldRotation()));
 
-        double rotatedXInput = xVal * cos_w - yVal * sin_w;
-        double rotatedYInput = xVal * sin_w + yVal * cos_w;
+        // double rotatedXInput = xVal * cos_w - yVal * sin_w;
+        // double rotatedYInput = xVal * sin_w + yVal * cos_w;
 
-        // double rotatedXInput = xVal;
-        // double rotatedYInput = yVal;
+        // // double rotatedXInput = xVal;
+        // // double rotatedYInput = yVal;
 
 
-        double xSpeed = rotatedXInput;
-        double ySpeed = rotatedYInput;
-        double turningSpeed = m_controller.getRightX();
+        // double xSpeed = rotatedXInput;
+        // double ySpeed = rotatedYInput;
+        // double turningSpeed = m_controller.getRightX();
 
-        xSpeed = Math.abs(xSpeed) > k_chassis.kDeadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > k_chassis.kDeadband ? ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > k_chassis.kDeadband ? turningSpeed : 0.0;
+        // xSpeed = Math.abs(xSpeed) > k_chassis.kDeadband ? xSpeed : 0.0;
+        // ySpeed = Math.abs(ySpeed) > k_chassis.kDeadband ? ySpeed : 0.0;
+        // turningSpeed = Math.abs(turningSpeed) > k_chassis.kDeadband ? turningSpeed : 0.0;
+        double joystickForward = -m_controller.getLeftY();
+        double joystickStrafe = m_controller.getLeftX();
+        double joystickTurn = m_controller.getRightX();
 
-        //makes driving smoother
-        xSpeed = xLimiter.calculate(xSpeed) * k_chassis.MaxMetersPerSecond;
-        ySpeed = yLimiter.calculate(ySpeed) * k_chassis.MaxMetersPerSecond;
-        turningSpeed = turningLimiter.calculate(turningSpeed) * k_chassis.AngularAccelerationUnitsPerSecond;
+        joystickForward = Math.abs(joystickForward) > k_chassis.kDeadband ? joystickForward : 0.0;
+        joystickStrafe = Math.abs(joystickStrafe) > k_chassis.kDeadband ? joystickStrafe : 0.0;
+        joystickTurn = Math.abs(joystickTurn) > k_chassis.kDeadband ? joystickTurn : 0.0;
+        
+
+
+        // //makes driving smoother
+        // xSpeed = xLimiter.calculate(xSpeed) * k_chassis.MaxMetersPerSecond;
+        // ySpeed = yLimiter.calculate(ySpeed) * k_chassis.MaxMetersPerSecond;
+        // turningSpeed = turningLimiter.calculate(turningSpeed) * k_chassis.AngularAccelerationUnitsPerSecond;
+
+        double xSpeed = xLimiter.calculate(joystickForward) * k_chassis.MaxMetersPerSecond;
+        double ySpeed = yLimiter.calculate(joystickStrafe) * k_chassis.MaxMetersPerSecond;
+        double turningSpeed = turningLimiter.calculate(joystickTurn) * k_chassis.kPhysicalMaxAngularSpeedRadiansPerSecond;
+        
+        
 
         SmartDashboard.putNumber("xSpeed mod", xSpeed);
         SmartDashboard.putNumber("ySpeed mod", ySpeed);

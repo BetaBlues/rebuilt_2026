@@ -122,10 +122,10 @@ public class Constants {
 
     public final class k_chassis {
         public static final double kPTurning = 0.7;
-        public static final double kPDrive = 0.3;
+        public static final double kPDrive = 0.5;//0.3
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kDeadband = 0.6;
+        public static final double kDeadband = 0.6; //0.6
         public static final double AccelerationUnitsPerSecond = 1.1;
         public static final double AngularAccelerationUnitsPerSecond = 1;
         public static final double MaxMetersPerSecond = 0.90;

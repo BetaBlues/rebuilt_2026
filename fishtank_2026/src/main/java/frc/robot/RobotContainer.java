@@ -52,9 +52,11 @@ public class RobotContainer {
 
       
       // new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
-       new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_gyro.zeroHeading()));
-      new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(()-> m_SwerveSubsystem.fieldForward(m_chassisController.getLeftBumperButton())));
-
+     
+      //  new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_gyro.zeroHeading()));
+      // new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(()-> m_SwerveSubsystem.fieldForward(m_chassisController.getLeftBumperButton())));
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(() -> m_SwerveSubsystem.fieldForward(!m_chassisController.getLeftBumperButton())));
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.zeroGyroAndSetFieldForward()));
         /*
           * Swerve Drive Kinematics and Odometry Setup
           *   
