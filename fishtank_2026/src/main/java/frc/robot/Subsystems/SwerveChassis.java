@@ -31,30 +31,34 @@ public class SwerveChassis extends SubsystemBase {
     private ChassisGyro gyro;
     private Field2d m_odoField;
     private Pose2d m_pose;
-    private boolean m_fieldForward = true;
+    private boolean m_fieldForward = false;
 
     
     private double worldRotation;
-    public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
-    public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
+    // public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
+    // public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
+    public static double[] chassisLength = {0.630, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
+    public static double[] chassisWidth = {0.505, Units.inchesToMeters(22.75)};
+   
     public SwerveDriveKinematics m_driveKinematics;
-    public SwerveDriveOdometry m_odometry;
+    //public SwerveDriveOdometry m_odometry;
 
     public void setWorldRotation(double nWR)
     {
         //worldRotation = nWR;
-        worldRotation = nWR;
+        //worldRotation = nWR;
+        worldRotation = 0;
         SmartDashboard.putNumber("WorldRotation", worldRotation);
         
         
 
         periodic();
-        Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
-         m_odometry.resetPosition(gyroAngle,
-        new SwerveModulePosition[] {
-        leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
-        leftRearWheel.getPosition(), rightRearWheel.getPosition()
-        }, m_pose);
+        // Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
+        //  m_odometry.resetPosition(gyroAngle,
+        // new SwerveModulePosition[] {
+        // leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+        // leftRearWheel.getPosition(), rightRearWheel.getPosition()
+        // }, m_pose);
     
     } 
     public double getWorldRotation()
@@ -156,14 +160,14 @@ public class SwerveChassis extends SubsystemBase {
 
 
         //motors for odometry
-        m_odometry = new SwerveDriveOdometry(
-        m_driveKinematics, gyro.getRotation2d(),
-        new SwerveModulePosition[] {
-            leftFrontWheel.getPosition(),
-            rightFrontWheel.getPosition(),
-            leftRearWheel.getPosition(),
-            rightRearWheel.getPosition()
-        }, new Pose2d(5.0, 6.5, new Rotation2d())); //x and y is robot starting position in field
+        // m_odometry = new SwerveDriveOdometry(
+        // m_driveKinematics, gyro.getRotation2d(),
+        // new SwerveModulePosition[] {
+        //     leftFrontWheel.getPosition(),
+        //     rightFrontWheel.getPosition(),
+        //     leftRearWheel.getPosition(),
+        //     rightRearWheel.getPosition()
+        // }, new Pose2d(5.0, 6.5, new Rotation2d())); //x and y is robot starting position in field
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
         
@@ -241,18 +245,18 @@ public class SwerveChassis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
-       m_pose = m_odometry.update(gyroAngle,
-        new SwerveModulePosition[] {
-      leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
-      leftRearWheel.getPosition(), rightRearWheel.getPosition()
-    });
+    //     Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyro.getAngle()));
+    //    m_pose = m_odometry.update(gyroAngle,
+    //     new SwerveModulePosition[] {
+    //   leftFrontWheel.getPosition(), rightFrontWheel.getPosition(),
+    //   leftRearWheel.getPosition(), rightRearWheel.getPosition()
+    // });
     
-    m_odoField.setRobotPose(m_pose);
-    SmartDashboard.putData("OdoField", m_odoField);
-    SmartDashboard.putString("odometry gyro", gyroAngle.toString());
-    SmartDashboard.putNumber("Robot X", Math.round(m_pose.getX() * 100.0)/100.0);
-    SmartDashboard.putNumber("Robot Y", Math.round(m_pose.getY() * 100.0) / 100.0);
+   // m_odoField.setRobotPose(m_pose);
+    //SmartDashboard.putData("OdoField", m_odoField);
+    //SmartDashboard.putString("odometry gyro", gyroAngle.toString());
+    // SmartDashboard.putNumber("Robot X", Math.round(m_pose.getX() * 100.0)/100.0);
+    // SmartDashboard.putNumber("Robot Y", Math.round(m_pose.getY() * 100.0) / 100.0);
   
     SmartDashboard.putString("rotation2d", getRotation2d().toString());
       

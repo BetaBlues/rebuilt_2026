@@ -41,22 +41,7 @@ public class SwerveDriveCommand extends Command {
 
      @Override
      public void execute() {
-    //    currentAngle = Math.toRadians(m_gyro.getCompassHeading());
-
-       
-        // double temp = m_controller.getLeftX() * Math.cos(currentAngle) + m_controller.getLeftY() * Math.sin(currentAngle);
-
-        // double ySpeedSquared = Math.pow(m_controller.getLeftX() - temp*Math.cos(currentAngle), 2) + Math.pow((m_controller.getLeftY() -temp*Math.sin(currentAngle)), 2); //m_controller.getLeftY();
-        // double ySpeed = ySpeedSquared > 0 ? Math.sqrt(ySpeedSquared) : - Math.sqrt(ySpeedSquared);
-
-
-        
-        // double xSpeedSquared = Math.pow(temp*Math.cos(currentAngle), 2) + Math.pow(temp*Math.sin(currentAngle), 2);
-        // double xSpeed = xSpeedSquared > 0 ? Math.sqrt(xSpeedSquared) : - Math.sqrt(xSpeedSquared);
-        // double turningSpeed = m_controller.getRightX();
-
-        // double vec1 = Math.abs(ySpeed) * Math.abs(xSpeed) * Math.cos(currentAngle);
-
+    
         double xVal = m_controller.getLeftY();
         
         double yVal;
@@ -73,11 +58,11 @@ public class SwerveDriveCommand extends Command {
         double cos_w = Math.cos(Math.toRadians(m_chassis.getWorldRotation()));
         double sin_w = Math.sin(Math.toRadians(m_chassis.getWorldRotation()));
 
-        double rotatedXInput = xVal * cos_w - yVal * sin_w;
-        double rotatedYInput = xVal * sin_w + yVal * cos_w;
+        // double rotatedXInput = xVal * cos_w - yVal * sin_w;
+        // double rotatedYInput = xVal * sin_w + yVal * cos_w;
 
-        // double rotatedXInput = xVal;
-        // double rotatedYInput = yVal;
+        double rotatedXInput = xVal;
+        double rotatedYInput = yVal;
 
 
         double xSpeed = rotatedXInput;
