@@ -146,9 +146,10 @@ public class SwerveWheel {
     // }
     public SwerveModulePosition getPosition(){
        // SmartDashboard.putNumber(loc + "driveEnc * 1", driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation);
+        SmartDashboard.putNumber("drive position", -driveEncoder.getPosition());
         return new SwerveModulePosition(
-            driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
-            //Rotation2d.fromRadians(0.0)
+            -driveEncoder.getPosition() * Constants.k_chassis.kDriveEncoderDistancePerRotation,
+           // Rotation2d.fromRadians(0.0)
             Rotation2d.fromRadians(getAbsEncoderRad())
         );
         
@@ -206,7 +207,7 @@ public class SwerveWheel {
         // Set drive motor speeds (using percentage output or velocity mode)
         if (manualControl){
             if (Math.abs(state.speedMetersPerSecond) < 0.001){
-            
+                stop();
                 return;
             }
             state = SwerveModuleState.optimize(state, getState().angle);

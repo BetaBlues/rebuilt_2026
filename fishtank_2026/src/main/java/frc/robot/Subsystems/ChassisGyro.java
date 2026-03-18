@@ -23,7 +23,8 @@ public class ChassisGyro extends com.studica.frc.AHRS {
     }
 
     public void zeroHeading() {
-        super.zeroYaw();
+      //  super.zeroYaw();
+      System.out.println("zeroHeading");
     }
     
 }
