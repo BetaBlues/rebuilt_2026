@@ -5,15 +5,16 @@ public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
     public final static boolean hasMotor = false;
-    public final static boolean hasLauncher = false;
-    public final static boolean hasIntake = false;
-    public final static boolean hasClimber = false;
-    public final static boolean hasCanCoder = false;
-    public final static boolean hasPWMEncoder = true;
+    public final static boolean hasLauncher = true;
+    public final static boolean hasIntake = true;
+    public final static boolean hasClimber = true;
+    public final static boolean hasCanCoder = true;
+    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasVision = false;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 1;
+    public static int enc = 0;
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};
@@ -21,10 +22,11 @@ public class Constants {
     public static final int[] leftRearAbsEncPort = {33, 3};
     public static final int[] rightRearAbsEncPort = {43, 4};
     
-    public static final double leftFrontAbsOffset =  0.226; //0.48;//0.226;
-    public static final double rightFrontAbsOffset = 0.351;
-    public static final double leftRearAbsOffset = 0.743;
-    public static final double rightRearAbsOffset= 0.361;
+    public static final double leftFrontAbsOffset =  0.238;
+    public static final double rightFrontAbsOffset = 0.353;
+    public static final double leftRearAbsOffset = 0.749;
+    public static final double rightRearAbsOffset= 0.363;
+
     public static final double steerEncoderRatio = 3.406;
     public static final double driveEncoderRatio = 10.0;
 
@@ -56,20 +58,23 @@ public class Constants {
 
       public static final double kSoftLimitReverse = -25000;
       public static final double kSoftLimitForward = 35000;
-      public static final double rotsPerMeter = 1;
+      public static final double rotsPerMeter = 3.058;
+      public static final double feedforward = 0.0;
 
     }
 
     public static class LauncherConstants {
-      public static final double pos_kP = 0.4;
+      public static final double pos_kP = 0.15;
       public static final double pos_kI = 0.0;
       public static final double pos_kD = 0.0;
+      public static final double feedforward = 1/473.0;
     }
 
     public static class IntakeConstants {
       public static final double pos_kP = 0.4;
       public static final double pos_kI = 0.0;
       public static final double pos_kD = 0.0;
+      public static final double feedforward = 0.0;
     }
     
     public static class ClimberConstants {
@@ -77,12 +82,17 @@ public class Constants {
       public static final int absPort = 5; //5
       public static final double startPos = 0.0;
       public static final double ticsPerMeters= 1.0; //meters to rotation
-      public static final double setpoint0 = 10.0;
-      public static final double setpoint1 = 11.0;
+      public static final double setpoint0 = 0.0;
+      public static final double setpoint1 = 10.0;
+      public static final double setpoint2 = -10.0;
 
       public static final double pos_kP = 0.4;
       public static final double pos_kI = 0.0;
       public static final double pos_kD = 0.0;
+
+      public static final double Max_Height = 0.6;
+      public static final double Min_Height = 0.4;
+      public static final double feedforward = 0.0;
   
     }
 
@@ -118,7 +128,7 @@ public class Constants {
         public static final double kDeadband = 0.6;
         public static final double AccelerationUnitsPerSecond = 1.1;
         public static final double AngularAccelerationUnitsPerSecond = 1;
-        public static final double MaxMetersPerSecond = 0.66;
+        public static final double MaxMetersPerSecond = 0.90;
 
         public static final int kCurrentLimit = 60;
         public static final double driveToDistance = 10.0;
@@ -129,7 +139,7 @@ public class Constants {
         //dunno
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        public static final double kDriveEncoderDistancePerRotation = 1;
+        public static final double kDriveEncoderDistancePerRotation = 0.0435;
     
 
               

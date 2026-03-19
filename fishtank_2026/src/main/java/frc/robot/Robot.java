@@ -6,9 +6,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -20,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Camera;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.cameraserver.CameraServer;
+import frc.robot.Subsystems.Vision;;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -43,14 +48,17 @@ public class Robot extends TimedRobot {
 
   private Field2d m_field = new Field2d();
   // private Vision m_vision = new Vision();
-  // private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
-  // private Camera m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, 0);
-  // private Camera m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, 0);
+
+  private UsbCamera intakeCamera;
+  private UsbCamera climberCamera;
+  VideoSink server;
 
   private boolean debugPose = false;
-  
-  
 
+  private Vision m_vision;
+  private Pose3d m_pose;
+  
+  private Transform3d m_hubDistance;
 
 
   private RobotContainer m_robotContainer;
@@ -61,27 +69,28 @@ public class Robot extends TimedRobot {
 
 
 
-  StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
+  //StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
   //StructArrayPublisher<Pose3d> arrayPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
 
   
   public Robot() {
-
+    DataLogManager.start();
     m_autoSelected = kDefaultAuto;
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Left Auto", kLeftAuto);
     m_chooser.addOption("Middle Auto", kMiddleAuto);
     m_chooser.addOption("Right Auto", kRightAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    //SmartDashboard.putData("Auto choices", m_chooser);
 
+    intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+    climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
+    server = CameraServer.getServer();
+    if(Constants.hasVision) {
+      m_vision = new Vision();
+    }
     
   }
 
-  /**
-   * Uses the CameraServer class to automatically capture video from a USB webcam and send it to the
-   * FRC dashboard without doing any vision processing. This is the easiest way to get camera images
-   * to the dashboard. Just add this to the robotInit() method in your program.
-   */
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -116,7 +125,31 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
-    //m_leftCamera.estimatePose(m_field, m_robotContainer.m_gyro);
+    // m_leftCamera.estimatePose(m_field, m_roXbotContainer.m_gyro);
+    try {
+      if (Constants.hasVision) {
+          m_pose = m_vision.estimatePoseAllCam();
+          // if (m_pose != null && m_vision != null) {
+          //   publisher.set(m_pose);
+          // }
+          m_vision.showAllData();
+          
+          m_hubDistance = m_vision.getHubDistanceAll();
+        
+          if (m_hubDistance != null) {
+            SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
+            SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
+            SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
+            SmartDashboard.putBoolean("Can Launch", m_hubDistance.getX() <= 3 && m_hubDistance.getX() >= 2.8);
+          } 
+        }
+      }
+      catch (Exception e) {
+        System.out.println(e);
+      }
+    
+    m_robotContainer.showData();
+
     if (debugPose == true) {
       Pose2d pose = m_field.getRobotPose();
       double x = pose.getX();
@@ -131,11 +164,9 @@ public class Robot extends TimedRobot {
       }
       m_field.setRobotPose(x, y, deg);
     }
+  
 
 
-    //m_leftCamera.showData();
-    //publisher.set(m_leftCamera.getPose3d());
-    m_robotContainer.showData();
 
 
 
@@ -172,11 +203,10 @@ public class Robot extends TimedRobot {
     // should find where it currently is, where it should be, 
     // how far it is from that position and move there to shoot
     // mix of vision and odo??
-    // watching frc 0 to auto
-    // tragectory thing??
+    // 
     switch (m_autoSelected) {
       case kLeftAuto:
-        
+        //m_leftCamera.getPose3d().getTranslation();
         break;
 
       case kMiddleAuto:

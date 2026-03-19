@@ -41,7 +41,6 @@ public class Motor extends SubsystemBase{
     private String motorName;
     private double targetVelocity;
     private double targetPosition;
-    private PIDController climberPID;
     private double m_eSetpoint = 0.0;
     private String loc;
 
@@ -60,7 +59,7 @@ public class Motor extends SubsystemBase{
 
     }
 
-    public Motor(String name, int canId, double kpPID, double kiPID, double kdPID, boolean continuous) {
+    public Motor(String name, int canId, double kpPID, double kiPID, double kdPID, double feedforward,boolean continuous) {
         motorName = name;
 
     SysIdRoutine routine = new SysIdRoutine(
@@ -74,10 +73,13 @@ public class Motor extends SubsystemBase{
     motorClosedLoop = spinMotor.getClosedLoopController();
     double batteryVoltage = RobotController.getBatteryVoltage();
 
-    if (continuous)
-    {
-        motorPID.enableContinuousInput(-180, 180);
-    }
+    // motorPID = new PIDController(kpPID, kiPID, kdPID);
+     
+
+    // if (continuous)
+    // {
+    //     motorPID.enableContinuousInput(-180, 180);
+    // }
     
 
     config.idleMode(IdleMode.kBrake);
@@ -139,6 +141,10 @@ public class Motor extends SubsystemBase{
         System.out.println("proceeding to setpoint = " + pGoal);
      
     }
+    public void setFeedforward(double ff)
+    {
+        config.closedLoop.velocityFF(ff, ClosedLoopSlot.kSlot1);
+    }
 
     public void setTargetVelocity(double pGoal, boolean relative) {
         if (relative)
@@ -151,6 +157,13 @@ public class Motor extends SubsystemBase{
         targetVelocity = pGoal;
         
         System.out.println("proceeding to setpoint = " + pGoal);
+    }
+
+    public void setTargetVoltage(double pGoal) {
+        
+        motorClosedLoop.setSetpoint(pGoal, ControlType.kVoltage, ClosedLoopSlot.kSlot1);
+        motorClosedLoop.setIAccum(0);
+        
     }
 
     public void MovePos(double angle, boolean relative) {
@@ -187,6 +200,8 @@ public class Motor extends SubsystemBase{
     }
 
     
+
+    
         public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return routine.dynamic(direction);
         }
@@ -199,6 +214,10 @@ public class Motor extends SubsystemBase{
         public void stopMotor() {
             System.out.println("Stop Motor");
             spinMotor.stopMotor();
+        }
+
+        public double getRelativePosition() {
+            return motorEncoder.getPosition();
         }
         public void setMovement(double desiredSpeedOn)
         {
@@ -215,6 +234,7 @@ public class Motor extends SubsystemBase{
         public void showData()
         {
             SmartDashboard.putNumber("motor relative pos", motorEncoder.getPosition());
+             SmartDashboard.putNumber("Climber Speed", motorEncoder.getVelocity());
         }
    
 }
