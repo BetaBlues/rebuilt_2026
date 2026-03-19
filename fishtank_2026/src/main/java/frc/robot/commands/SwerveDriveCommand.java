@@ -78,9 +78,9 @@ public class SwerveDriveCommand extends Command {
         ySpeed = yLimiter.calculate(ySpeed) * k_chassis.MaxMetersPerSecond;
         turningSpeed = turningLimiter.calculate(turningSpeed) * k_chassis.AngularAccelerationUnitsPerSecond;
 
-        SmartDashboard.putNumber("xSpeed mod", xSpeed);
-        SmartDashboard.putNumber("ySpeed mod", ySpeed);
-        SmartDashboard.putNumber("turningSpeed mod", turningSpeed);
+        // SmartDashboard.putNumber("xSpeed mod", xSpeed);
+        // SmartDashboard.putNumber("ySpeed mod", ySpeed);
+        // SmartDashboard.putNumber("turningSpeed mod", turningSpeed);
 
         // The gyro is causing the wheel drift, need to test if x, y and turning are zero, if so, set chassis speed to zero
         // and do not call fromFieldRelativeSpeeds

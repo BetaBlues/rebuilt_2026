@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
 
 
 
-  StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
+  //StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
   //StructArrayPublisher<Pose3d> arrayPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
 
   
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Left Auto", kLeftAuto);
     m_chooser.addOption("Middle Auto", kMiddleAuto);
     m_chooser.addOption("Right Auto", kRightAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    //SmartDashboard.putData("Auto choices", m_chooser);
 
     intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
     climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
@@ -129,9 +129,9 @@ public class Robot extends TimedRobot {
     try {
       if (Constants.hasVision) {
           m_pose = m_vision.estimatePoseAllCam();
-          if (m_pose != null && m_vision != null) {
-            publisher.set(m_pose);
-          }
+          // if (m_pose != null && m_vision != null) {
+          //   publisher.set(m_pose);
+          // }
           m_vision.showAllData();
           
           m_hubDistance = m_vision.getHubDistanceAll();
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
         }
       }
       catch (Exception e) {
-        //System.out.println(e);
+        System.out.println(e);
       }
     
     m_robotContainer.showData();

@@ -145,10 +145,10 @@ public class Camera {
                          m_robotPose = PhotonUtils.estimateFieldToRobotAprilTag(m_target.getBestCameraToTarget(), kTagLayout.getTagPose(m_target.getFiducialId()).get(), kRobotToCam);
                         SmartDashboard.putNumber("Distance x", m_robotPose.getX());
                          SmartDashboard.putNumber("Distance y", m_robotPose.getY());
-                         SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
+                         //SmartDashboard.putNumber("Distance z", m_robotPose.getZ());
                          SmartDashboard.putNumber("Distance to tag", m_target.getBestCameraToTarget().getX());
-                         SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
-                         SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
+                         // SmartDashboard.putNumber("Angle to tag", m_target.getBestCameraToTarget().getY());
+                         // SmartDashboard.putNumber("Delta to tag", m_target.getBestCameraToTarget().getZ());
                         return m_robotPose;
                     }
                }

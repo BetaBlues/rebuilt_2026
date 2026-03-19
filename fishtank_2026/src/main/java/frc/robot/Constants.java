@@ -139,7 +139,7 @@ public class Constants {
         //dunno
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-        public static final double kDriveEncoderDistancePerRotation = 1;
+        public static final double kDriveEncoderDistancePerRotation = 0.0435;
     
 
               
