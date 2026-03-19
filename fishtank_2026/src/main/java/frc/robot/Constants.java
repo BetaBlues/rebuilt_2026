@@ -10,7 +10,7 @@ public class Constants {
     public final static boolean hasClimber = true;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
-    public final static boolean hasVision = false;
+    public final static boolean hasVision = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1

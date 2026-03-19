@@ -66,16 +66,18 @@ public class Climber extends Motor{
    * @param speed the desired speed of the motor, positive for up and negative for down
    */
   public void setMotorSpeed(double speed) {
-    if (speed != 0) {
-      if (m_bottomlimitSwitch.get()) {
-        
+   
+      
+    if (speed < 0 && m_bottomlimitSwitch.get()) 
+    {
         MoveMotor(0);
-      } else {
+    } 
+    else 
+    {
         
         MoveMotor(speed);
-      }
-    
     }
+    
   }
 
     public void showData()
