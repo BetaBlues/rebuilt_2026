@@ -181,33 +181,35 @@ public class SwerveChassis extends SubsystemBase {
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
 
         try{
-        RobotConfig config = RobotConfig.fromGUISettings();
+            RobotConfig config = RobotConfig.fromGUISettings();
 
-        // Configure AutoBuilder
-        AutoBuilder.configure(
-            m_leftCamera::getPose2d, 
-            m_leftCamera::resetPose, 
-            this::getSpeeds, 
-            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards 
-            new PPHolonomicDriveController(
-                new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-            ),
-            config,
-            () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+            // Configure AutoBuilder
+            AutoBuilder.configure(
+                // should probably change to swerve odo
+                m_leftCamera::getPose2d, 
+                m_leftCamera::resetPose, 
+                this::getSpeeds, 
+                (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards 
+                new PPHolonomicDriveController(
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                ),
+                config,
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            },
-            this
-            );
-            }catch(Exception e){
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this
+                );
+            }
+            catch(Exception e){
                 DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
             }
         

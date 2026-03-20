@@ -1,6 +1,7 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,7 +25,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Camera;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.cameraserver.CameraServer;
-import frc.robot.Subsystems.Vision;;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import frc.robot.Subsystems.Vision;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -65,6 +68,8 @@ public class Robot extends TimedRobot {
   private PowerDistribution pdh;
 
   XboxController m_MechanismController = new XboxController(1);
+
+  
   
 
 
@@ -88,6 +93,7 @@ public class Robot extends TimedRobot {
     if(Constants.hasVision) {
       m_vision = new Vision();
     }
+
     
   }
 
@@ -113,6 +119,9 @@ public class Robot extends TimedRobot {
     
 
     pdh = new PowerDistribution();
+
+    // for pathplanning to decrease delay
+    FollowPathCommand.warmupCommand().schedule();
   }
 
   /**
