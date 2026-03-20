@@ -67,10 +67,11 @@ public class Climber extends Motor{
    */
   public void setMotorSpeed(double speed) {
    
-      
+    
     if (speed < 0 && m_bottomlimitSwitch.get()) 
     {
         MoveMotor(0);
+
     } 
     else 
     {
@@ -84,7 +85,7 @@ public class Climber extends Motor{
     {
         SmartDashboard.putNumber("Climber height", absoluteEncoder.get());
         SmartDashboard.putNumber("relative climb height", getRelativePosition());
-       
+        SmartDashboard.putBoolean("limit switch", m_bottomlimitSwitch.get());
         super.showData();
         
     }
