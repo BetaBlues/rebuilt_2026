@@ -110,8 +110,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_field.setRobotPose(1.0, 1.0, Rotation2d.fromDegrees(0.0));
-    // SmartDashboard.putData("Field", m_field);
-    m_robotContainer = new RobotContainer();
+    SmartDashboard.putData("Field", m_field);
+    m_robotContainer = new RobotContainer(m_field);
     
 
     pdh = new PowerDistribution();

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Subsystems.SwerveChassis;
 import frc.robot.Subsystems.Motor;
 import frc.robot.Constants.SpinMotorConstants;
@@ -34,16 +35,20 @@ public class RobotContainer {
     private final XboxController m_chassisController = new XboxController(0); // connect XboxController to port 0
     private final XboxController m_MechanismController = new XboxController(1); // connect XboxController to port 1
     public final ChassisGyro m_gyro = Constants.hasGyro ? new ChassisGyro(AHRS.NavXComType.kUSB1) : null;
-    private final SwerveChassis m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro) : null;
+    private final SwerveChassis m_SwerveSubsystem; // = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro, m_field) : null;
     private final Motor m_Motor = Constants.hasMotor ? new Motor("Motor Test", 6, Constants.SpinMotorConstants.pos_kP, Constants.SpinMotorConstants.pos_kI, Constants.SpinMotorConstants.pos_kD, Constants.SpinMotorConstants.feedforward,false) : null;
     private final Launcher m_Launcher = Constants.hasLauncher ? new Launcher("Launcher", 10, Constants.LauncherConstants.pos_kP, Constants.LauncherConstants.pos_kI, Constants.LauncherConstants.pos_kD, Constants.LauncherConstants.feedforward) : null;
     private final Motor m_Intake = Constants.hasIntake ? new Motor("Intake", 9, Constants.IntakeConstants.pos_kP, Constants.IntakeConstants.pos_kI, Constants.IntakeConstants.pos_kD, Constants.IntakeConstants.feedforward,false) : null;
     private final Climber m_Climber = Constants.hasClimber ? new Climber("Climber", 7, Constants.ClimberConstants.absPort, Constants.ClimberConstants.pos_kP, Constants.ClimberConstants.pos_kI, Constants.ClimberConstants.pos_kD, Constants.ClimberConstants.feedforward, true) : null;
 
     private Pose3d targetPose3d = new Pose3d();
+    private Field2d m_field;
 
 
-    public RobotContainer() {
+    public RobotContainer(Field2d field) {
+
+    m_field = field;
+    m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro, m_field) : null;
   
 
     if (Constants.hasSwerve) {

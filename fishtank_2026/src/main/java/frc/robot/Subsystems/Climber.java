@@ -20,6 +20,7 @@ public class Climber extends Motor{
     private double curPos;
     private PIDController climberPID;
     DigitalInput m_bottomlimitSwitch = new DigitalInput(2);
+    private boolean m_lowerLimit = false;
   
 
     private SysIdRoutine log;
@@ -68,7 +69,7 @@ public class Climber extends Motor{
   public void setMotorSpeed(double speed) {
    
     
-    if (speed < 0 && m_bottomlimitSwitch.get()) 
+    if (speed < 0 && m_lowerLimit) 
     {
         MoveMotor(0);
 
@@ -88,5 +89,13 @@ public class Climber extends Motor{
         SmartDashboard.putBoolean("limit switch", m_bottomlimitSwitch.get());
         super.showData();
         
+    }
+
+    @Override
+    public void periodic() {
+        m_lowerLimit = m_bottomlimitSwitch.get();
+        if (m_lowerLimit) {
+            MoveMotor(0);
+        }
     }
 }
