@@ -1,171 +1,152 @@
 package frc.robot.Subsystems;
 import edu.wpi.first.math.geometry.Pose3d;
+import java.util.ArrayList;
+import java.util.List;
 
-import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+public class Vision extends SubsystemBase {
 
+    private Camera m_leftCamera = null;
+    private Camera m_middleCamera = null;
+    private Camera m_rightCamera = null;
+    List<Camera> activeCameras = new ArrayList<>();
 
+    private Pose3d m_calcPose = null;
 
-public class Vision {
+    private Transform3d m_hubDist = null;
 
-    private Camera m_leftCamera;
-    private Camera m_middleCamera;
-    private Camera m_rightCamera;
-
-    private Pose3d m_leftPose;
-    private Pose3d m_middlePose;
-    private Pose3d m_rightPose;
-    private Pose3d m_calcPose;
-
-    private Transform3d m_leftHub;
-    private Transform3d m_middleHub;
-    private Transform3d m_rightHub;
-    private Transform3d m_hubDist;
-
-    private double x;
-    private double y;
-    private double z;
-    private Rotation3d rot;
-
-    private double xHub;
-    private double yHub;
-    private double zHub;
-    private Rotation3d rotHub;
-
-    private boolean canSeeHub;
-    private boolean m_hasVision;
-  
     public Vision() {
         // need to measure offsets
-        m_hasVision = Constants.hasVision;
-        try{
-            m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15));
-            m_middleCamera = new Camera("MiddlCamera", 0, 0, 0.3937, Math.toRadians(15));
-            m_rightCamera = new Camera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15));
+        boolean showState = true;
+        m_leftCamera = setupCamera("LeftCamera", -30*Math.PI/180, 0, 0.33, Math.toRadians(15), showState);
+        m_middleCamera = setupCamera("MiddleCamera", 0, 0, 0.3937, Math.toRadians(15), showState);
+        m_rightCamera = setupCamera("RightCamera", 30*Math.PI/180, 0, 0.33, Math.toRadians(15), showState);
         
+        if (null != m_leftCamera) activeCameras.add(m_leftCamera);
+        if (null != m_middleCamera) activeCameras.add(m_middleCamera);
+        if (null != m_rightCamera) activeCameras.add(m_rightCamera);
+    }
+
+    public boolean hasVision() {
+        for (Camera cam : activeCameras) {
+            if (cam.isValid()) return true;
+        }
+        return false;
+    }
+
+    private Camera setupCamera(String cameraName, double yaw, double x, double y, double pitch, boolean showConnectionState) {
+        Camera cam = null;
+        try{
+            cam = new Camera(cameraName, yaw, x, y, pitch);
         }
         catch (Exception e) {
-            m_hasVision = false;
+            System.out.println("Failed to connect to " + cameraName + ": "  + e);
         }
+        if (showConnectionState) SmartDashboard.putBoolean("Have " + cameraName, cam != null);
+        return cam;
     }
 
-    public Pose3d estimatePoseAllCam() {
+    private Pose3d estimatePoseAllCam() {
+        if (!hasVision())
+            return null;
+
         try {
-            if (Constants.hasVision) {
-                m_leftPose = m_leftCamera.estimateAveragePose();
-                m_middlePose = m_middleCamera.estimateAveragePose();
-                m_rightPose = m_rightCamera.estimateAveragePose();
+            List<Rotation3d> rot = new ArrayList<>();
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
 
-                if (m_leftPose != null && m_middlePose != null && m_rightPose != null) {
-                    x += m_leftPose.getX() + m_middlePose.getX() + m_rightPose.getX();
-                    y += m_leftPose.getY() + m_middlePose.getY() + m_rightPose.getY();
-                    z += m_leftPose.getZ() + m_middlePose.getZ() + m_rightPose.getZ();
-                    rot = rot.plus(m_leftPose.getRotation()).plus(m_middlePose.getRotation()).plus(m_rightPose.getRotation()); 
-                    x /= 3;
-                    y /= 3;
-                    rot = rot.div(3);
-                    m_calcPose = new Pose3d(x, y, z, rot);
-                     m_hasVision = true;
-                    return m_calcPose;
-                }
-                else {
-                    return null;
+            for (Camera cam : activeCameras) {
+                if (!cam.isValid())
+                    continue;
+                Pose3d pose = cam.estimateAveragePose();
+                if (null != pose) {
+                  x += pose.getX();
+                  y += pose.getY();
+                  z += pose.getZ();
+                  rot.add(pose.getRotation());
                 }
             }
-            else {
-                return null;
+            if (rot.size() > 0) {
+                m_calcPose = new Pose3d(x / rot.size(), y / rot.size(), z / rot.size(),
+                    averageRotation(rot));
             }
+            else m_calcPose = null;
+
+        } catch (Exception e) {
+            m_calcPose = null;
         }
-        catch(Exception e) {
-            //System.out.println(e);
-             m_hasVision = false;
-        }
-        return null;
+        return m_calcPose;
     }
 
-    public Transform3d getHubDistanceAll() {
+    public Transform3d getHubDistance() {
+        return m_hubDist;
+    }
 
-        m_leftHub = m_leftCamera.getHubDistance();
-        m_middleHub = m_middleCamera.getHubDistance();
-        m_rightHub = m_rightCamera.getHubDistance();
+    public Pose3d getEstimatePose() {
+        return m_calcPose;
+    }
 
-        if (m_leftHub != null && m_middleHub != null && m_rightHub != null) {
-                xHub = m_leftHub.getX() + m_middleHub.getX() + m_rightHub.getX();
-                yHub = m_leftHub.getY() + m_middleHub.getY() + m_rightHub.getY();
-                zHub = m_leftHub.getZ() + m_middleHub.getZ() + m_rightHub.getZ();
-                rotHub = rotHub.plus(m_leftHub.getRotation()).plus(m_middleHub.getRotation()).plus(m_rightHub.getRotation()); 
-                xHub /= 3;
-                yHub /= 3;
-                rotHub = rotHub.div(3);
-                m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                canSeeHub = true;
+    // Just to compile
+    private Rotation3d averageRotation(List<Rotation3d> rotations) {
+        if (0 == rotations.size()) return new Rotation3d();
+        if (1 == rotations.size()) return rotations.get(0);
+
+        // Calculate from here out.
+        return rotations.get(0);
+    }
+
+    private Transform3d calculateHubDistanceAll() {
+        if (!hasVision())
+            return null;
+
+        try {
+            List<Rotation3d> rot = new ArrayList<>();
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+
+            for (Camera cam : activeCameras) {
+                if (!cam.isValid())
+                    continue;
+                Transform3d dist = cam.getHubDistance();
+                if (null != dist) {
+                  x += dist.getX();
+                  y += dist.getY();
+                  z += dist.getZ();
+                  rot.add(dist.getRotation());
+                }
             }
-            else {
-                if(m_leftHub != null && m_middleHub != null) {
-                    xHub = m_leftHub.getX() + m_middleHub.getX();
-                    yHub = m_leftHub.getY() + m_middleHub.getY();
-                    zHub = m_leftHub.getZ() + m_middleHub.getZ();
-                    rotHub = rotHub.plus(m_leftHub.getRotation()).plus(m_middleHub.getRotation()); 
-                    xHub /= 3;
-                    yHub /= 3;
-                    rotHub = rotHub.div(2);
-                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                    canSeeHub = true;
-                }
-                else if(m_rightHub != null && m_middleHub != null) {
-                    xHub = m_rightHub.getX() + m_middleHub.getX();
-                    yHub = m_rightHub.getY() + m_middleHub.getY();
-                    zHub = m_rightHub.getZ() + m_middleHub.getZ();
-                    rotHub = rotHub.plus(m_rightHub.getRotation()).plus(m_middleHub.getRotation()); 
-                    xHub /= 3;
-                    yHub /= 3;
-                    rotHub = rotHub.div(2);
-                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                    canSeeHub = true;
-                }
-                else if (m_leftHub != null && m_middleHub == null && m_rightHub == null) {
-                    xHub = m_leftHub.getX();
-                    yHub = m_leftHub.getY();
-                    zHub = m_leftHub.getZ();
-                    rotHub = m_leftHub.getRotation();
-                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                    canSeeHub = true;
-                }
-                else if (m_leftHub == null && m_middleHub != null && m_rightHub == null) {
-                    xHub = m_middleHub.getX();
-                    yHub = m_middleHub.getY();
-                    zHub = m_middleHub.getZ();
-                    rotHub = m_middleHub.getRotation();
-                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                    canSeeHub = true;
-                }
-                else if (m_leftHub == null && m_middleHub == null && m_rightHub != null) {
-                    xHub = m_rightHub.getX();
-                    yHub = m_rightHub.getY();
-                    zHub = m_rightHub.getZ();
-                    rotHub = m_rightHub.getRotation();
-                    m_hubDist = new Transform3d(xHub, yHub, zHub, rotHub);
-                    canSeeHub = true;
-                }
-                else {
-                    m_hubDist = null;
-                }
-                // canSeeHub = false;
-                // return null;
+
+            if (rot.size() > 0) {
+                m_hubDist = new Transform3d(x / rot.size(), y / rot.size(), z / rot.size(),
+                    averageRotation(rot));
             }
-            
-            return m_hubDist;
+            else m_calcPose = null;
+        } catch (Exception e) {
+            m_hubDist = null;
+        }
+
+        return m_hubDist;
+    }
+
+    @Override
+    public void periodic() {
+        estimatePoseAllCam();
+        calculateHubDistanceAll();
+        showAllData();
     }
 
     public void showAllData() {
-        //SmartDashboard.putBoolean("hasVision", m_hasVision);
-        // m_leftCamera.showData();
-        // m_middleCamera.showData();
-        // m_rightCamera.showData();
+        if (null != m_leftCamera) m_leftCamera.showData();
+        if (null != m_middleCamera) m_middleCamera.showData();
+        if (null != m_rightCamera) m_rightCamera.showData();
+
+        if (m_hubDist != null) SmartDashboard.putString("Distance to hub: ", m_hubDist.toString());
+        if (m_calcPose != null) SmartDashboard.putString("Current Pose: ", m_calcPose.toString());
     }
-
-
 }

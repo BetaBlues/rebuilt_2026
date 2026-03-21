@@ -4,17 +4,18 @@ package frc.robot;
 public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
-    public final static boolean hasMotor = false;
+    public final static boolean hasMotor = true;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
     public final static boolean hasClimber = true;
     public final static boolean hasCanCoder = true;
     public final static boolean hasPWMEncoder = false;
-    public final static boolean hasVision = false;
+    public final static boolean hasUsbCameras = true;
+    public final static boolean hasVision = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1
-    public static int enc = 0;
+    public static int enc = (hasCanCoder ? 0 : 1);
 
    
     public static final int[] rightFrontAbsEncPort = {13, 1};

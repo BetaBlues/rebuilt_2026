@@ -82,9 +82,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Right Auto", kRightAuto);
     //SmartDashboard.putData("Auto choices", m_chooser);
 
-    intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
-    climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
-    server = CameraServer.getServer();
+    if (Constants.hasUsbCameras) {
+      intakeCamera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+      climberCamera = CameraServer.startAutomaticCapture("Climber Camera", 1);
+      server = CameraServer.getServer();
+    }
     if(Constants.hasVision) {
       m_vision = new Vision();
     }
@@ -124,51 +126,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    //m_leftCamera.estimatePoseMultTarg(m_field, m_robotContainer.m_gyro);
-    // m_leftCamera.estimatePose(m_field, m_roXbotContainer.m_gyro);
-    try {
-      if (Constants.hasVision) {
-          m_pose = m_vision.estimatePoseAllCam();
-          // if (m_pose != null && m_vision != null) {
-          //   publisher.set(m_pose);
-          // }
-          m_vision.showAllData();
-          
-          m_hubDistance = m_vision.getHubDistanceAll();
-        
-          if (m_hubDistance != null) {
-            SmartDashboard.putNumber("Hub Distance X", m_hubDistance.getX());
-            SmartDashboard.putNumber("Hub Distance Y", m_hubDistance.getY());
-            SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDistance.getRotation().getAngle()));
-            SmartDashboard.putBoolean("Can Launch", m_hubDistance.getX() <= 3 && m_hubDistance.getX() >= 2.8);
-          } 
-        }
-      }
-      catch (Exception e) {
-        System.out.println(e);
-      }
-    
-    m_robotContainer.showData();
-
-    if (debugPose == true) {
-      Pose2d pose = m_field.getRobotPose();
-      double x = pose.getX();
-      double y = pose.getY();
-      Rotation2d deg = pose.getRotation().plus(Rotation2d.fromDegrees(0.1));
-
-      if (x < 16.0) {
-        x += 0.01;
-      }
-      else if (y < 8.0) {
-        y += 0.01;
-      }
-      m_field.setRobotPose(x, y, deg);
-    }
-  
-
-
-
-
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -177,6 +134,8 @@ public class Robot extends TimedRobot {
     
 
     CommandScheduler.getInstance().run();
+    // Let scheduler run first before showing debug data.
+    m_robotContainer.showData();
 
   }
 

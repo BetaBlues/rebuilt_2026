@@ -29,13 +29,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.photonvision.PhotonPoseEstimator;
 
 public class Camera {
-     public static PhotonCamera camera;
+     public PhotonCamera camera;
 
      public static AprilTagFieldLayout kTagLayout;
 
-     public static PhotonPoseEstimator m_estimator;
+     public PhotonPoseEstimator m_estimator;
 
-     public static Transform3d kRobotToCam;
+     public Transform3d kRobotToCam;
      private PhotonTrackedTarget m_target;
      private Pose3d m_robotPose;
      private Pose3d m_Pose3d;
@@ -46,17 +46,30 @@ public class Camera {
      private double[] zValues = new double[5];
 
      private List<PhotonTrackedTarget> targets;
-     private int count = 0;
-    
 
      public Camera(String cameraName, double yaw, double x, double y, double pitch) {
           camera = new PhotonCamera(cameraName);
-
+          if (null == camera || !camera.isConnected()) {
+               System.out.println(cameraName + " not found");
+               throw new NullPointerException(cameraName + " not found");
+          }
+          System.out.println("Setting up " + cameraName);
           kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
           kRobotToCam = new Transform3d(new Translation3d(x, y, 0.435), new Rotation3d(0, pitch, yaw));
+
+          camera.setDriverMode(false);
      }
 
+     public boolean isValid() {
+          return (null != camera && camera.isConnected());
+     }
+
+     public String getName() {
+          return camera.getName();
+     }
      public Pose3d estimateAveragePose() {
+          if (!isValid()) return null; // Did is disconnect....
+
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           ArrayList<Pose3d> estimatedPoses = new ArrayList<Pose3d>();
           
@@ -125,6 +138,8 @@ public class Camera {
      
 
      public Pose3d estimatePose(Field2d field, ChassisGyro gyro) {
+          if (!isValid()) return null; // Did is disconnect....
+
           List<PhotonPipelineResult> results = camera.getAllUnreadResults();
           
           SmartDashboard.putNumber("Results size", results.size());
@@ -174,6 +189,8 @@ public class Camera {
 
      // might need to change april tags b/c they're all of them right now, do we want just the front two
      public Transform3d getHubDistance() {
+          if (!isValid()) return null; // Did is disconnect....
+
           if (targets != null) {
                if (DriverStation.getAlliance().get() == Alliance.Blue) {
                     for (int i = 0; i < targets.size(); i++) {
@@ -202,11 +219,15 @@ public class Camera {
      }
 
      public void showData() {
-          //SmartDashboard.putNumber("Left Apriltag Id", m_target.getFiducialId());
-          SmartDashboard.putString("Camera Name", camera.getName());
-          SmartDashboard.putBoolean(camera.getName() + " Camera Connected", camera.isConnected());
-          SmartDashboard.putNumber(camera.getName() + " Camera Apriltag Id", m_apriltagId);
-          //SmartDashboard.putBoolean("is present", kTagLayout.getTagPose(m_target.getFiducialId()).isPresent());
-          // SmartDashboard.put
-     } 
+          try {
+            if (null != camera) {
+              SmartDashboard.putString(camera.getName()  + "Camera Name", camera.getName());
+              SmartDashboard.putBoolean(camera.getName() + " Camera Connected", camera.isConnected());
+              SmartDashboard.putNumber(camera.getName()  + " Camera Apriltag Id", m_apriltagId);
+            }
+          }
+          catch (Exception e) {
+             System.out.println("Faild to show camera data: " + e);
+          }
+     }
 }
