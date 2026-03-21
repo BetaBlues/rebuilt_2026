@@ -146,7 +146,15 @@ public class Vision extends SubsystemBase {
         if (null != m_middleCamera) m_middleCamera.showData();
         if (null != m_rightCamera) m_rightCamera.showData();
 
-        if (m_hubDist != null) SmartDashboard.putString("Distance to hub: ", m_hubDist.toString());
+        if (m_hubDist != null) {
+            SmartDashboard.putString("Distance to hub: ", m_hubDist.toString());
+        
+            SmartDashboard.putNumber("Hub Distance X", m_hubDist.getX());
+            SmartDashboard.putNumber("Hub Distance Y", m_hubDist.getY());
+            SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDist.getRotation().getAngle()));
+            SmartDashboard.putBoolean("Can Launch", m_hubDist.getX() <= 3 && m_hubDist.getX() >= 2.8);
+        } 
+
         if (m_calcPose != null) SmartDashboard.putString("Current Pose: ", m_calcPose.toString());
     }
 }
