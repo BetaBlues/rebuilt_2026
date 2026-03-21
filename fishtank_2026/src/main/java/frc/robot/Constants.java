@@ -4,12 +4,12 @@ package frc.robot;
 public class Constants {
     public final static boolean hasGyro = true;
     public final static boolean hasSwerve = true;
-    public final static boolean hasMotor = true;
+    public final static boolean hasMotor = false;
     public final static boolean hasLauncher = true;
     public final static boolean hasIntake = true;
     public final static boolean hasClimber = true;
     public final static boolean hasCanCoder = true;
-    public final static boolean hasPWMEncoder = false;
+    public final static boolean hasPWMEncoder = !hasCanCoder;
     public final static boolean hasUsbCameras = true;
     public final static boolean hasVision = true;
     public static boolean testMotors = false;
