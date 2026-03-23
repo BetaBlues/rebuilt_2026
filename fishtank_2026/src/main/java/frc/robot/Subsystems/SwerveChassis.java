@@ -27,7 +27,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Subsystems.Camera;
 
 public class SwerveChassis extends SubsystemBase {
 
@@ -40,9 +39,7 @@ public class SwerveChassis extends SubsystemBase {
     private Field2d m_odoField;
     private Pose2d m_pose;
     private boolean m_fieldForward = true;
-    private Camera m_leftCamera = new Camera("LeftCamera", -30*Math.PI/180, 0, 0.33, 0);
-
-    
+   
     private double worldRotation;
     public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
     public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
@@ -186,8 +183,8 @@ public class SwerveChassis extends SubsystemBase {
             // Configure AutoBuilder
             AutoBuilder.configure(
                 // should probably change to swerve odo
-                m_leftCamera::getPose2d, 
-                m_leftCamera::resetPose, 
+                this::getPose, 
+                this::resetPose, 
                 this::getSpeeds, 
                 (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards 
                 new PPHolonomicDriveController(
@@ -219,6 +216,16 @@ public class SwerveChassis extends SubsystemBase {
         SwerveModuleState[] states = m_driveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(states, false);
     }
+
+
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    private void resetPose(Pose2d newPose) {
+
+    } 
+
 
     public ChassisSpeeds getSpeeds() {
         return m_driveKinematics.toChassisSpeeds(
