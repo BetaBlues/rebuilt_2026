@@ -48,6 +48,12 @@ public class SwerveChassis extends SubsystemBase {
        
         this.gyro = gyro;
         m_odoField = field;
+        if (null == m_odoField) {
+            // Only called if no field passed.
+            m_odoField = new Field2d();
+            m_odoField.setRobotPose(1.0, 1.0, Rotation2d.fromDegrees(0.0));
+        }
+
 
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
@@ -105,7 +111,7 @@ public class SwerveChassis extends SubsystemBase {
             rightFrontWheel.getPosition(),
             leftRearWheel.getPosition(),
             rightRearWheel.getPosition()
-        }, m_odometry.getPoseMeters()); //x and y is robot starting position in field
+        }, m_odoField.getRobotPose()); //x and y is robot starting position in field
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
 
@@ -149,6 +155,9 @@ public class SwerveChassis extends SubsystemBase {
         setModuleStates(states, false);
     }
 
+    public Field2d getField() {
+        return m_odoField;
+    }
 
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
