@@ -12,6 +12,7 @@ public class Constants {
     public final static boolean hasPWMEncoder = !hasCanCoder;
     public final static boolean hasUsbCameras = true;
     public final static boolean hasVision = true;
+    public final static boolean hasPathPlanner = true;
     public static boolean testMotors = false;
 
     //REMEMBER TO CHANGE THIS WHEN CHANGING BETWEEN SWERVE, Cancoder is 0, pwm is 1

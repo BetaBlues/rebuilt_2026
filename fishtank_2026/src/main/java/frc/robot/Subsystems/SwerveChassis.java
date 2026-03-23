@@ -36,6 +36,8 @@ public class SwerveChassis extends SubsystemBase {
     private Field2d m_odoField;
     private boolean m_fieldForward = true;
 
+    RobotConfig config = null;
+
     public static double[] chassisLength = {0.505, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
     public static double[] chassisWidth = {0.630, Units.inchesToMeters(22.75)};
     // public static double[] chassisLength = {0.630, Units.inchesToMeters(22.75)}; // index 0 is 2026, 1 is 2025
@@ -115,8 +117,9 @@ public class SwerveChassis extends SubsystemBase {
 
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
 
+        if (Constants.hasPathPlanner) {
         try{
-            RobotConfig config = RobotConfig.fromGUISettings();
+            config = RobotConfig.fromGUISettings();
 
             // Configure AutoBuilder
             AutoBuilder.configure(
@@ -147,7 +150,8 @@ public class SwerveChassis extends SubsystemBase {
             catch(Exception e){
                 DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
             }
-        
+        }
+        setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -257,7 +261,6 @@ public class SwerveChassis extends SubsystemBase {
             }
         }).start();
     }
-
 
     public void stopModules() {
         rightFrontWheel.stop();

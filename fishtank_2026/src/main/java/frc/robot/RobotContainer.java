@@ -1,10 +1,10 @@
 package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.commands.FollowPathCommand;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.studica.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,8 +22,6 @@ import frc.robot.Subsystems.Launcher;
 // import frc.robot.Subsystems.Vision;
 import frc.robot.Subsystems.Climber;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 
 // Copyright (c) FIRST and other WPILib contributors.
@@ -53,47 +51,18 @@ public class RobotContainer {
 
 
     public RobotContainer(Field2d field) {
-
+     
     m_field = field;
-    m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro, m_field) : null;
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   
     if (Constants.hasSwerve) {
-      DataLogManager.start();
+      m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro, m_field) : null;
       m_SwerveSubsystem.setDefaultCommand(new SwerveDriveCommand(m_SwerveSubsystem, m_chassisController, m_gyro));
-
-      
-      // new JoystickButton(m_chassisController, Constants.k_xbox.buttonA).onTrue(new InstantCommand(()-> m_SwerveSubsystem.setWorldRotation(m_gyro.getAngle())));
-       new JoystickButton(m_chassisController, Constants.k_xbox.buttonBack).onTrue(new InstantCommand(()-> m_gyro.zeroHeading()));
+      new JoystickButton(m_chassisController, Constants.k_xbox.buttonBack).onTrue(new InstantCommand(()-> m_gyro.zeroHeading()));
       new JoystickButton(m_chassisController, Constants.k_xbox.buttonLeftBumper).onChange(new InstantCommand(()-> m_SwerveSubsystem.fieldForward(!m_chassisController.getLeftBumperButton())));
-
-        /*
-          * Swerve Drive Kinematics and Odometry Setup
-          *   
-          * The kinematics object allows us to convert between chassis speeds and individual wheel speeds.
-          * The odometry object allows us to track the robot's position on the field over time using the kinematics and sensor data.
-          * 
-          * Below, we define the locations of our swerve modules relative to the robot center, create our kinematics object from those locations,
-          * and then create our odometry object from the kinematics and our initial wheel positions.
-          */
-        // Locations for the swerve drive modules relative to the robot center.
-        Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-        Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-        Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-        Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
-        // Creating my kinematics object using the module locations
-        SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
-        );
-      
-
-  
-   
-
-
-
+    }
 
     if (Constants.hasMotor) {
    
@@ -150,7 +119,6 @@ public class RobotContainer {
         // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonB).onChange(new InstantCommand(()-> m_Intake.setMovement(0.5)));
         // new JoystickButton(m_MechanismController, Constants.k_xbox.buttonX).onChange(new InstantCommand(()-> m_Intake.setMovement(-0.5)));
       }
-    }
         
     // if (Constants.hasClimber) {
     //     00new JoystickButton(m_MechanismController, Constants.k_xbox.buttonLeftBumper).onTrue(new InstantCommand(()-> m_Climber.MovePos(0.0)));
@@ -158,6 +126,7 @@ public class RobotContainer {
     //     new POVButton(m_MechanismController, 180).onTrue(new InstantCommand(()-> m_Climber.MovePos(70.0)));
        
     //   }
+
 
    
     }
