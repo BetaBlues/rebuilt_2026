@@ -111,7 +111,7 @@ public class SwerveChassis extends SubsystemBase {
        rightRearWheel.turnWheel(angle);
        angleTest = degrees;
     }
-    public SwerveChassis(XboxController controller, ChassisGyro gyro) {
+    public SwerveChassis(XboxController controller, ChassisGyro gyro, Field2d field) {
        
         this.gyro = gyro;
         waitResetGyro();
@@ -119,7 +119,7 @@ public class SwerveChassis extends SubsystemBase {
         SparkFlexConfig configLeft = new SparkFlexConfig();
         SparkFlexConfig configRight = new SparkFlexConfig();
        
-        m_odoField = new Field2d();
+        m_odoField = field;
         //m_odoField.setRobotPose(2,3,Rotation2d.fromDegrees(0.0));
 
 
