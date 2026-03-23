@@ -5,14 +5,20 @@ package frc.robot.Subsystems;
 public class ChassisGyro extends com.studica.frc.AHRS {
 
    
-    public ChassisGyro(NavXComType comType) { super(comType); }
-    public ChassisGyro(NavXComType comType, NavXUpdateRate updateRate) { super(comType, updateRate); }
-    public ChassisGyro(NavXComType comType, int customRateHz) { super(comType, customRateHz); }
+    public ChassisGyro(NavXComType comType) { super(comType); resetGyro(); }
+    public ChassisGyro(NavXComType comType, NavXUpdateRate updateRate) { super(comType, updateRate); resetGyro(); }
+    public ChassisGyro(NavXComType comType, int customRateHz) { super(comType, customRateHz); resetGyro(); }
 
 
-    // public void resetGyro() {
-    //     this.setAngleAdjustment((this.getAngle()));
-    // }
+    private void resetGyro() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                gyro.reset();
+            } catch (Exception e) {
+            }
+        }).start();
+    }
 
 
     public double getAngle() {
