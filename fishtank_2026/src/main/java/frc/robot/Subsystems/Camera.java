@@ -191,10 +191,6 @@ public class Camera {
           return m_robotPose.toPose2d();
      }
 
-     public void resetPose(Pose2d pose) {
-        m_robotPose = new Pose3d(pose.getX(), pose.getY(), 0.0, new Rotation3d());
-     }
-
      // might need to change april tags b/c they're all of them right now, do we want just the front two
      public Transform3d getHubDistance() {
           if (!isValid()) return null; // Did is disconnect....

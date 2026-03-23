@@ -33,7 +33,6 @@ public class SwerveDriveCommand extends Command {
         this.yLimiter = new SlewRateLimiter(k_chassis.AccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(k_chassis.AngularAccelerationUnitsPerSecond);
         this.m_gyro = gyro;
-        chassis.setWorldRotation(0.0);
         addRequirements(m_chassis);
     }
 

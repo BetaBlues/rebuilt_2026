@@ -105,9 +105,8 @@ public class SwerveChassis extends SubsystemBase {
             rightFrontWheel.getPosition(),
             leftRearWheel.getPosition(),
             rightRearWheel.getPosition()
-        }, new Pose2d(5.0, 6.5, new Rotation2d())); //x and y is robot starting position in field
+        }, m_odometry.getPoseMeters()); //x and y is robot starting position in field
 
-        m_odoField.setRobotPose(m_odometry.getPoseMeters());
         setDefaultCommand(new SwerveDriveCommand(this, controller, gyro));
 
         try{

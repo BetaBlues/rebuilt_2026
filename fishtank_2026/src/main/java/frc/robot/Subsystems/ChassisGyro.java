@@ -14,7 +14,7 @@ public class ChassisGyro extends com.studica.frc.AHRS {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                gyro.reset();
+                super.reset();
             } catch (Exception e) {
             }
         }).start();
