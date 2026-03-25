@@ -44,8 +44,9 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private static final String kDefaultAuto = "Default";
   private static final String kLeftAuto = "LeftAuto";
-  private static final String kMiddleAuto = "MiddleAuto";
-  private static final String kRightAuto = "Right Auto";
+  private static final String kMiddleRightAuto = "MiddleRightAuto";
+  private static final String kMiddleLeftAuto = "MiddleLeftAuto";
+  private static final String kRightAuto = "RightAuto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -75,7 +76,8 @@ public class Robot extends TimedRobot {
     m_autoSelected = kDefaultAuto;
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Left Auto", kLeftAuto);
-    m_chooser.addOption("Middle Auto", kMiddleAuto);
+    m_chooser.addOption("MiddleRight Auto", kMiddleRightAuto);
+    m_chooser.addOption("MiddleLeft Auto", kMiddleLeftAuto);
     m_chooser.addOption("Right Auto", kRightAuto);
     // SmartDashboard.putData("Auto choices", m_chooser);
 
@@ -182,7 +184,11 @@ public class Robot extends TimedRobot {
         // m_leftCamera.getPose3d().getTranslation();
         break;
 
-      case kMiddleAuto:
+      case kMiddleRightAuto:
+
+        break;
+
+      case kMiddleLeftAuto:
 
         break;
 
