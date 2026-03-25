@@ -145,7 +145,8 @@ public class Vision extends SubsystemBase {
         if (null != m_leftCamera) m_leftCamera.showData();
         if (null != m_middleCamera) m_middleCamera.showData();
         if (null != m_rightCamera) m_rightCamera.showData();
-
+        
+        SmartDashboard.putBoolean("Hub: ", m_hubDist != null);
         if (m_hubDist != null) {
             SmartDashboard.putString("Distance to hub: ", m_hubDist.toString());
         
