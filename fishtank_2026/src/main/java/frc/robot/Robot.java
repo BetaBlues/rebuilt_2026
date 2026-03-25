@@ -113,8 +113,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData("Field", m_field);
     m_robotContainer = new RobotContainer(m_field);
 
-    pdh = new PowerDistribution();
-    pdh.clearStickyFaults();
+    // pdh = new PowerDistribution();
+    //pdh.clearStickyFaults();
 
     if (Constants.hasPathPlanner) {
       // for pathplanning to decrease delay

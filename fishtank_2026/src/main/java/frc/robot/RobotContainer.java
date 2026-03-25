@@ -54,8 +54,15 @@ public class RobotContainer {
      
     m_field = field;
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    if (Constants.hasPathPlanner)
+    {
+      autoChooser = AutoBuilder.buildAutoChooser();
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+    else
+    {
+      autoChooser = null;
+    }
   
     if (Constants.hasSwerve) {
       m_SwerveSubsystem = Constants.hasSwerve ? new SwerveChassis(m_chassisController, m_gyro, m_field) : null;
