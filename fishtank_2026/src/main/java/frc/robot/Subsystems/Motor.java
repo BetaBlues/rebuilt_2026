@@ -233,8 +233,8 @@ public class Motor extends SubsystemBase{
         
         public void showData()
         {
-            SmartDashboard.putNumber("motor relative pos", motorEncoder.getPosition());
-             SmartDashboard.putNumber("Climber Speed", motorEncoder.getVelocity());
+            // SmartDashboard.putNumber("motor relative pos", motorEncoder.getPosition());
+            //  SmartDashboard.putNumber("Motor Speed", motorEncoder.getVelocity());
         }
    
 }
