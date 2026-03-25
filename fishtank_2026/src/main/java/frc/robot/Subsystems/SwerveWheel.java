@@ -190,13 +190,13 @@ public class SwerveWheel {
     }
 
     public void publishData() {
-        SmartDashboard.putNumber(loc+" Port", absEncPort);
-        if (Constants.hasPWMEncoder)
-        {
-            SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
-        }
+        // SmartDashboard.putNumber(loc+" Port", absEncPort);
+        // if (Constants.hasPWMEncoder)
+        // {
+        //     SmartDashboard.putNumber(loc + " Raw Angle", this.absoluteEncoder.getRawDutyCycle());
+        // }
         
-        SmartDashboard.putNumber(loc+" Steer Encoder Val", Math.round(getAbsEncoderRad() * 100.0) /100.0);
+        // SmartDashboard.putNumber(loc+" Steer Encoder Val", Math.round(getAbsEncoderRad() * 100.0) /100.0);
 
         
     }

@@ -40,7 +40,7 @@ public class Camera {
      private Pose3d m_robotPose;
      private Pose3d m_Pose3d;
      private int m_apriltagId = -1;
-     private boolean isIndex = false;
+     //private boolean isIndex = false;
      private double[] xValues = new double[5];
      private double[] yValues = new double[5];
      private double[] zValues = new double[5];
@@ -76,7 +76,7 @@ public class Camera {
           SmartDashboard.putNumber("Results size", results.size());
 
           if(results.size() < 1) {
-               isIndex = false;
+               //isIndex = false;
                return null;
 
           }
@@ -84,7 +84,7 @@ public class Camera {
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
                     SmartDashboard.putNumber("Targets size", result.getTargets().size());
-                    isIndex = true;
+                    //isIndex = true;
                     targets = result.getTargets();
                     for (int i = 0; i < targets.size(); i++) {
                          if (targets.get(i).getPoseAmbiguity() < 0.2) {
@@ -126,7 +126,7 @@ public class Camera {
           }
 
           catch(Exception e) {
-               SmartDashboard.putBoolean("Has april tag target:", isIndex);
+              // SmartDashboard.putBoolean("Has april tag target:", isIndex);
           }
 
           finally {
@@ -145,7 +145,7 @@ public class Camera {
           SmartDashboard.putNumber("Results size", results.size());
 
           if(results.size() < 1) {
-               isIndex = false;
+              // isIndex = false;
                return null;
 
           }
@@ -153,7 +153,7 @@ public class Camera {
                PhotonPipelineResult result = results.get(results.size()-1);
                if (result.hasTargets()) {
                     SmartDashboard.putNumber("Targets size", result.getTargets().size());
-                    isIndex = true;
+                    //isIndex = true;
                     m_target = result.getBestTarget();
                     m_apriltagId = m_target.getFiducialId();
                     if (kTagLayout.getTagPose(m_target.getFiducialId()).isPresent()) {
@@ -173,7 +173,7 @@ public class Camera {
           }
 
           catch(Exception e) {
-               SmartDashboard.putBoolean("Has april tag target:", isIndex);
+               
           }
 
           finally {
@@ -225,9 +225,9 @@ public class Camera {
      public void showData() {
           try {
             if (null != camera) {
-              SmartDashboard.putString(camera.getName()  + "Camera Name", camera.getName());
+              //SmartDashboard.putString(camera.getName()  + "Camera Name", camera.getName());
               SmartDashboard.putBoolean(camera.getName() + " Camera Connected", camera.isConnected());
-              SmartDashboard.putNumber(camera.getName()  + " Camera Apriltag Id", m_apriltagId);
+              //SmartDashboard.putNumber(camera.getName()  + " Camera Apriltag Id", m_apriltagId);
             }
           }
           catch (Exception e) {

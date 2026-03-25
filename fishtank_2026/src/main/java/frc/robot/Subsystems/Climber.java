@@ -84,8 +84,8 @@ public class Climber extends Motor{
 
     public void showData()
     {
-        SmartDashboard.putNumber("Climber height", absoluteEncoder.get());
-        SmartDashboard.putNumber("relative climb height", getRelativePosition());
+        // SmartDashboard.putNumber("Climber height", absoluteEncoder.get());
+        // SmartDashboard.putNumber("relative climb height", getRelativePosition());
         SmartDashboard.putBoolean("limit switch", m_bottomlimitSwitch.get());
         super.showData();
         

@@ -46,7 +46,7 @@ public class Vision extends SubsystemBase {
         catch (Exception e) {
             System.out.println("Failed to connect to " + cameraName + ": "  + e);
         }
-        if (showConnectionState) SmartDashboard.putBoolean("Have " + cameraName, cam != null);
+        //if (showConnectionState) SmartDashboard.putBoolean("Have " + cameraName, cam != null);
         return cam;
     }
 
@@ -126,7 +126,11 @@ public class Vision extends SubsystemBase {
                 m_hubDist = new Transform3d(x / rot.size(), y / rot.size(), z / rot.size(),
                     averageRotation(rot));
             }
-            else m_calcPose = null;
+            else 
+            {
+                m_calcPose = null;
+                m_hubDist = null;
+            }
         } catch (Exception e) {
             m_hubDist = null;
         }
@@ -155,6 +159,11 @@ public class Vision extends SubsystemBase {
             SmartDashboard.putNumber("Hub Distance Rotation", Math.toDegrees(m_hubDist.getRotation().getAngle()));
             SmartDashboard.putBoolean("Can Launch", m_hubDist.getX() <= 3 && m_hubDist.getX() >= 2.8);
         } 
+        else
+        {
+            SmartDashboard.putBoolean("Can Launch", false);
+      
+        }
 
         if (m_calcPose != null) SmartDashboard.putString("Current Pose: ", m_calcPose.toString());
     }
