@@ -129,10 +129,10 @@ public class Constants {
         public static final double kD = 0.0;
         public static final double kDeadband = 0.6;
         public static final double AccelerationUnitsPerSecond = 1.1;
-        public static final double AngularAccelerationUnitsPerSecond = 1;
-        public static final double MaxMetersPerSecond = 0.90;
+        public static final double AngularAccelerationUnitsPerSecond = 1.0;
+        public static final double MaxMetersPerSecond = 1.0;
 
-        public static final int kCurrentLimit = 60;
+        public static final int kCurrentLimit = 65;
         public static final double driveToDistance = 10.0;
         public static final double targetReached = 0.20;
         public static final double activateDrivePid = 0.60; 

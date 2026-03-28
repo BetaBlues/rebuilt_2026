@@ -93,7 +93,7 @@ public class Climber extends Motor{
 
     @Override
     public void periodic() {
-        m_lowerLimit = m_bottomlimitSwitch.get();
+        m_lowerLimit = false; //m_bottomlimitSwitch.get();
         if (m_lowerLimit) {
             MoveMotor(0);
         }
